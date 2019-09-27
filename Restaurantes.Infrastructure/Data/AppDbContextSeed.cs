@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurantes.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Restaurantes.Infrastructure.Data
         {
             if (!catalogContext.Restaurantes.Any())
             {
-                catalogContext.Add(new Restaurantes.Core.Entities.Restaurante
+                catalogContext.Add(new Restaurante
                 {
                     Nombre = "Restaurante Maestro",
                     Domicilio = "Ave. Prueba 123",
