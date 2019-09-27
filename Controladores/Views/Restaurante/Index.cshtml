@@ -1,0 +1,29 @@
+﻿@using Controladores.Models
+@model RestauranteViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Restaurante</h1>
+<h2>Nombre: @Model.Nombre</h2>
+<p>Direccion: @Model.Direccion</p>
+<p>No.: @Model.NumeroExterior</p>
+<p>
+    Comida:
+    @if (Model.TipoDeComida == "Pizza")
+    {
+        <b style="color: red">Pizza</b>
+    }
+    else
+    {
+        <b>No pizza :(</b>
+    }
+</p>
+<p>Alta Fecha: @Model.FechaDeAlta.ToString("dd/MMM/yy")</p>
+<p>Alta Hora: @Model.FechaDeAlta.ToString("hh:mm tt")</p>
+
+@foreach(var orden in Model.Ordenes)
+{
+    <a href="/ordenes/index/@orden">@orden</a>
+    <p><a asp-Controller="Ordenes" asp-Action="Index" asp-route-id="@orden">Helper</a></p>
+}
