@@ -1,5 +1,28 @@
-﻿@model RestauranteViewModel
+﻿@model List<Restaurante>
 
     <h1>
-        @Model.Nombre
+        Restaurantes
     </h1>
+
+<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Domicilio</th>
+            <th>Teléfono</th>
+            <th>Mesas</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var restaurante in Model)
+        {
+        <tr>
+            <td>@restaurante.Nombre</td>
+            <td>@restaurante.Domicilio</td>
+            <td>@restaurante.Telefono</td>
+            <td><a href="">@restaurante.Mesas.Count</a></td>
+        </tr>
+        }
+    </tbody>
+</table>

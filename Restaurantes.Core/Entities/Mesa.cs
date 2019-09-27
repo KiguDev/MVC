@@ -10,5 +10,6 @@ namespace Restaurantes.Core.Entities
         public string Identificador { get; set; }
         public int Capacidad { get; set; }
         public int RestauranteId { get; set; }
+        public Restaurante Restaurante { get; set; }
     }
 }
