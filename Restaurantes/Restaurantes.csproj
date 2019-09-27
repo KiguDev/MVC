@@ -18,8 +18,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Restaurante.Core\Restaurante.Core.csproj" />
-    <ProjectReference Include="..\Restaurante.Infrastructure\Restaurante.Infrastructure.csproj" />
+    <ProjectReference Include="..\Restaurantes.Core\Restaurantes.Core.csproj" />
+    <ProjectReference Include="..\Restaurantes.Infrastructure\Restaurantes.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

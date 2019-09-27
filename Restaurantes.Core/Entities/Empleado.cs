@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurante.Core.Entities
+namespace Restaurantes.Core.Entities
 {
     public class Empleado
     {

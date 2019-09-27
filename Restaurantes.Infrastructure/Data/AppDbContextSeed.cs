@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Restaurante.Infrastructure.Data
+namespace Restaurantes.Infrastructure.Data
 {
     public class AppDbContextSeed
     {
@@ -11,7 +11,7 @@ namespace Restaurante.Infrastructure.Data
         {
             if (!catalogContext.Restaurantes.Any())
             {
-                catalogContext.Add(new Restaurante.Core.Entities.Restaurante
+                catalogContext.Add(new Restaurantes.Core.Entities.Restaurante
                 {
                     Nombre = "Restaurante Maestro",
                     Domicilio = "Ave. Prueba 123",

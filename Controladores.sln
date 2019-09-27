@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurantes", "Restaurante
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbFirst", "DbFirst\DbFirst.csproj", "{202FA3C1-AD9D-424A-BBC4-73E00CD64AC8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurante.Core", "Restaurante.Core\Restaurante.Core.csproj", "{187B759D-47D6-45B6-B982-6115478ED70A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurantes.Core", "Restaurantes.Core\Restaurantes.Core.csproj", "{187B759D-47D6-45B6-B982-6115478ED70A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurante.Infrastructure", "Restaurante.Infrastructure\Restaurante.Infrastructure.csproj", "{C6DE4646-B2C8-4AD5-9F73-A54B994C4D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restaurantes.Infrastructure", "Restaurantes.Infrastructure\Restaurantes.Infrastructure.csproj", "{C6DE4646-B2C8-4AD5-9F73-A54B994C4D93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temas", "Temas", "{3A0A4F14-3B07-4D24-8CA9-7852AD7FC718}"
 EndProject

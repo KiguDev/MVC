@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurante.Infrastructure.Data
+namespace Restaurantes.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {

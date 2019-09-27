@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Restaurante.Infrastructure.Migrations
+namespace Restaurantes.Infrastructure.Migrations
 {
     public partial class inicio : Migration
     {

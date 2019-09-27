@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurante.Infrastructure.Data;
+using Restaurantes.Infrastructure.Data;
 
-namespace Restaurante.Infrastructure.Migrations
+namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190927000054_horaDeCierre")]
@@ -21,7 +21,7 @@ namespace Restaurante.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Restaurante.Core.Entities.Empleado", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace Restaurante.Infrastructure.Migrations
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("Restaurante.Core.Entities.Mesa", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace Restaurante.Infrastructure.Migrations
                     b.ToTable("Mesas");
                 });
 
-            modelBuilder.Entity("Restaurante.Core.Entities.Restaurante", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.Restaurante", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

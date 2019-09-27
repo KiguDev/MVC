@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurante.Infrastructure.Data;
+using Restaurantes.Infrastructure.Data;
 
 namespace Restaurantes
 {
