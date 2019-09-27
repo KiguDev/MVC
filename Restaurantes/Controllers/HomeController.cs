@@ -32,15 +32,63 @@ namespace Restaurantes.Controllers
 
         public IActionResult Agregar()
         {
-            return View(new Restaurante());
+            ViewData["Accion"] = "Agregar";
+            return View(new RestauranteViewModel());
         }
 
         [HttpPost]
-        public IActionResult PostAgregar(Restaurante model)
+        public IActionResult Agregar(RestauranteViewModel model)
         {
-            model.FechaDeAlta = DateTime.Now;
-            var id = _restauranteService.Agregar(model);
-            return View("Agregar", model);
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("","Te hacen falta campos");
+                return View(model);
+            }
+
+            var restaurante = new Restaurante {
+                Nombre = model.Nombre,
+                Domicilio = model.Direccion,
+                HoraDeCierre = model.HoraDeCierre,
+                FechaDeAlta = DateTime.Now,
+                Telefono = int.Parse(model.Telefono)
+            };
+            var id = _restauranteService.Agregar(restaurante);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            ViewData["Accion"] = "Editar";
+            var restaurante = _restauranteService.Obtener(id);
+
+            var viewModel = new RestauranteViewModel
+            {
+                Id = restaurante.Id,
+                Nombre = restaurante.Nombre,
+                Direccion = restaurante.Domicilio,
+                HoraDeCierre = restaurante.HoraDeCierre.GetValueOrDefault(),
+                PaginaWeb = restaurante.PaginaWeb,
+                Telefono = restaurante.Telefono.ToString(),
+            };
+            return View("Agregar",viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(RestauranteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var restaurante = _restauranteService.Obtener(model.Id);
+            restaurante.Nombre = model.Nombre;
+
+            _restauranteService.Editar(restaurante);
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

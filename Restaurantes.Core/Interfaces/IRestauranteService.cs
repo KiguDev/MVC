@@ -10,5 +10,6 @@ namespace Restaurantes.Core.Interfaces
         List<Restaurante> ObtenerRestaurantes();
         Restaurante Obtener(int id);
         int Agregar(Restaurante restaurante);
+        void Editar(Restaurante restaurante);
     }
 }

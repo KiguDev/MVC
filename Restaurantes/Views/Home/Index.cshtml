@@ -12,6 +12,7 @@
             <th>Domicilio</th>
             <th>Teléfono</th>
             <th>Mesas</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,7 @@
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td><a href="">@restaurante.Mesas.Count</a></td>
+            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
         </tr>
         }
     </tbody>

@@ -8,6 +8,16 @@ namespace Restaurantes.Infrastructure.Services
 {
     public class RestauranteDummyService : IRestauranteService
     {
+        public int Agregar(Restaurante restaurante)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Editar(Restaurante restaurante)
+        {
+            throw new NotImplementedException();
+        }
+
         public Restaurante Obtener(int id)
         {
             throw new NotImplementedException();

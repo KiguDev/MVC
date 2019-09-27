@@ -34,5 +34,11 @@ namespace Restaurantes.Infrastructure.Services
 
             return restaurante.Id;
         }
+
+        public void Editar(Restaurante restaurante)
+        {
+            _context.Update(restaurante);
+            _context.SaveChanges();
+        }
     }
 }
