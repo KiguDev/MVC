@@ -1,0 +1,12 @@
+﻿@model List<Mesa>
+
+<a asp-action="AgregarMesa" asp-route-restaurante="@ViewData["restauranteId"]">Agregar mesa</a>
+<table>
+    @foreach (var mesa in Model)
+    {
+    <tr>
+        <td>@mesa.Identificador</td>
+        <td>@mesa.Capacidad</td>
+    </tr>
+    }
+</table>

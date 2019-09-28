@@ -25,11 +25,6 @@ namespace Restaurantes.Controllers
             return View(restaurantes);
         }
 
-        public IActionResult Mesas(int id)
-        { 
-            return View();
-        }
-
         public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
@@ -37,6 +32,7 @@ namespace Restaurantes.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestauranteViewModel model)
         {
             if (!ModelState.IsValid)
@@ -90,6 +86,32 @@ namespace Restaurantes.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult Mesas(int id)
+        {
+            ViewData["restauranteId"] = id;
+            var restaurante = _restauranteService.Obtener(id);
+
+            return View(restaurante.Mesas);
+        }
+
+        public IActionResult AgregarMesa(int restaurante)
+        {
+
+            return View(new Mesa {
+                RestauranteId = restaurante
+            });
+        }
+
+        [HttpPost]
+        public IActionResult AgregarMesa(Mesa model)
+        {
+            // utilizar el servicio de mesa y pbtemer la entidad
+            // modificar las propiedades de Mesa con los del view model
+            // enviar la entidad al metodo de actualizar del servicio 
+            return RedirectToAction("Index");
+        }
+
 
         public IActionResult Privacy()
         {
