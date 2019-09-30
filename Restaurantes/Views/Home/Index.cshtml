@@ -1,18 +1,17 @@
-﻿@model List<Restaurante>
+﻿@model  List<Restaurante>
 
-    <h1>
-        Restaurantes
-    </h1>
 
-<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
+<h1>
+    Restaurantes
+</h1>
+<a class="btn btn-primary" asp-action="Agregar">Agregar Restaurante</a>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Nombre</th>
             <th>Domicilio</th>
-            <th>Teléfono</th>
+            <th>Telefono</th>
             <th>Mesas</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +21,17 @@
             <td>@restaurante.Nombre</td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+            <td><a href=""></a>@restaurante.Mesas.Count()</td>
+            <td> <a asp-controller="Home" asp-action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+            <td>
+                <form asp-action="Eliminar">
+                    <button type="submit" name="Id" value="@restaurante.Id" class="btn btn-danger">Eliminar</button>
+                </form>
+            </td>
         </tr>
         }
     </tbody>
 </table>
+
+

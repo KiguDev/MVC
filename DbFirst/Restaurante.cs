@@ -17,9 +17,9 @@ namespace DbFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Restaurante()
         {
-            this.Categorias = new HashSet<Categoria>();
-            this.Empleadoes = new HashSet<Empleado>();
-            this.Mesas = new HashSet<Mesa>();
+            this.Categoria = new HashSet<Categoria>();
+            this.Empleado = new HashSet<Empleado>();
+            this.Mesa = new HashSet<Mesa>();
         }
     
         public int Id { get; set; }
@@ -30,10 +30,10 @@ namespace DbFirst
         public string PaginaWeb { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Categoria> Categorias { get; set; }
+        public virtual ICollection<Categoria> Categoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Empleado> Empleadoes { get; set; }
+        public virtual ICollection<Empleado> Empleado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Mesa> Mesas { get; set; }
+        public virtual ICollection<Mesa> Mesa { get; set; }
     }
 }

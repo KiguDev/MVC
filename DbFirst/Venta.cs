@@ -17,9 +17,9 @@ namespace DbFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Venta()
         {
-            this.VentaProductoes = new HashSet<VentaProducto>();
-            this.Clientes = new HashSet<Cliente>();
-            this.Reservacions = new HashSet<Reservacion>();
+            this.VentaProducto = new HashSet<VentaProducto>();
+            this.Cliente = new HashSet<Cliente>();
+            this.Reservacion = new HashSet<Reservacion>();
         }
     
         public int Id { get; set; }
@@ -33,10 +33,10 @@ namespace DbFirst
     
         public virtual Empleado Empleado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VentaProducto> VentaProductoes { get; set; }
+        public virtual ICollection<VentaProducto> VentaProducto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cliente> Clientes { get; set; }
+        public virtual ICollection<Cliente> Cliente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Reservacion> Reservacions { get; set; }
+        public virtual ICollection<Reservacion> Reservacion { get; set; }
     }
 }
