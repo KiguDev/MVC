@@ -1,19 +1,19 @@
-﻿using Restaurantes.Core.Entities;
-using Restaurantes.Core.Interfaces;
+﻿using Restaurante.Core.Entities;
+using Restaurante.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurantes.Infrastructure.Services
+namespace Restaurante.Infrastructure.Services
 {
     public class RestauranteDummyService : IRestauranteService
     {
-        public int Agregar(Restaurante restaurante)
+        public int Agregar(Core.Entities.Restaurante restaurante)
         {
             throw new NotImplementedException();
         }
 
-        public void Editar(Restaurante restaurante)
+        public void Editar(Core.Entities.Restaurante restaurante)
         {
             throw new NotImplementedException();
         }
@@ -23,7 +23,7 @@ namespace Restaurantes.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public List<Restaurante> ObtenerRestaurantes()
+        public List<Core.Entities.Restaurante> ObtenerRestaurantes()
         {
             return new List<Restaurante> {
                 new Restaurante{Nombre = "Mario's Pizza", Domicilio = "Avev. Prueba 123"}

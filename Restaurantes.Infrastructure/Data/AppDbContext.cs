@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Restaurantes.Core.Entities;
+using Restaurante.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurantes.Infrastructure.Data
+namespace Restaurante.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
@@ -18,13 +18,13 @@ namespace Restaurantes.Infrastructure.Data
             modelBuilder.Entity<Restaurante>(ConfigureRestaurante);
         }
 
-        private void ConfigureRestaurante(EntityTypeBuilder<Restaurante> builder)
+        private void ConfigureRestaurante(EntityTypeBuilder<Core.Entities.Restaurante> builder)
         {
             builder.Property(r => r.HoraDeCierre)
                 .IsRequired();
         }
 
-        public DbSet<Restaurante> Restaurantes { get; set; }
+        public DbSet<Core.Entities.Restaurante> Restaurantes { get; set; }
         public DbSet<Mesa> Mesas { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
     }

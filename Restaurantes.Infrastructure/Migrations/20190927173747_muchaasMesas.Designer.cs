@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurantes.Infrastructure.Data;
+using Restaurante.Infrastructure.Data;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190927173747_muchaasMesas")]

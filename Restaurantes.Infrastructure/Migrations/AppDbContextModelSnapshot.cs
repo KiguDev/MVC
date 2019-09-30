@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurantes.Infrastructure.Data;
+using Restaurante.Infrastructure.Data;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -15,11 +15,11 @@ namespace Restaurantes.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
+            modelBuilder.Entity("Restaurante.core.Entities.Empleado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>
+            modelBuilder.Entity("Restaurante.core.Entities.Mesa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Mesas");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Restaurante", b =>
+            modelBuilder.Entity("Restaurante.core.Entities.Restaurante", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,10 +81,10 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Restaurantes");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>
+            modelBuilder.Entity("Restaurante.core.Entities.Mesa", b =>
                 {
-                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany("Mesas")
+                    b.HasOne("Restaurante.core.Entities.Restaurante", "Restaurante")
+                        .WithMany("mesas")
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

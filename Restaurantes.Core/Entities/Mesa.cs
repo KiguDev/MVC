@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Restaurantes.Core.Entities
+namespace Restaurante.Core.Entities
 {
     public class Mesa
     {

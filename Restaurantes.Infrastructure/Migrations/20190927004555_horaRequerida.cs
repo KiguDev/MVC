@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.Infrastructure.Migrations
 {
     public partial class horaRequerida : Migration
     {
