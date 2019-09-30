@@ -1,7 +1,22 @@
-﻿
-@{
-    ViewData["Title"] = "AgregarMesa";
-}
+﻿@model MesaViewModel
 
-<h1>AgregarMesa</h1>
-
+<div>
+    <div class="">
+        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+            @Html.ValidationSummary()
+            <div class="text-danger">@Html.ValidationSummary(true)</div>
+            <div class="form-group">
+                <label asp-for="Capacidad">Capacidad</label>
+                <input class="form-control" asp-for="Capacidad" />
+                <span asp-validation-for="Capacidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Identificador">Identificador</label>
+                <input class="form-control" asp-for="Identificador" />
+                <span asp-validation-for="Identificador" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>

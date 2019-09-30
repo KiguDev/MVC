@@ -17,7 +17,7 @@ namespace DbFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Mesa()
         {
-            this.Reservacions = new HashSet<Reservacion>();
+            this.Reservacion = new HashSet<Reservacion>();
         }
     
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace DbFirst
     
         public virtual Restaurante Restaurante { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Reservacion> Reservacions { get; set; }
+        public virtual ICollection<Reservacion> Reservacion { get; set; }
     }
 }

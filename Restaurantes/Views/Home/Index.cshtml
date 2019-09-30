@@ -1,10 +1,10 @@
 ﻿@model List<Restaurante>
+@{
+    ViewData["Title"] = "Home Page";
+}
 
-    <h1>
-        Restaurantes
-    </h1>
-
-<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
+<h1>Restaurante</h1>
+<a class="btn btn-primary btn-block" asp-action="Agregar">Agregar restaurante</a>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -12,18 +12,20 @@
             <th>Domicilio</th>
             <th>Teléfono</th>
             <th>Mesas</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var restaurante in Model)
+        @foreach (var restaurante in Model)
         {
         <tr>
             <td>@restaurante.Nombre</td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+            <td>@restaurante.Mesas.Count</td>
+            <td><a asp-Action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+
+            <td><form asp-action="Eliminar"><button type="submit" name="Id" value="@restaurante.Id">Eliminar</button></form></td>
         </tr>
         }
     </tbody>

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{202FA3C1-AD9D-424A-BBC4-73E00CD64AC8}</ProjectGuid>
+    <ProjectGuid>{ABB73763-F2CF-40CC-AACF-4184D44CE3A0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DbFirst</RootNamespace>
     <AssemblyName>DbFirst</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -90,19 +90,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RestauranteModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>RestauranteModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserProfile.cs">
-      <DependentUpon>RestauranteModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Venta.cs">
       <DependentUpon>RestauranteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="VentaProducto.cs">
-      <DependentUpon>RestauranteModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="webpages_Roles.cs">
       <DependentUpon>RestauranteModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

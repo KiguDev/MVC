@@ -8,20 +8,21 @@ namespace Restaurantes.Models
 {
     public class RestauranteViewModel
     {
-        [Required(ErrorMessage ="Nombre es requerido")]
+        public int Id { get; set; }
+        [Required (ErrorMessage ="Nombre requerido")]
         public string Nombre { get; set; }
         [Required]
         public string Direccion { get; set; }
         [Phone]
-        public string Telefono { get; set; }
-        [Display(Name = "Página Web")]
+        public int Telefono { get; set; }
+        [Display(Name ="Página Web")]
         [Url]
         public string PaginaWeb { get; set; }
-        [Range(100, 2000)]
-        public int HoraDeCierre { get; set; }
+        public int NumeroExterior { get; set; }
+        public string TipoDeComida { get; set; }
         public DateTime FechaDeAlta { get; set; }
+        [Range(100,2000)]
+        public int HoraDeCierre { get; set; }
         public List<int> Ordenes { get; set; }
-        public bool EsEditar { get; set; }
-        public int Id { get; set; }
     }
 }

@@ -25,17 +25,14 @@ namespace DbFirst
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Categoria> Categorias { get; set; }
-        public virtual DbSet<Cliente> Clientes { get; set; }
-        public virtual DbSet<Empleado> Empleadoes { get; set; }
-        public virtual DbSet<Mesa> Mesas { get; set; }
-        public virtual DbSet<Producto> Productoes { get; set; }
-        public virtual DbSet<Reservacion> Reservacions { get; set; }
-        public virtual DbSet<Restaurante> Restaurantes { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<UserProfile> UserProfiles { get; set; }
-        public virtual DbSet<Venta> Ventas { get; set; }
-        public virtual DbSet<VentaProducto> VentaProductoes { get; set; }
-        public virtual DbSet<webpages_Roles> webpages_Roles { get; set; }
+        public virtual DbSet<Categoria> Categoria { get; set; }
+        public virtual DbSet<Cliente> Cliente { get; set; }
+        public virtual DbSet<Empleado> Empleado { get; set; }
+        public virtual DbSet<Mesa> Mesa { get; set; }
+        public virtual DbSet<Producto> Producto { get; set; }
+        public virtual DbSet<Reservacion> Reservacion { get; set; }
+        public virtual DbSet<Restaurante> Restaurante { get; set; }
+        public virtual DbSet<Venta> Venta { get; set; }
+        public virtual DbSet<VentaProducto> VentaProducto { get; set; }
     }
 }
