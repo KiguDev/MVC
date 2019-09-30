@@ -92,6 +92,8 @@ namespace Restaurantes.Controllers
             mesa.Identificador = model.Identificador;
             
             mesa.Capacidad = model.Capacidad;
+
+            _mesasService.Editar(mesa);
           
             return RedirectToAction("Mesas");
         }

@@ -24,6 +24,7 @@
             <td><a href=""></a>@restaurante.Mesas.Count()</td>
             <td> <a asp-controller="Home" asp-action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+            <td><a asp-controller="Empleado" asp-action="Empleados" asp-route-id="@restaurante.Id">Ver Empleados</a> </td>
             <td>
                 <form asp-action="Eliminar">
                     <button type="submit" name="Id" value="@restaurante.Id" class="btn btn-danger">Eliminar</button>
