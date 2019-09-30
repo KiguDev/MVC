@@ -38,6 +38,7 @@ namespace Restaurantes
             services.AddDbContext<AppDbContext>(c=> c.UseSqlServer (Configuration.GetConnectionString ("CatalogConnection")));
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IMesaService, MesaService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

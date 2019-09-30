@@ -19,4 +19,13 @@
     <ProjectReference Include="..\Restaurante.infrastructure\Restaurante.infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Empleado\AgregarEmpleado.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Empleado\Empleados.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

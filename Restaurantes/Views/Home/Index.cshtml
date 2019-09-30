@@ -22,7 +22,8 @@
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td>@restaurante.Mesas.Count</td>
-            <td><a asp-Action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
+            <td><a asp-Action="Mesas"  asp-route-id="@restaurante.Id">Ver mesas</a></td>
+            <td><a asp-action="Empleados" asp-controller="Empleado" asp-route-id="@restaurante.Id">Empleados</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
 
             <td><form asp-action="Eliminar"><button type="submit" name="Id" value="@restaurante.Id">Eliminar</button></form></td>

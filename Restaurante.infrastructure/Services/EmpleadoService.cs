@@ -43,7 +43,7 @@ namespace Restaurante.infrastructure.Services
 
         }
 
-        public List<Core.Entities.Empleado> ObtenerEmpleados()
+        public List<Core.Entities.Empleado> ObtenerEmpleado()
         {
             return _context.Empleados.Include(c => c.Restaurante).ToList();
         }
