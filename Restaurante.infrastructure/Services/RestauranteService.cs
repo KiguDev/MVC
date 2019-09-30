@@ -46,7 +46,7 @@ namespace Restaurante.infrastructure.Services
 
         public List<core.Entities.Restaurante> ObtenerRestaurante()
         {
-            return _context.Restaurantes.Include(c => c.mesas).ToList();
+            return _context.Restaurantes.Include(c => c.mesas).Include(d => d.empleados).ToList();
         }
     }
 }

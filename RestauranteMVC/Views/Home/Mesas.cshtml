@@ -21,8 +21,8 @@
             <td>@mesa.Identificador</td>
             <td>@mesa.Capacidad</td>
             <td>
-                <a asp-action="EditarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]">Editar</a>
-                <a asp-action="EliminarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]">Eliminar</a>
+                <a asp-action="EditarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
+                <a asp-action="EliminarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
             </td>
         </tr>
         }

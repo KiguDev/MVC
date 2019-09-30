@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurante.infrastructure.Data;
 
 namespace Restaurante.infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190930172551_empleadoRestaurante")]
+    partial class empleadoRestaurante
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +29,7 @@ namespace Restaurante.infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
-                    b.Property<string>("Puesto");
+                    b.Property<int>("Puesto");
 
                     b.Property<int>("RestauranteId");
 
@@ -55,59 +57,6 @@ namespace Restaurante.infrastructure.Migrations
                     b.HasIndex("RestauranteId");
 
                     b.ToTable("Mesas");
-                });
-
-            modelBuilder.Entity("Restaurante.core.Entities.Orden", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmpleadoId");
-
-                    b.Property<int>("Estatus");
-
-                    b.Property<DateTime>("FechaDeAlta");
-
-                    b.Property<int>("RestauranteId");
-
-                    b.Property<decimal>("Total");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ordenes");
-                });
-
-            modelBuilder.Entity("Restaurante.core.Entities.OrdenProducto", b =>
-                {
-                    b.Property<int>("OrdenId");
-
-                    b.Property<int>("ProductoId");
-
-                    b.Property<int>("Cantidad");
-
-                    b.HasKey("OrdenId", "ProductoId");
-
-                    b.HasIndex("ProductoId");
-
-                    b.ToTable("OrdenProducto");
-                });
-
-            modelBuilder.Entity("Restaurante.core.Entities.Producto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Cantidad");
-
-                    b.Property<string>("Ingredientes");
-
-                    b.Property<string>("Nombre");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("Restaurante.core.Entities.Restaurante", b =>
@@ -149,19 +98,6 @@ namespace Restaurante.infrastructure.Migrations
                     b.HasOne("Restaurante.core.Entities.Restaurante", "Restaurante")
                         .WithMany("mesas")
                         .HasForeignKey("RestauranteId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Restaurante.core.Entities.OrdenProducto", b =>
-                {
-                    b.HasOne("Restaurante.core.Entities.Orden", "Orden")
-                        .WithMany("Productos")
-                        .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Restaurante.core.Entities.Producto", "Producto")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

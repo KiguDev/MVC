@@ -1,0 +1,31 @@
+﻿@model List<Empleado>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Empleados</h1>
+<a class="btn btn-primary" asp-action="Agregar" asp-route-id="@ViewData["resId"]">Agregar</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Puesto</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var empleado in Model)
+        {
+            <tr>
+                <td>@empleado.Nombre</td>
+                <td>@empleado.Puesto</td>
+                <td>
+                    <a asp-action="EditarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
+                    <a asp-action="EliminarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
