@@ -16,12 +16,28 @@ namespace Restaurantes.Infrastructure.Data
                 {
                     Nombre = "Restaurante Maestro",
                     Domicilio = "Ave. Prueba 123",
-                    Telefono = 686156
+                    Telefono = 686156,
+                    HoraDeCierre = 500
                 });
 
 
                 catalogContext.SaveChanges();
             }
+
+            if(!catalogContext.Ordenes.Any())
+            {
+                catalogContext.AddRange(
+                    new List<Orden>
+                    {
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Pendiente,
+                        }
+                    }
+                    )
+            }
+
+
         }
     }
 }
