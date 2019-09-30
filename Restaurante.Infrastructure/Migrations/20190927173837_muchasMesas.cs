@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.Infrastructure.Migrations
 {
-    public partial class muchaasMesas : Migration
+    public partial class muchasMesas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restaurantes.Infrastructure.Data;
+using Restaurante.Infrastructure.Data;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190927173747_muchaasMesas")]
-    partial class muchaasMesas
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +19,7 @@ namespace Restaurantes.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
+            modelBuilder.Entity("Restaurante.Core.Entities.Empleado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +36,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Empleados");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>
+            modelBuilder.Entity("Restaurante.Core.Entities.Mesa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +55,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Mesas");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Restaurante", b =>
+            modelBuilder.Entity("Restaurante.Core.Entities.Restaurante", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,10 +63,9 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<string>("Domicilio");
 
-                    b.Property<DateTime>("FechaDeAlta");
+                    b.Property<DateTime>("FechaAlta");
 
-                    b.Property<int?>("HoraDeCierre")
-                        .IsRequired();
+                    b.Property<int?>("HoraCierre");
 
                     b.Property<string>("Logo");
 
@@ -83,9 +80,9 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Restaurantes");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>
+            modelBuilder.Entity("Restaurante.Core.Entities.Mesa", b =>
                 {
-                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
+                    b.HasOne("Restaurante.Core.Entities.Restaurante", "Restaurante")
                         .WithMany("Mesas")
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);

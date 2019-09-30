@@ -26,13 +26,17 @@ namespace Controladores
                 app.UseDeveloperExceptionPage();
             }
 
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
+
             app.UseMvc(routes => {
-            routes.MapRoute(
-                name: "default",
-                template: "{controller=Restaurante}/{action=Index}/{id?}"
-                    ); 
-            });
-            
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Restaurante}/{action=Index}/{id?}"
+                    );
+            } );
         }
     }
 }

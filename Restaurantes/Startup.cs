@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurantes.Core.Interfaces;
-using Restaurantes.Infrastructure.Data;
-using Restaurantes.Infrastructure.Services;
+using Restaurante.Core.Interfaces;
+using Restaurante.Infrastructure.Data;
+using Restaurante.Infrastructure.Services;
 
 namespace Restaurantes
 {
@@ -35,10 +35,9 @@ namespace Restaurantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
-
             services.AddScoped<IRestauranteService, RestauranteService>();
-
+            services.AddScoped<IMesaService, MesaService>();
+            services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")) );
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

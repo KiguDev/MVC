@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Controladores.Models;
 using Microsoft.AspNetCore.Mvc;
+using Controladores.Models;
 
 namespace Controladores.Controllers
 {
@@ -12,19 +12,22 @@ namespace Controladores.Controllers
         public IActionResult Index()
         {
             var restaurante = new RestauranteViewModel {
-                Nombre = "Luigi's Pizza",
-                Direccion = "Ave ejemplo",
+                Nombre = "Sushi Alfa",
+                Direccion = "Calle 123 Colonia 22000",
                 NumeroExterior = 123,
-                TipoDeComida = "Torta",
+                TipoDeComida = "Japonesa",
                 FechaDeAlta = DateTime.Now,
-                Ordenes = new List<int>
-                {
-                    1,
-                    5,
-                    6
-                }
-            };
+                Ordenes = new List<int> {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6}
+        };
             return View(restaurante);
         }
+
+        
     }
 }

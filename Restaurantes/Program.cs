@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Restaurantes.Infrastructure.Data;
+using Restaurante.Infrastructure.Data;
 
 namespace Restaurantes
 {
@@ -18,11 +18,11 @@ namespace Restaurantes
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            using(var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
-                var catalogContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var cataloContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                AppDbContextSeed.Seed(catalogContext);
+                AppDbContextSeed.Seed(cataloContext);
             }
 
             host.Run();

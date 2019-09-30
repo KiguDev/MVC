@@ -1,30 +1,44 @@
-﻿@model List<Restaurante>
+﻿@model  List<Restaurante>
+@{
+    ViewData["Title"] = "Home Page";
+}
 
-    <h1>
-        Restaurantes
-    </h1>
+<h1>Restaurantes</h1>
 
-<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
-<table class="table table-bordered">
+<a href="/Home/Agregar" class="btn btn-outline-primary">Agregar</a>
+
+<table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>Teléfono</th>
-            <th>Mesas</th>
+            <th> Nombre </th>
+            <th> Domicilio </th>
+            <th> Telefono </th>
+            <th> Mesas </th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
+        
     </thead>
     <tbody>
-        @foreach(var restaurante in Model)
+        @foreach (var r in Model)
         {
-        <tr>
-            <td>@restaurante.Nombre</td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
-        </tr>
+            <tr>
+                <td>@r.Nombre</td>
+                <td>@r.Domicilio</td>
+                <td>@r.Telefono</td>
+                <td>@r.Mesas.Count</td>
+                <td><a href="/Home/Mesas?id=@r.Id"> Ver Mesas</a></td>
+                <td><a asp-action="Editar" asp-route-id="@r.Id" class="btn btn-warning">Editar</a></td>
+                <td>
+                    <form asp-action="Eliminar">
+                        <button name="Id" value="@r.Id" type="submit" class="btn btn-danger" >Eliminar</button>
+                    </form>
+                </td>
+
+            </tr>
+
         }
     </tbody>
 </table>
+

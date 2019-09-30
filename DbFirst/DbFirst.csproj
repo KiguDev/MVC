@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{202FA3C1-AD9D-424A-BBC4-73E00CD64AC8}</ProjectGuid>
+    <ProjectGuid>{CFD4E864-3C04-4DB8-A5D6-8DA4A1B7724D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DbFirst</RootNamespace>
     <AssemblyName>DbFirst</AssemblyName>
@@ -90,9 +90,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RestauranteModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>RestauranteModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserProfile.cs">
       <DependentUpon>RestauranteModel.tt</DependentUpon>
     </Compile>
@@ -100,9 +97,6 @@
       <DependentUpon>RestauranteModel.tt</DependentUpon>
     </Compile>
     <Compile Include="VentaProducto.cs">
-      <DependentUpon>RestauranteModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="webpages_Roles.cs">
       <DependentUpon>RestauranteModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

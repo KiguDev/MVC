@@ -1,10 +1,9 @@
-﻿using Restaurantes.Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Restaurantes.Infrastructure.Data
+namespace Restaurante.Infrastructure.Data
 {
     public class AppDbContextSeed
     {
@@ -12,13 +11,15 @@ namespace Restaurantes.Infrastructure.Data
         {
             if (!catalogContext.Restaurantes.Any())
             {
-                catalogContext.Add(new Restaurante
+                catalogContext.Add(new Restaurante.Core.Entities.Restaurante
                 {
-                    Nombre = "Restaurante Maestro",
-                    Domicilio = "Ave. Prueba 123",
-                    Telefono = 686156
-                });
+                    Nombre="Restaurante Maestro",
+                    Domicilio="Ave. Prueba 123",
+                    Telefono = 664,
+                    HoraCierre = 10
 
+
+                });
 
                 catalogContext.SaveChanges();
             }

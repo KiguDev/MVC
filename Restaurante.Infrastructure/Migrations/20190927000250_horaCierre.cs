@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Restaurantes.Infrastructure.Migrations
+namespace Restaurante.Infrastructure.Migrations
 {
-    public partial class horaDeCierre : Migration
+    public partial class horaCierre : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,13 +15,13 @@ namespace Restaurantes.Infrastructure.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "FechaDeAlta",
+                name: "FechaAlta",
                 table: "Restaurantes",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<int>(
-                name: "HoraDeCierre",
+                name: "HoraCierre",
                 table: "Restaurantes",
                 nullable: true);
         }
@@ -29,11 +29,11 @@ namespace Restaurantes.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FechaDeAlta",
+                name: "FechaAlta",
                 table: "Restaurantes");
 
             migrationBuilder.DropColumn(
-                name: "HoraDeCierre",
+                name: "HoraCierre",
                 table: "Restaurantes");
 
             migrationBuilder.AlterColumn<string>(

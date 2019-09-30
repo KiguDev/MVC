@@ -1,42 +1,53 @@
 ﻿@model RestauranteViewModel
+@{
+    ViewData["Title"] = "Agregar";
+}
+
 <div class="card">
     <div class="card-header">
-        @ViewData["Accion"] restaurante
+        Agregar Restaurante
     </div>
     <div class="card-body">
         <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
-            <div class="text-danger">
-                @Html.ValidationSummary(true)
-            </div>
+            @Html.ValidationSummary(true)
             <div class="form-group">
-                <label asp-for="Nombre"></label>
+                <label asp-for="Nombre"> Nombre </label>
                 <input class="form-control" asp-for="Nombre" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Direccion"></label>
                 <input class="form-control" asp-for="Direccion" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
-
             </div>
+
             <div class="form-group">
                 <label asp-for="Telefono"></label>
                 <input class="form-control" asp-for="Telefono" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
-
             </div>
+
+
+            <div class="form-group">
+                <label asp-for="Logo"></label>
+                <input class="form-control" asp-for="Logo" />
+                <span asp-validation-for="Logo" class="text-danger"></span>
+            </div>
+
+
             <div class="form-group">
                 <label asp-for="PaginaWeb"></label>
                 <input class="form-control" asp-for="PaginaWeb" />
                 <span asp-validation-for="PaginaWeb" class="text-danger"></span>
-
             </div>
+
             <div class="form-group">
-                <label asp-for="HoraDeCierre"></label>
-                <input class="form-control" asp-for="HoraDeCierre" />
-                <span asp-validation-for="HoraDeCierre" class="text-danger"></span>
-
+                <label asp-for="HoraCierre"></label>
+                <input class="form-control" asp-for="HoraCierre" />
+                <span asp-validation-for="HoraCierre" class="text-danger"></span>
             </div>
+
             <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
     </div>

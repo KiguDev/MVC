@@ -1,3 +1,15 @@
-﻿@model int
+﻿@using Controladores.Models
 
-<h2>Orden: @Model</h2>
+@model  int
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1> Orden: @Model </h1>
+@*
+@for (var i = 0; i < Model.numero; i++)
+{
+    <p> @Model.nombre</p>
+   
+}*@
+

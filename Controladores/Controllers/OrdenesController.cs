@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Controladores.Models;
 
 namespace Controladores.Controllers
 {
     public class OrdenesController : Controller
     {
+        //public IActionResult Index(int numero, string nombre)
+        //{
+        //    var orden = new OrdenesViewModel {
+        //        nombre = nombre,
+        //        numero = numero
+
+        //    };
+        //    return View("index",orden);
+        //}
+
         public IActionResult Index(int id)
         {
-            return View(id);
+           
+            return View("index", id);
         }
 
-        [HttpPost]
         [Route("peticion")]
         public IActionResult Detalles()
         {
