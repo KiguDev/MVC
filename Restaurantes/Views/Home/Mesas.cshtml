@@ -1,12 +1,25 @@
 ﻿@model List<Mesa>
+<h1>Mesas</h1>
 
-<a asp-action="AgregarMesa" asp-route-restaurante="@ViewData["restauranteId"]">Agregar mesa</a>
-<table>
-    @foreach (var mesa in Model)
-    {
-    <tr>
-        <td>@mesa.Identificador</td>
-        <td>@mesa.Capacidad</td>
-    </tr>
-    }
+<a class="btn btn-primary" asp-action="AgregarMesa" asp-route-restaurante="@ViewData["restauranteId"]">Agregar mesa</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Identificador</th>
+            <th>Capacidad</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mesa in Model)
+        {
+            <tr>
+                <td>@mesa.Identificador</td>
+                <td>@mesa.Capacidad</td>
+                <td><a asp-action="EditarMesa" asp-route-id="@mesa.Id">Editar</a></td>
+                <td><a asp-action="EliminarMesa" asp-route-id="@mesa.Id">Eliminar</a></td>
+            </tr>
+        }
+    </tbody>
 </table>

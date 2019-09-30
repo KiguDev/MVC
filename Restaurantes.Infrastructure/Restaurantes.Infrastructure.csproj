@@ -14,4 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Restaurantes.Core\Restaurantes.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Services\RestauranteDummyService.cs" />
+  </ItemGroup>
 </Project>

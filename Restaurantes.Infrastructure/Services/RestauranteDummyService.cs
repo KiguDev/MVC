@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Restaurantes.Infrastructure.Services
 {
-    public class RestauranteDummyService : IRestauranteService
+    public class RestauranteDummyService
     {
         public int Agregar(Restaurante restaurante)
         {

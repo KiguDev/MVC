@@ -1,7 +1,37 @@
-﻿
-@{
-    ViewData["Title"] = "AgregarMesa";
+﻿@model MesaViewModel
+<div class="card">
+    <div class="card-header">
+        Agregar mesa
+    </div>
+    <div class="card-body">
+        <form asp-action="@ViewData["AccionMesa"]" asp-antiforgery="true">
+            <div class="text-danger">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <label asp-for="Identificador"></label>
+                <input class="form-control" asp-for="Identificador" />
+                <span asp-validation-for="Identificador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Capacidad"></label>
+                <input class="form-control" asp-for="Capacidad" />
+                <span asp-validation-for="Capacidad" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha256-F6h55Qw6sweK+t7SiOJX+2bpSAa3b/fnlrVCJvmEj1A="></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY="></script>
 }
-
-<h1>AgregarMesa</h1>
-

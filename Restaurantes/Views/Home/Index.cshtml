@@ -13,6 +13,7 @@
             <th>Teléfono</th>
             <th>Mesas</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +25,7 @@
             <td>@restaurante.Telefono</td>
             <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+            <td><a asp-action="Eliminar" asp-route-id="@restaurante.Id">Eliminar</a></td>
         </tr>
         }
     </tbody>

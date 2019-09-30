@@ -13,10 +13,12 @@ namespace Restaurantes.Controllers
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
+        private IMesaService _mesaService;
 
-        public HomeController(IRestauranteService restauranteService)
+        public HomeController(IRestauranteService restauranteService, IMesaService mesaService)
         {
             _restauranteService = restauranteService;
+            _mesaService = mesaService;
         }
 
         public IActionResult Index()
@@ -81,36 +83,59 @@ namespace Restaurantes.Controllers
 
             var restaurante = _restauranteService.Obtener(model.Id);
             restaurante.Nombre = model.Nombre;
-
+            restaurante.Domicilio = model.Direccion;
+            restaurante.Telefono = int.Parse(model.Telefono);
+            restaurante.PaginaWeb = model.PaginaWeb;
+            restaurante.HoraDeCierre = model.HoraDeCierre;
             _restauranteService.Editar(restaurante);
 
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult Eliminar(int id)
+        {
+            ViewData["Accion"] = "Eliminar";
+            var restaurante = _restauranteService.Obtener(id);
+            _restauranteService.Eliminar(restaurante);
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Mesas(int id)
         {
-            ViewData["restauranteId"] = id;
+            ViewData["RestauranteId"] = id;
             var restaurante = _restauranteService.Obtener(id);
-
             return View(restaurante.Mesas);
         }
 
         public IActionResult AgregarMesa(int restaurante)
         {
-
-            return View(new Mesa {
+            ViewData["Accion"] = "AgregarMesa";
+            return View(new MesaViewModel
+            {
                 RestauranteId = restaurante
             });
         }
 
         [HttpPost]
-        public IActionResult AgregarMesa(Mesa model)
+        public IActionResult AgregarMesa(MesaViewModel model)
         {
-            // utilizar el servicio de mesa y pbtemer la entidad
-            // modificar las propiedades de Mesa con los del view model
-            // enviar la entidad al metodo de actualizar del servicio 
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var mesa = new Mesa
+            {
+                Identificador = model.Identificador,
+                Capacidad = model.Capacidad,
+                RestauranteId = model.RestauranteId
+            };
+            var id = _mesaService.Agregar(mesa);
+            return View(model);
         }
+
 
 
         public IActionResult Privacy()
