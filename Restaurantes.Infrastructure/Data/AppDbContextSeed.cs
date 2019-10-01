@@ -24,6 +24,11 @@ namespace Restaurantes.Infrastructure.Data
 
                 catalogContext.SaveChanges();
             }
+
+
+
+
+
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿@model List<Restaurante>
 
-    <h1>
-        Restaurantes
-    </h1>
+<h1>
+    Restaurantes
+</h1>
 
 <a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
 <table class="table table-bordered">
@@ -16,15 +16,57 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var restaurante in Model)
+        @foreach (var restaurante in Model)
         {
-        <tr>
-            <td>@restaurante.Nombre</td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
-        </tr>
+            <tr class="row-@restaurante.Id">
+                <td>@restaurante.Nombre</td>
+                <td>@restaurante.Domicilio</td>
+                <td>@restaurante.Telefono</td>
+                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+                <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+                <a href="#" class="ejecutar-eliminarcion">Eliminar </a>
+            </tr>
+
+
         }
     </tbody>
 </table>
+
+@section Scripts{
+    <Script>
+        $('a.ejecutar-eliminarcion').click(function (event))
+        event.preventDefult();
+        {
+            var id = $(this).data.('id');
+            var IsConfimed = confirm('seguro que quieres eliminar este elemento');
+            if (IsConfimed)
+            {
+                $ajax({
+                    url: //Url en Postman
+                    Type: 'DELETE'
+                    success: function(result)
+                    {
+                    }
+
+                })
+            }
+        }
+
+
+
+        }
+    </Script>
+}}
+
+
+
+
+
+@*@section Scripts{
+    <Script>
+        $('a.ejecutar-eliminarcion').click(function (event))
+        event.preventDefault();
+        alert('me diero clic');
+
+    </Script>
+}}*@
