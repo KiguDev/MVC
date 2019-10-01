@@ -12,27 +12,61 @@
             <th>Domicilio</th>
             <th>Telefono</th>
             <th>Mesas</th>
+            <th>Id</th>
         </tr>
     </thead>
     <tbody>
         @foreach(var restaurante in Model)
         {
-        <tr>
+        <tr class="row-@restaurante.Id">
             <td>@restaurante.Nombre</td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td><a href=""></a>@restaurante.Mesas.Count()</td>
+            <td>@restaurante.Id</td>
             <td> <a asp-controller="Home" asp-action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
             <td><a asp-controller="Empleado" asp-action="Empleados" asp-route-id="@restaurante.Id">Ver Empleados</a> </td>
             <td>
-                <form asp-action="Eliminar">
+                @*<form asp-action="Eliminar">
                     <button type="submit" name="Id" value="@restaurante.Id" class="btn btn-danger">Eliminar</button>
-                </form>
+                </form>*@
+                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id"> Eliminacion</a>
             </td>
         </tr>
         }
     </tbody>
 </table>
+@section Scripts{ 
+    <script>
+        $('a.ejecutar-eliminacion').click(function (event) {
+            event.preventDefault();
+            //var id = $(this).attr('data-id');
+            var id = $(this).data('id');
+            var IsConfirmed = confirm("¿Seguro que quieres eliminar este elemento?");
+
+            if (IsConfirmed) {
+                $.ajax({
+                    url: 'https://localhost:44373/api/restaurantes/' + id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        // obtener elementos
+                        $.getJSON('https://localhost:43373/api/restaurantes/', fuction(data){
+                            var row = '<tr>'
+                                + '<td>' + data.nombre + '</td>'
+                                + '<td>' + data.domicilio + '</td>'
+                                + '<td>' + data.telefono + '</td>'
+                                + '<td><a href= ""@Url.Action("Mesas","Index")/' + id + '">' + data.mesas + '</a></td>' + '</a></td>'
+                                + '<td></td>'
+                                + '</tr>'
+                        });
+                        window.location.reload();
+                    }
+                })
+            });
+        }
+            
+    </script>
+}
 
 

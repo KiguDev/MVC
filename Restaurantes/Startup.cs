@@ -13,6 +13,7 @@ using Restaurante.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Restaurante.Core.Interfaces;
 using Restaurante.Infrastructure.Services;
+using AutoMapper;
 
 namespace Restaurantes
 {
@@ -39,6 +40,10 @@ namespace Restaurantes
             services.AddScoped<IMesasService, MesasService>();
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IOrdenService, OrdenService>();
+
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

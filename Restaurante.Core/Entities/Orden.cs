@@ -7,7 +7,7 @@ namespace Restaurante.Core.Entities
     public class Orden
     {
         public int Id { get; set; }
-        public ICollection<Producto> Producto { get; set; }
+        public ICollection<OrdenProducto> Productos { get; set; }
         public int EmpleadoId { get; set; }
         public int RestauranteId { get; set; }
         public DateTime FechaAlta { get; set; }

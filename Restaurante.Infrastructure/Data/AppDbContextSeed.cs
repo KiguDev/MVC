@@ -26,6 +26,7 @@ namespace Restaurante.Infrastructure.Data
                 });
                 catalogContext.SaveChanges();
             }
+           
         }
     }
 }
