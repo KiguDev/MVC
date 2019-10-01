@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootbox@5.3.2",
+      "destination": "wwwroot/lib/bootbox",
+      "files": [
+        "bootbox.min.js",
+        "bootbox.js"
+      ]
+    },
+    {
+      "library": "sweetalert@2.1.2",
+      "destination": "wwwroot/lib/sweetalert",
+      "files": [
+        "sweetalert.min.js"
+      ]
+    }
+  ]
+}
