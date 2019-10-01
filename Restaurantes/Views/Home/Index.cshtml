@@ -17,26 +17,29 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         
     </thead>
     <tbody>
         @foreach (var r in Model)
         {
-            <tr>
-                <td>@r.Nombre</td>
-                <td>@r.Domicilio</td>
-                <td>@r.Telefono</td>
-                <td>@r.Mesas.Count</td>
-                <td><a href="/Home/Mesas?id=@r.Id"> Ver Mesas</a></td>
-                <td><a asp-action="Editar" asp-route-id="@r.Id" class="btn btn-warning">Editar</a></td>
-                <td>
-                    <form asp-action="Eliminar">
-                        <button name="Id" value="@r.Id" type="submit" class="btn btn-danger" >Eliminar</button>
-                    </form>
-                </td>
+        <tr>
+            <td>@r.Nombre</td>
+            <td>@r.Domicilio</td>
+            <td>@r.Telefono</td>
+            <td>@r.Mesas.Count</td>
+            <td><a href="/Home/Mesas?id=@r.Id"> Ver Mesas</a></td>
+            <td><a asp-controller="Empleados" asp-action="Index" asp-route-id="@r.Id" class="btn btn-info">Empleados</a></td>
+            <td><a asp-action="Editar" asp-route-id="@r.Id" class="btn btn-warning">Editar</a></td>
 
-            </tr>
+            <td>
+                <form asp-action="Eliminar">
+                    <button name="Id" value="@r.Id" type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </td>
+
+        </tr>
 
         }
     </tbody>

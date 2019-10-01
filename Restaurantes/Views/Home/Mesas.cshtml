@@ -1,8 +1,9 @@
 ﻿@model List<Mesa>
 
 
-<h1>Mesas de @Model.FirstOrDefault().Restaurante.Nombre</h1>
+<h1>Mesas de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
 <a asp-action="AgregarMesa" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Mesa +</a>
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>

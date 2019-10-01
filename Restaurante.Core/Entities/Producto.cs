@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Restaurante.Core.Entities
 {
-    public class Empleado
+    public class Producto
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public int RestauranteId { get; set; }
-        public string Puesto { get; set; }
+        public string Ingredientes { get; set; }
+        public int Cantidad { get; set; }
+        public ICollection<OrdenTieneProducto> Ordenes {get; set;}
+
     }
 }

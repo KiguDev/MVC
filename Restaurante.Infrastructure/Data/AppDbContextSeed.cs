@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurante.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,16 @@ namespace Restaurante.Infrastructure.Data
                 });
 
                 catalogContext.SaveChanges();
+            }
+
+            if (!catalogContext.Ordenes.Any())
+            {
+                catalogContext.Add(new Restaurante.Core.Entities.Orden
+                {
+                    Estatus = (int)OrdenEstatus.Pendiente,
+                    RestauranteId = 1,
+                    FechaAltra = DateTime.Now
+                });
             }
         }
     }

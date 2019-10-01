@@ -95,14 +95,15 @@ namespace Restaurantes.Controllers
            
             _mesaServices.Editar(mesa);
 
-
-            return RedirectToAction("Mesas", new { id = model.RestauranteId});
+            
+            return RedirectToAction("Mesas", new { Id = mesa.RestauranteId });
         }
         [HttpPost]
         public IActionResult EliminarMesa(int id)
         {
+            var resId = _mesaServices.Obtener(id).RestauranteId;
             _mesaServices.Eliminar(id);
-            return RedirectToAction("Mesas", new { id = ViewData["resId"] });
+            return RedirectToAction("Mesas", new { Id = resId });
         }
         #endregion 
 
