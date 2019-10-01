@@ -82,7 +82,6 @@ namespace Restaurantes.Controllers
             empleado.Nombre = model.Nombre;
             empleado.Puesto = model.Puesto;
 
-
             _empleadoService.Editar(empleado);
 
             return RedirectToAction("Empleados");
