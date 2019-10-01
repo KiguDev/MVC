@@ -50,8 +50,13 @@ namespace Restaurantes.Infrastructure.Services
         }
 
 
-//Empleado
-//--------------------------------------------------------------------------------------------
+        public void Eliminar( int [] ids )
+        {
+            _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+        }
+        //Empleado
+        //--------------------------------------------------------------------------------------------
         //Obtner Empleado por ID
         public Empleado ObtenerE(int id)
         {
@@ -124,6 +129,10 @@ namespace Restaurantes.Infrastructure.Services
         //{
         //    return _context.Orden;
         //}
+
+
+
+
 
     }
 }

@@ -89,5 +89,14 @@ namespace Restaurantes.API
             return Ok();
 
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int [] ids)
+        {
+           _restauranteService.Eliminar(ids);
+
+            return Ok();
+
+        }
     }
 }
