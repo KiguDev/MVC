@@ -36,10 +36,45 @@
             <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.mesas.Count()</a></td>
             <td>
                 <a asp-action="Editar" asp-route-id="@restaurante.Id" class="fa fa-pencil"></a>
-                <a asp-action="Eliminar" asp-route-id="@restaurante.Id" class="fa fa-trash"></a>
+                <!--<a asp-action="Eliminar" asp-route-id="@restaurante.Id" class="fa fa-trash"></a>-->
+
+                <a href="#" class="fa fa-trash ejecutar-eliminacion" data-id="@restaurante.Id"></a>
             </td>
         </tr>          
         }
     </tbody>
 </table>
+@section Scripts{ 
+<script>
+
+    $('a.ejecutar-eliminacion').click(function (event) {
+        event.preventDefault();
+        //var resId = $(this).attr('data-id');
+        var resId = $(this).data('id');
+        var IsConfirmed = confirm("Seguro que desea eliminar el restaurante");
+        if (IsConfirmed) {
+            $.ajax({
+                url: 'https://localhost:44317/api/restaurantes/' + resId,
+                type: 'DELETE',
+                success: function (result) {
+                    //alert('Se elimino el restauratnte');
+                    //window.location.reload();
+                    $.getJSON('https://localhost:44317/api/restaurantes/', function (data) {
+                        var row =
+                            '<tr>' +
+                                '<td>' + data.nombre + '</td>' +
+                                '<td>' + data.logo + '</td>' +
+                                '<td>' + data.domicilio + '</td>' +
+                                '<td>' + data.telefono + '</td>' +
+                                '<td><a href='@Url.Action("Mesas","Index")/' + resId + '">' + data.mesas.count() + '</td>' +
+                                '<td>' + data.empleados +'</td>'+
+                            '</tr > ';
+                    });
+                }                
+            })
+        }
+    });
+
+</script>
+}
 

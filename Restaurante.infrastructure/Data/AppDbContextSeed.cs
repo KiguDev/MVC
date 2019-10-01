@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurante.core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,27 @@ namespace Restaurante.infrastructure.Data
                     FechaDeAlta = DateTime.Now,
                     HoraDeCierre = 19
                 });
+
+                catalogContext.SaveChanges();
+            }
+
+            if (!catalogContext.Ordenes.Any())
+            {
+                catalogContext.AddRange(new List<Orden> {
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Pendiente,
+                            RestauranteId = 1,
+                            FechaDeAlta = DateTime.Now,
+                            Total = 0
+                        }, new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Pendiente,
+                            RestauranteId = 1,
+                            FechaDeAlta = DateTime.Now,
+                            Total = 1000
+                        }
+                    });
                 catalogContext.SaveChanges();
             }
         }
