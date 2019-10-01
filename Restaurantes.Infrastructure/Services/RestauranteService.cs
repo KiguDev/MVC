@@ -48,5 +48,11 @@ namespace Restaurantes.Infrastructure.Services
             _context.Remove(restaurante);
             _context.SaveChanges();
         }
+
+        public void Eliminar(int[] ids)
+        {
+            _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+        }
     }
 }

@@ -4,13 +4,18 @@
         Restaurantes
     </h1>
 
-<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
+<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar restaurante</a>
 <div>
     <div>
         <div>
-            <table class="table table-bordered">
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6"></div>
+            </div>
+            <table class="table table-bordered " id="tabla-restaurantes-contenido">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nombre</th>
                         <th>Domicilio</th>
                         <th>Teléfono</th>
@@ -22,6 +27,7 @@
                     @foreach (var restaurante in Model)
                     {
                         <tr class="row-@restaurante.Id">
+                            <td>@restaurante.Id</td>
                             <td>@restaurante.Nombre</td>
                             <td>@restaurante.Domicilio</td>
                             <td>@restaurante.Telefono</td>
@@ -68,7 +74,8 @@
                         + '<td>' + element.direccion + '</td>'
                         + '<td>' + element.telefono + '</td>'
                         + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
-                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
+                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>' 
+                        + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
                         + '</tr>';
 
                     rows += row;
@@ -76,6 +83,41 @@
 
                 $('tbody').html(rows);
             });
-        }
+    }
+
+    $(document).ready( function () {
+        var table = $('#tabla-restaurantes-contenido').DataTable({
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function () {
+                        var rows = table.rows({ selected: true }).data();
+
+                        var ids = [];
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x][0]);
+                        }
+
+                         $.ajax({
+                             url: '/api/restaurantes/',
+                             data: {ids},
+                            type: 'DELETE',
+                             success: function(){
+                             }
+                         });
+
+                        console.log(ids);
+                    }
+                }
+            ]
+        });
+
+    //    table.buttons().container()
+    //.appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+
+    } );
 </script>
 }

@@ -13,5 +13,6 @@ namespace Restaurantes.Core.Interfaces
         void Editar(Restaurante restaurante);
 
         void Eliminar(int id);
+        void Eliminar(int[] ids);
     }
 }

@@ -3,7 +3,7 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "bootbox@5.3.2",
+      "library": "bootbox.js@5.3.2",
       "destination": "wwwroot/lib/bootbox",
       "files": [
         "bootbox.min.js",
@@ -11,6 +11,7 @@
       ]
     },
     {
+      // este no se está usando
       "library": "sweetalert@2.1.2",
       "destination": "wwwroot/lib/sweetalert",
       "files": [
