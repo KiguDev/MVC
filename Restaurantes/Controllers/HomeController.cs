@@ -106,7 +106,11 @@ namespace Restaurantes.Controllers
             return RedirectToAction("Mesas");
         }
 
-
+        public IActionResult Agregar()
+        {
+            ViewData["Accion"] = "Agregar";
+            return View(new RestaurantesViewModel());
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -117,7 +121,7 @@ namespace Restaurantes.Controllers
                 ModelState.AddModelError("", "Te hacen falta campos");
                 return View(model);
             }
-            var restaurantes = new Restaurante.Core.Entities.Restaurante()
+            var restaurante = new Restaurante.Core.Entities.Restaurante
             {
                 Nombre = model.Nombre,
                 Domicilio = model.Direccion,
@@ -126,7 +130,7 @@ namespace Restaurantes.Controllers
                 FechaDeAlta = DateTime.Now
             };
             
-            var id = _restauranteService.Agregar(restaurantes);
+            var id = _restauranteService.Agregar(restaurante);
             return View(model);
         }
 

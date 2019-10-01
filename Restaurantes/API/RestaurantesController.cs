@@ -25,11 +25,11 @@ namespace Restaurantes.API
         [HttpGet]
         public ActionResult<List<RestauranteDTO>> Get()
         {
-            return _restauranteService.ObtenerRestaurantes().Select(c => new RestauranteDTO {
-                Nombre = c.Nombre,
-                Direccion = c.Domicilio,
-                CantidadMesas = c.Mesas.Count()
-            }).ToList();
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            var model = new List<RestauranteDTO>();
+            _mapper.Map(restaurantes, model);
+
+            return model;
         }
 
         [HttpPost]
@@ -79,6 +79,12 @@ namespace Restaurantes.API
                 return BadRequest();
             }
             _restauranteService.Eliminar(restaurante);
+            return Ok();
+        }
+        [HttpDelete]
+        public ActionResult Delete([FromBody]int[] ids)
+        {
+            _restauranteService.Eliminar(ids);
             return Ok();
         }
     }

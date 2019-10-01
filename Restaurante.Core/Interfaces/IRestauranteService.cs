@@ -11,6 +11,7 @@ namespace Restaurante.Core.Interfaces
         Entities.Restaurante Obtener(int id);
         int Agregar(Entities.Restaurante restaurante);
         void Editar(Entities.Restaurante restaurante);
-        void Eliminar(Entities.Restaurante restaurante);
+        void Eliminar(Entities.Restaurante restaurante); 
+        void Eliminar(int[] ids);
     }
 }

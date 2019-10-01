@@ -1,71 +1,118 @@
-﻿@model  List<Restaurante>
+﻿@model List<Restaurante>
 
 
 <h1>
     Restaurantes
 </h1>
 <a class="btn btn-primary" asp-action="Agregar">Agregar Restaurante</a>
-<table class="table table-bordered">
+<table class="table table-bordered" id="tabla-restaurantes-contenido">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Nombre</th>
             <th>Domicilio</th>
             <th>Telefono</th>
             <th>Mesas</th>
-            <th>Id</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach(var restaurante in Model)
+    <tbody >
+        @*@foreach (var restaurante in Model)
         {
         <tr class="row-@restaurante.Id">
+            <td>@restaurante.Id</td>
             <td>@restaurante.Nombre</td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td><a href=""></a>@restaurante.Mesas.Count()</td>
-            <td>@restaurante.Id</td>
             <td> <a asp-controller="Home" asp-action="Mesas" asp-route-id="@restaurante.Id">Ver mesas</a></td>
             <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
             <td><a asp-controller="Empleado" asp-action="Empleados" asp-route-id="@restaurante.Id">Ver Empleados</a> </td>
             <td>
-                @*<form asp-action="Eliminar">
-                    <button type="submit" name="Id" value="@restaurante.Id" class="btn btn-danger">Eliminar</button>
-                </form>*@
+                <form asp-action="Eliminar">
+                <button type="submit" name="Id" value="@restaurante.Id" class="btn btn-danger">Eliminar</button>
+            </form>
                 <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id"> Eliminacion</a>
             </td>
         </tr>
-        }
+        }*@
     </tbody>
 </table>
-@section Scripts{ 
+@section Scripts{
     <script>
-        $('a.ejecutar-eliminacion').click(function (event) {
-            event.preventDefault();
-            //var id = $(this).attr('data-id');
-            var id = $(this).data('id');
-            var IsConfirmed = confirm("¿Seguro que quieres eliminar este elemento?");
-
+    @*$('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
+        event.preventDefault();
+        //var id = $(this).attr('data-id');
+        var id = $(this).data('id');
+       
+        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
             if (IsConfirmed) {
+                // eliminar elemento
                 $.ajax({
-                    url: 'https://localhost:44373/api/restaurantes/' + id,
+                    url: '/api/restaurantes/' + id,
                     type: 'DELETE',
-                    success: function (result) {
-                        // obtener elementos
-                        $.getJSON('https://localhost:43373/api/restaurantes/', fuction(data){
-                            var row = '<tr>'
-                                + '<td>' + data.nombre + '</td>'
-                                + '<td>' + data.domicilio + '</td>'
-                                + '<td>' + data.telefono + '</td>'
-                                + '<td><a href= ""@Url.Action("Mesas","Index")/' + id + '">' + data.mesas + '</a></td>' + '</a></td>'
-                                + '<td></td>'
-                                + '</tr>'
-                        });
-                        window.location.reload();
-                    }
-                })
+                    success: recargarElementos
+                });
+            }
+        });
+    });
+    function recargarElementos() {
+        // obtener elementos
+        $.getJSON('/api/restaurantes/', function (data) {
+            var rows;
+            data.forEach(function (element) {
+                var row = '<tr>'
+                + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                        + '<td>' + element.direccion + '</td>'
+                        + '<td>' + element.telefono + '</td>'
+                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
+                        + '</tr>';
+                rows += row;
             });
-        }
+            $('#tabla-restaurantes').html(rows);
+        });
+        }*@
+        $(document).ready(function () {
+            var table = $('#tabla-restaurantes-contenido').DataTable({
+                ajax: {
+                    url: '/api/restaurantes',
+                    dataSrc: '',
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'nombre' },
+                    { data: 'domicilio' },
+                    { data: 'telefono' },
+                    { data: 'mesas' }
+                ],
+                select: true,
+                dom : 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf', 
+                    {
+                        text: 'Eliminar',
+                        action: function () {
+                            var rows = table.rows({ selected: true }).data();
+                            var ids = [];
+                            for (var x = 0; x < rows.length; x++) {
+                                ids.push(rows[x].id);
+                            }
+                            $.ajax({
+                                url: '/api/restaurantes/',
+                                data: '[' + ids.toString() + ']',
+                                contentType: 'application/json',
+                                type: 'DELETE',
+                                success: function () {
+                                    table.ajax.reload();
+                                }
+                            });
+                            console.log(ids);
+                        }
+                    }
+                ]
+            });
             
+        });
     </script>
 }
 
