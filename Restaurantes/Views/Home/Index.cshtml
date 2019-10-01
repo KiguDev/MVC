@@ -5,68 +5,111 @@
 </h1>
 
 <a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>Teléfono</th>
-            <th>Mesas</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var restaurante in Model)
-        {
-            <tr class="row-@restaurante.Id">
-                <td>@restaurante.Nombre</td>
-                <td>@restaurante.Domicilio</td>
-                <td>@restaurante.Telefono</td>
-                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
-                <a href="#" class="ejecutar-eliminarcion">Eliminar </a>
-            </tr>
+<div>
+    <div>
+        <div>
+            <div class="row">
+                <div class=" col-sm-6"> </div>
+                <div class=" col-sm-6"></div>
 
 
-        }
-    </tbody>
-</table>
+                
 
-@section Scripts{
-    <Script>
-        $('a.ejecutar-eliminarcion').click(function (event))
-        event.preventDefult();
-        {
-            var id = $(this).data.('id');
-            var IsConfimed = confirm('seguro que quieres eliminar este elemento');
-            if (IsConfimed)
-            {
-                $ajax({
-                    url: //Url en Postman
-                    Type: 'DELETE'
-                    success: function(result)
+            </div>
+            <table class="table table-bordered" , id =" tabla-restaurantes-contenido"  >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Domicilio</th>
+                        <th>Teléfono</th>
+                        <th>Mesas</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-restaurantes">
+                    @foreach (var restaurante in Model)
                     {
+                        <tr class="row-@restaurante.Id">
+                            <td>@restaurante.Nombre</td>
+                            <td>@restaurante.Domicilio</td>
+                            <td>@restaurante.Telefono</td>
+                            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+                            <td>
+                                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
+                            </td>
+                        </tr>
                     }
-
-                })
-            }
-        }
-
-
-
-        }
-    </Script>
-}}
-
-
-
-
-
-@*@section Scripts{
-    <Script>
-        $('a.ejecutar-eliminarcion').click(function (event))
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+    $('#tabla-restaurantes').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
-        alert('me diero clic');
+        //var id = $(this).attr('data-id');
+        var id = $(this).data('id');
+        //var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
+            if (IsConfirmed) {
+                // eliminar elemento
+                $.ajax({
+                    url: '/api/restaurantes/' + id,
+                    type: 'DELETE',
+                    success: recargarElementos
+                });
+            }
+        });
+    });
 
-    </Script>
-}}*@
+        function recargarElementos() {
+            // obtener elementos
+            $.getJSON('/api/restaurantes/', function (data) {
+                var rows = "";
+                data.forEach(function (element) {
+                    var row = '<tr>'
+                        + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                        + '<td>' + element.direccion + '</td>'
+                        + '<td>' + element.telefono + '</td>'
+                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+
+
+                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
+                        + '</tr>';
+                    rows += row;
+                });
+                $('tbody').html(rows);
+
+            });
+        }
+
+
+        $(Document).ready(function () {
+            var table = $('#tabla-restaurante-contenido').DataTable({
+                select: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: 'Eliminar',
+                        action: funcion()
+                             {
+                        var rows = table.rows({ selected: true }).data();
+                        Console.log(rows);
+                    }
+                  }
+                ]
+
+
+               });
+
+
+
+
+
+        
+    });
+    </script>
+}

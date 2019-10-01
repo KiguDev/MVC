@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+
+
+      "library": "bootbox@5.3.2",
+      "destination": "wwwroot/lib/bootbox",
+      "files": [
+        "bootbox.min.js",
+        "booxbox.js"
+
+      ]
+    }
+
+
+  ]
+}

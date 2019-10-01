@@ -26,8 +26,15 @@ namespace Restaurantes.Infrastructure.Services
         public List<Restaurante> ObtenerRestaurantes()
         {
             return new List<Restaurante> {
-                new Restaurante{Nombre = "Mario's Pizza", Domicilio = "Avev. Prueba 123"}
+                new Restaurante{Nombre = "Jemmy AMA el SUSHI", Domicilio = "JALISCO 977 3-c"}
             };
+
+
+          
+        }
+        public void Eliminar(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

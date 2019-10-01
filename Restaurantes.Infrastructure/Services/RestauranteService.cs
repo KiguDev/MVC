@@ -11,48 +11,47 @@ namespace Restaurantes.Infrastructure.Services
 {
     public class RestauranteService : IRestauranteService
     {
-
-
         public AppDbContext _context;
-
-
         public RestauranteService(AppDbContext context)
         {
             _context = context;
         }
 
-
-        //Empleado
-        //--------------------------------------------------------------------------------------------
-        //Obtener Restaurantes por id
         public Restaurante Obtener(int id)
         {
             return _context.Restaurantes.FirstOrDefault(c => c.Id == id);
         }
 
-        //Obtener listado de restaurantes
         public List<Restaurante> ObtenerRestaurantes()
         {
             return _context.Restaurantes.Include(c => c.Mesas).ToList();
         }
 
-        //Obtener listado de restaurantes por id para agregar
         public int Agregar(Restaurante restaurante)
         {
             _context.Add(restaurante);
             _context.SaveChanges();
+
             return restaurante.Id;
         }
 
-        // Editar Restaurante 
         public void Editar(Restaurante restaurante)
         {
             _context.Update(restaurante);
             _context.SaveChanges();
         }
 
-        //Empleado
-        //--------------------------------------------------------------------------------------------
+        public void Eliminar(int id)
+        {
+            var restaurante = _context.Restaurantes.FirstOrDefault(c => c.Id == id);
+
+            _context.Remove(restaurante);
+            _context.SaveChanges();
+        }
+
+
+//Empleado
+//--------------------------------------------------------------------------------------------
         //Obtner Empleado por ID
         public Empleado ObtenerE(int id)
         {
