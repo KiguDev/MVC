@@ -18,13 +18,48 @@
     <tbody>
         @foreach(var restaurante in Model)
         {
-        <tr>
+        <tr class="row-@restaurante.Id">
             <td>@restaurante.Nombre</td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
+            </td>
         </tr>
         }
     </tbody>
 </table>
+@section Scripts{ 
+<script>
+    $('a.ejecutar-eliminacion').click(function (event) {
+        event.preventDefault();
+        //var id = $(this).attr('data-id');
+        var id = $(this).data('id');
+        var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+
+        if (IsConfirmed) {
+            // eliminar elemento
+            $.ajax({
+                url: 'https://localhost:44343/api/restaurantes/' + id,
+                type: 'DELETE',
+                success: function (result) {
+                   // obtener elementos 
+                    $.getJSON('https://localhost:44343/api/restaurantes/', function (data) {
+                        var row = '<tr>'
+                            +'<td class="clase">'+ data.nombre + '</td>'
+                            +'<td>'+ data.domicilio + '</td>'
+                            +'<td>'+ data.telefono + '</td>'
+                            +'<td><a href="@Url.Action("Mesas", "Index")/"'+id+'">'+ data.mesas + '</a></td>'
+                            +'<td></td>'
+                        + '</tr>'
+                    });
+                }
+            });
+
+          
+        }    
+    });
+</script>
+}
