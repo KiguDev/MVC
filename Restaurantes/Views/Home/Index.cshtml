@@ -23,8 +23,8 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="tabla-restaurantes">
-                    @foreach (var restaurante in Model)
+                <tbody>
+                    @*@foreach (var restaurante in Model)
                     {
                         <tr class="row-@restaurante.Id">
                             <td>@restaurante.Id</td>
@@ -37,7 +37,7 @@
                                 <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
                             </td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
             </table>
         </div>
@@ -45,7 +45,7 @@
 </div>
 @section Scripts{ 
 <script>
-    $('#tabla-restaurantes').on('click', '.ejecutar-eliminacion', function (event) {
+    $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
         var id = $(this).data('id');
@@ -87,6 +87,17 @@
 
     $(document).ready( function () {
         var table = $('#tabla-restaurantes-contenido').DataTable({
+            ajax: {
+                url: '/api/restaurantes',
+                dataSrc: '',
+            },
+            columns: [
+                { data: 'id' },
+                {data: 'nombre' },
+                {data: 'domicilio' },
+                {data: 'telefono' },
+                {data: 'mesas' },
+            ],
             select: true,
             dom: 'Bfrtip',
             buttons: [
@@ -98,14 +109,16 @@
 
                         var ids = [];
                         for (var x = 0; x < rows.length; x++) {
-                            ids.push(rows[x][0]);
+                            ids.push(rows[x].id);
                         }
 
                          $.ajax({
-                             url: '/api/restaurantes/',
-                             data: {ids},
+                             url: '/api/restaurantes',
+                             data: '[' + ids.toString() + ']',
+                             contentType: 'application/json',
                             type: 'DELETE',
-                             success: function(){
+                             success: function () {
+                                 table.ajax.reload();
                              }
                          });
 

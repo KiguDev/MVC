@@ -25,14 +25,13 @@ namespace Restaurantes.API
         [HttpGet]
         public ActionResult<List<RestauranteDTO>> Get()
         {
-            return _restauranteService
-                .ObtenerRestaurantes()
-                .Select(c => new RestauranteDTO {
-                    Id = c.Id,
-                Nombre = c.Nombre,
-                Direccion = c.Domicilio,
-                CantidadMesas = c.Mesas.Count()
-            }).ToList();
+            var restaurantes = _restauranteService
+                .ObtenerRestaurantes();
+            var model = new List<RestauranteDTO>();
+
+            _mapper.Map(restaurantes, model);
+
+            return model;
         }
 
         [HttpGet("{id}")]
@@ -89,7 +88,7 @@ namespace Restaurantes.API
         }
 
         [HttpDelete]
-        public ActionResult Delete(int[] ids)
+        public ActionResult Eliminar([FromBody] int[] ids)
         {
             _restauranteService.Eliminar(ids);
 
