@@ -96,7 +96,17 @@
                 {data: 'nombre' },
                 {data: 'domicilio' },
                 {data: 'telefono' },
-                {data: 'mesas' },
+                {
+                    data: 'mesas',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
+                    },                  
+                },
+                {
+                    render: function (data, type, row) {
+                        return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                    }
+                }
             ],
             select: true,
             dom: 'Bfrtip',
