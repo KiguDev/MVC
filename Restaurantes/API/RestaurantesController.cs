@@ -28,6 +28,7 @@ namespace Restaurantes.API
             return _restauranteService
                 .ObtenerRestaurantes()
                 .Select(c => new RestauranteDTO {
+                    Id = c.Id,
                 Nombre = c.Nombre,
                 Direccion = c.Domicilio,
                 CantidadMesas = c.Mesas.Count()

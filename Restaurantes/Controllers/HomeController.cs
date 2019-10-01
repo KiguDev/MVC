@@ -120,5 +120,11 @@ namespace Restaurantes.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Restaurantes()
+        {
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            return View(restaurantes);
+        }
     }
 }

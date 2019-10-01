@@ -5,9 +5,10 @@
     </h1>
 
 <a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
-<table class="table table-bordered">
+<table class="table table-bordered tabla-completa-restaurantes">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Domicilio</th>
             <th>Teléfono</th>
@@ -19,7 +20,11 @@
         @foreach(var restaurante in Model)
         {
         <tr class="row-@restaurante.Id">
-            <td>@restaurante.Nombre</td>
+            <td>@restaurante.Id</td>
+            <td>
+            <input type="hidden" class="id-restaurante" value="@restaurante.Id"/>
+            @restaurante.Nombre
+            </td>
             <td>@restaurante.Domicilio</td>
             <td>@restaurante.Telefono</td>
             <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
@@ -70,5 +75,32 @@
             $('#tabla-restaurantes').html(rows);
         });
     }
+
+    $(function () {
+        var table = $('.tabla-completa-restaurantes').DataTable(
+            {
+                select: true,
+                dom: 'Bfrtip',
+                 buttons: [
+                {
+                    text: 'Eliminar',
+                    action: function ( e, dt, node, config ) {
+                        var rows = table.rows({ selected: true } ).data();
+
+                        var ids = [];
+
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x][0]);
+                        }
+
+                        console.log(ids);
+
+                        //dt.ajax.reload();
+                    }
+                }
+    ]
+            }
+        );
+    })
 </script>
 }
