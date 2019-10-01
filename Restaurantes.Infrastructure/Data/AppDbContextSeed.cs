@@ -27,14 +27,16 @@ namespace Restaurantes.Infrastructure.Data
             if(!catalogContext.Ordenes.Any())
             {
                 catalogContext.AddRange(
-                    new List<Orden>
-                    {
+                    new List<Orden> {
                         new Orden
                         {
                             Estatus = (int) OrdenEstatus.Pendiente,
-                        }
-                    }
-                    )
+                            RestauranteId = 1,
+
+                        },
+                                    }
+
+                    );
             }
 
 

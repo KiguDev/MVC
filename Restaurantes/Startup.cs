@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +41,9 @@ namespace Restaurantes
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IOrdenService, OrdenService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

@@ -8,6 +8,6 @@
         <td>@emp.Nombre</td>
         <td>@emp.Puesto</td>
     </tr>
-    <form asp-action="EliminarEmpleado"><button type="submit" name="Id" value="@emp.Id">Eliminar</button>></form>
+    <button type="submit" name="Id" value="@emp.Id" asp-action="EliminarEmpleado">Eliminar</button>
     }
 </table>
