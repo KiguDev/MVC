@@ -40,5 +40,13 @@ namespace Restaurantes.Infrastructure.Services
             _context.Update(restaurante);
             _context.SaveChanges();
         }
+
+        public void Eliminar(int id)
+        {
+            var restaurante = _context.Restaurantes.FirstOrDefault(c => c.Id == id);
+
+            _context.Remove(restaurante);
+            _context.SaveChanges();
+        }
     }
 }
