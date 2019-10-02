@@ -5,10 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Restaurantes.Infrastructure.Data;
+using Restaurantes.Infrastructure.Identity;
 
 namespace Restaurantes
 {
@@ -18,22 +20,17 @@ namespace Restaurantes
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            using(var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var catalogContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                AppIdentityContextSeed.SeedASync(userManager, roleManager).Wait();
+
                 AppDbContextSeed.Seed(catalogContext);
             }
-
-            var userManager = IExternalScopeProvider.ServiceProvider.GetRequiredService<UserManager><IdentityUser>>();
-            var roleManager = scope.ServiceProvider.GetRequiredService<roleManager> < IdentityRole >> ();
-            AppIdentityContextSeed.SeedASync(userManager, roleManager).Wait();
-            AppDbContextSeed(CatalogContext);
-
-
-
-
-
 
             host.Run();
         }
