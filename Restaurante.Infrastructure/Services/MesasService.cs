@@ -1,4 +1,5 @@
-﻿using Restaurante.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurante.Core.Entities;
 using Restaurante.Core.Interfaces;
 using Restaurante.Infrastructure.Data;
 using System;
@@ -19,7 +20,7 @@ namespace Restaurante.Infrastructure.Services
 
         public List<Mesa> ObtenerMesas()
         {
-            return _context.Mesas.ToList();
+            return _context.Mesas.Include(c => c.Restaurante).ToList();
         }
         public Mesa Obtener(int id)
         {
@@ -41,6 +42,11 @@ namespace Restaurante.Infrastructure.Services
         public void Eliminar(Mesa mesa)
         {
             _context.Remove(mesa);
+            _context.SaveChanges();
+        }
+        public void Eliminar(int[] ids)
+        {
+            _context.RemoveRange(_context.Mesas.Where(c => ids.Contains(c.Id)));
             _context.SaveChanges();
         }
     }

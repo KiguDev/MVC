@@ -1,30 +1,135 @@
-﻿@model List<Mesa>
-
-<h1>Mesas</h1>
-<a class="btn btn-primary" asp-action="AgregarMesa" asp-route-id="@ViewData["restauranteId"]">Agregar Mesa</a>
-<table class="table table-bordered">
+﻿<h1>
+    Mesas
+</h1>
+<a class="btn btn-primary" asp-action="AgregarMesa">Agregar Mesa</a>
+<table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
         <tr>
-            <th>Identificador</th>
             <th>Id</th>
+            <th>Identificador</th>
             <th>Capacidad</th>
+            <th>Editar</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var Mesas in Model)
-        {
-        <tr>
-            <td>@Mesas.Identificador</td>
-            <td>@Mesas.Id</td>
-            <td>@Mesas.Capacidad</td>
-            <td><a asp-action="EditarMesa" asp-route-id="@Mesas.Id">Editar</a></td>
-            <td>
-                <form asp-action="EliminarMesa">
-                    <button type="submit" name="Id" value="@Mesas.Id" class="btn btn-danger">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        }
+        
     </tbody>
 </table>
+@section Scripts{
+    <script>
+    @*$('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
+        event.preventDefault();
+        //var id = $(this).attr('data-id');
+        var id = $(this).data('id');
+
+        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
+            if (IsConfirmed) {
+                // eliminar elemento
+                $.ajax({
+                    url: '/api/restaurantes/' + id,
+                    type: 'DELETE',
+                    success: recargarElementos
+                });
+            }
+        });
+    });
+    function recargarElementos() {
+        // obtener elementos
+        $.getJSON('/api/restaurantes/', function (data) {
+            var rows;
+            data.forEach(function (element) {
+                var row = '<tr>'
+                + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                        + '<td>' + element.direccion + '</td>'
+                        + '<td>' + element.telefono + '</td>'
+                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
+                        + '</tr>';
+                rows += row;
+            });
+            $('#tabla-restaurantes').html(rows);
+        });
+        }*@
+        $(document).ready(function () {
+            var table = $('#tabla-mesas-contenido').DataTable({
+                ajax: {
+                    url: '/api/Mesas',
+                    dataSrc: '',
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'identificador' },
+                    { data: 'capacidad' },
+                    
+                    {
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                        }
+                    }
+                ],
+                select: true,
+                dom : 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: 'Eliminar',
+                        action: function () {
+                            var rows = table.rows({ selected: true }).data();
+                            var ids = [];
+                            for (var x = 0; x < rows.length; x++) {
+                                ids.push(rows[x].id);
+                            }
+                        bootbox.confirm("¿Seguro que quieres eliminar esta mesa?", function (ConfirmedDelete) {
+                            if (ConfirmedDelete) {
+                                $.ajax({
+                                    url: '/api/mesas/',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function () {
+                                        table.ajax.reload();
+                                    }
+                                });
+                            }
+                        });
+
+                            console.log(ids);
+                        }
+                    }
+                ]
+            });
+
+        });
+    </script>
+}
+
+@*@model List<Mesa>
+
+    <h1>Mesas</h1>
+    <a class="btn btn-primary" asp-action="AgregarMesa" asp-route-id="@ViewData["restauranteId"]">Agregar Mesa</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Identificador</th>
+                <th>Id</th>
+                <th>Capacidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+            <tr>
+                <td>@m.Identificador</td>
+                <td>@m.Id</td>
+                <td>@m.Capacidad</td>
+                <td><a asp-action="EditarMesa" asp-route-id="@m.Id">Editar</a></td>
+                <td>
+                    <form asp-action="EliminarMesa">
+                        <button type="submit" name="Id" value="@m.Id" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>*@
 

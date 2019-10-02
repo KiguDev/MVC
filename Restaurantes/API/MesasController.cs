@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.Core.Interfaces;
 using Restaurantes.Models;
@@ -10,71 +11,64 @@ namespace Restaurantes.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MesasController : Controller
+    public class MesasController : ControllerBase
     {
-        private readonly IMesasService _mesasService;
+        public readonly IMesasService _mesaService;
+        private readonly IMapper _mapper;
 
-        public MesasController(IMesasService mesasService)
+        public MesasController(IMesasService mesaService, IMapper mapper)
         {
-            _mesasService = mesasService;
+            _mesaService = mesaService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<List<Restaurante.Core.Entities.Mesa>> Get()
+        public ActionResult<List<MesaDTO>> Get()
         {
-            return _mesasService.ObtenerMesas();
-        }
-        [HttpGet]
-        public ActionResult<List<Restaurante.Core.Entities.Mesa>> Get(int id)
-        {
-            var mesa = _mesasService.Obtener(id);
-            return View(mesa);
+            var mesas = _mesaService.ObtenerMesas();
+            var model = new List<MesaDTO>();
+            _mapper.Map(mesas, model);
+            return model;
         }
 
         [HttpPost]
         public ActionResult Post([FromBody] MesaViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                return BadRequest("Datos Invalidos");
-            }
-            var mesa = new Restaurante.Core.Entities.Mesa
-            {
-                Identificador = model.Identificador,
-                Capacidad = model.Capacidad,
-                RestauranteId = model.RestauranteId
-
-
-            };
-            _mesasService.Agregar(mesa);
+            var mesa = new Restaurante.Core.Entities.Mesa();
+            _mapper.Map(model, mesa);
+            _mesaService.Agregar(mesa);
             return Ok();
         }
 
         [HttpPut("{id}")]
         public ActionResult Put(int id, MesaViewModel model)
         {
-            var mesa = _mesasService.Obtener(id);
+            var mesa = _mesaService.Obtener(id);
             if (mesa == null)
             {
                 return BadRequest();
             }
-
-            mesa.Capacidad = model.Capacidad;
             mesa.Identificador = model.Identificador;
-            mesa.RestauranteId = model.RestauranteId;
-
+            mesa.Capacidad = model.Capacidad;
             return Ok();
-
         }
+
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var mesa= _mesasService.Obtener(id);
+            var mesa = _mesaService.Obtener(id);
             if (mesa == null)
             {
                 return BadRequest();
             }
-            _mesasService.Eliminar(mesa);
+            _mesaService.Eliminar(mesa);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public ActionResult Delete([FromBody] int[] ids)
+        {
+            _mesaService.Eliminar(ids);
             return Ok();
         }
     }

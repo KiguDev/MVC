@@ -13,6 +13,7 @@
             <th>Domicilio</th>
             <th>Telefono</th>
             <th>Mesas</th>
+            <th></th>
         </tr>
     </thead>
     <tbody >
@@ -83,8 +84,18 @@
                     { data: 'nombre' },
                     { data: 'domicilio' },
                     { data: 'telefono' },
-                    { data: 'mesas' }
-                ],
+                    {
+                        data: 'mesas',
+                        render: function (data, type, row) {
+                            return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
+                        },
+                    },
+                    {
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        }
+                    }
+                ],               
                 select: true,
                 dom : 'Bfrtip',
                 buttons: [
@@ -97,15 +108,20 @@
                             for (var x = 0; x < rows.length; x++) {
                                 ids.push(rows[x].id);
                             }
-                            $.ajax({
-                                url: '/api/restaurantes/',
-                                data: '[' + ids.toString() + ']',
-                                contentType: 'application/json',
-                                type: 'DELETE',
-                                success: function () {
-                                    table.ajax.reload();
-                                }
-                            });
+                        bootbox.confirm("¿Seguro que quieres eliminar Restaurante?", function (ConfirmedDelete) {
+                            if (ConfirmedDelete) {
+                                $.ajax({
+                                    url: '/api/restaurantes/',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function () {
+                                        table.ajax.reload();
+                                    }
+                                });
+                            }
+                        });
+
                             console.log(ids);
                         }
                     }
