@@ -13,7 +13,6 @@ namespace Restaurantes.Models
         public string Nombre { get; set; }
         [Required]
         public string Direccion { get; set; }
-        [Phone]
         public int Telefono { get; set; }
         [Display(Name ="Página Web")]
         [Url]

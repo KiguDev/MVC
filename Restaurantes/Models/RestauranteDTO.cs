@@ -8,9 +8,12 @@ namespace Restaurantes.Models
 {
     public class RestauranteDTO
     {
+        public int Id { get; set; }
         [JsonProperty("NombreRestaurante")]
         public string Nombre { get; set; }
-        public string Direccion { get; set; }
-        public int CantidadMesas { get; set; }
+        public string Domicilio { get; set; }
+        public int Telefono { get; set; }
+        public int Mesas { get; set; }
+
     }
 }

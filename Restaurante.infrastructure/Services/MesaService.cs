@@ -47,5 +47,11 @@ namespace Restaurante.infrastructure.Services
         {
             return _context.Mesas.Include(c => c.Restaurante).ToList();
         }
+
+        public void Eliminar(int[] ids)
+        {
+            _context.RemoveRange(_context.Mesas.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+        }
     }
 }

@@ -5,29 +5,85 @@
 
 <h1>Restaurante</h1>
 <a class="btn btn-primary btn-block" asp-action="Agregar">Agregar restaurante</a>
-<table class="table table-bordered">
+<br />
+<table class="table table-bordered" id="tabla-restaurantes-contenido">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Domicilio</th>
             <th>Teléfono</th>
-            <th>Mesas</th>
+            <th>No. de mesas</th>
+            <th>Editar</th>
+            <th>Empleados</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var restaurante in Model)
-        {
-        <tr>
-            <td>@restaurante.Nombre</td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td>@restaurante.Mesas.Count</td>
-            <td><a asp-Action="Mesas"  asp-route-id="@restaurante.Id">Ver mesas</a></td>
-            <td><a asp-action="Empleados" asp-controller="Empleado" asp-route-id="@restaurante.Id">Empleados</a></td>
-            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a></td>
-
-            <td><form asp-action="Eliminar"><button type="submit" name="Id" value="@restaurante.Id">Eliminar</button></form></td>
-        </tr>
-        }
-    </tbody>
+    <tbody id="tabla-restaurantes"></tbody>
 </table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $('#tabla-restaurantes-contenido').DataTable({
+                ajax:
+                {
+                    url: '/api/restaurantes',
+                    dataSrc: '',
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'NombreRestaurante' },
+                    { data: 'domicilio' },
+                    { data: 'telefono' },
+                    {
+                        data: 'mesas',
+                        render: function (data, type, row) {
+                            return '<a href="@Url.Action("Mesas")/' + row.id + '">'+data+'</a>'
+                        }
+                    },
+                    {
+                        data: '',
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        }
+                    },
+                    {
+                        data: '',
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("~/Empleado/AgregarEmpleado")/' + row.id + '">Empleado</a>'
+                        }
+                    }
+                ],
+                select: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: 'Eliminar',
+                        action: function ()
+                        {
+                            var rows = table.rows({ selected: true }).data();
+                            var ids = [];
+                            for (var x = 0; x < rows.length; x++)
+                            {
+                                ids.push(rows[x].id);
+                            }
+
+                            $.ajax(
+                                {
+                                    url: '/api/restaurantes/',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function () {
+                                        table.ajax.reload();
+                                    }
+                                });
+                            console.log(ids);
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

@@ -1,5 +1,5 @@
 ﻿@model List<Mesa>
-@{ 
+@{
 
 }
 @{
@@ -7,25 +7,68 @@
 }
 <h1>Mesas</h1>
 <a class="btn btn-primary btn-block" asp-route-id="@ViewData["restauranteId"]" asp-action="AgregarMesa">Agregar mesa</a>
-<table class="table table-bordered">
+<table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Identificador</th>
             <th>Capacidad</th>
+            <th>Editar</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var mesa in Model)
-        {
-        <tr>
-            <td>@mesa.Identificador</td>
-            <td>@mesa.Capacidad</td>
-            <td><a asp-action="EditarMesa" asp-route-id="@mesa.Id">Editar</a></td>
-
-            <td><form asp-action="EliminarMesa"><button type="submit" name="Id" value="@mesa.Id">Eliminar</button></form></td>
-        </tr>
-        }
-    </tbody>
+    <tbody id="tabla-mesas"></tbody>
 </table>
 
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $('#tabla-mesas-contenido').DataTable({
+                ajax:
+                {
+                    url: '/api/mesas',
+                    dataSrc: '',
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'identificador' },
+                    { data: 'capacidad' },                   
+                    {
+                        data: '',
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                        }
+                    }
+                ],
+                select: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: 'Eliminar',
+                        action: function ()
+                        {
+                            var rows = table.rows({ selected: true }).data();
+                            var ids = [];
+                            for (var x = 0; x < rows.length; x++)
+                            {
+                                ids.push(rows[x].id);
+                            }
 
+                            $.ajax(
+                                {
+                                    url: '/api/mesas/',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function () {
+                                        table.ajax.reload();
+                                    }
+                                });
+                            console.log(ids);
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

@@ -16,19 +16,19 @@ namespace Restaurantes.API
         private readonly IRestauranteService _restauranteService;
         private readonly IMapper _mapper;
 
-        public RestaurantesController(IRestauranteService restauranteService)
+        public RestaurantesController(IRestauranteService restauranteService, IMapper mapper)
         {
             _restauranteService = restauranteService;
+            _mapper = mapper;
         }
         [HttpGet]
         public ActionResult<List<RestauranteDTO>> Get()
         {
-            return _restauranteService.ObtenerRestaurantes().Select(c=> new RestauranteDTO
-            {
-                Nombre = c.Nombre,
-                Direccion = c.Domicilio,
-                CantidadMesas = c.Mesas.Count()
-            }).ToList();
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            var model = new List<RestauranteDTO>();
+            _mapper.Map(restaurantes, model);
+           
+            return model;
         }
 
         [HttpPost]
@@ -36,17 +36,6 @@ namespace Restaurantes.API
         {
             var restaurante = new Restaurante.Core.Entities.Restaurante();
             _mapper.Map(model, restaurante);
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest("Datos inválidos");
-            //}
-            //var restaurante = new Restaurante.Core.Entities.Restaurante
-            //{
-            //    Nombre = model.Nombre,
-            //    Domicilio = model.Direccion,
-            //    PaginaWeb = model.PaginaWeb,
-            //    HoraDeCierre = model.HoraDeCierre
-            //};
             _restauranteService.Insertar(restaurante);
             return Ok();
         }
@@ -55,7 +44,7 @@ namespace Restaurantes.API
         public ActionResult Put(int id, RestauranteViewModel model)
         {
             var restaurante = _restauranteService.Obtener(id);
-            if (restaurante==null)
+            if (restaurante == null)
             {
                 return BadRequest();
             }
@@ -75,6 +64,14 @@ namespace Restaurantes.API
                 return BadRequest();
             }
             _restauranteService.Eliminar(restaurante);
+            return Ok();
+        }
+
+
+        [HttpDelete]
+        public ActionResult Delete([FromBody] int[] ids)
+        {
+            _restauranteService.Eliminar(ids);
             return Ok();
         }
     }
