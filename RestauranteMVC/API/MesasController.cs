@@ -31,6 +31,13 @@ namespace RestauranteMVC.API
             return model;
         }
 
+        [HttpDelete]
+        public ActionResult Delete([FromBody]int[] ids)
+        {
+            _mesaService.EliminarMesas(ids);
+            return Ok();
+        }
+
         [HttpPost]
         public ActionResult Post([FromBody] MesaViewModel model)
         {
@@ -67,13 +74,6 @@ namespace RestauranteMVC.API
         public ActionResult Delete(int id)
         {
             _mesaService.EliminarMesa(id);
-            return Ok();
-        }
-
-        [HttpDelete]
-        public ActionResult Delete([FromBody]int[] ids)
-        {
-            _mesaService.EliminarMesas(ids);
             return Ok();
         }
     }
