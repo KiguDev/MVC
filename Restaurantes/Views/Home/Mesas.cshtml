@@ -1,25 +1,74 @@
 ﻿@model List<Mesa>
 <h1>Mesas</h1>
 
-<a class="btn btn-primary" asp-action="AgregarMesa" asp-route-restaurante="@ViewData["restauranteId"]">Agregar mesa</a>
-<table class="table table-bordered">
+<a class="btn btn-outline-primary" asp-action="AgregarMesa" asp-route-id="@ViewData["restauranteId"]">Agregar mesa</a>
+<table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Identificador</th>
             <th>Capacidad</th>
             <th></th>
-            <th></th>
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var mesa in Model)
-        {
-            <tr>
-                <td>@mesa.Identificador</td>
-                <td>@mesa.Capacidad</td>
-                <td><a asp-action="EditarMesa" asp-route-id="@mesa.Id">Editar</a></td>
-                <td><a asp-action="EliminarMesa" asp-route-id="@mesa.Id">Eliminar</a></td>
-            </tr>
-        }
     </tbody>
 </table>
+
+@section Scripts{
+<script>
+     $(document).ready( function () {
+        var table = $('#tabla-mesas-contenido').DataTable({
+            ajax: {
+                url: '/api/mesas/@ViewData["restauranteId"]',
+                dataSrc: '',
+
+            },
+            columns:[
+                {data: 'id'},
+                {data: 'identificador'},
+                {data: 'capacidad'},
+
+                {
+                    data: '',
+                    render: function(data,type,row){
+                        return '<a class="btn btn-outline-primary" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy','excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function(){
+
+                        bootbox.confirm("¿Seguro que quieres eliminar estos elementos?", function(IsConfirmed){
+                            if (IsConfirmed) {
+                                var rows = table.rows( { selected: true } ).data();
+
+                                var ids = [];
+                                for(var x = 0; x < rows.length; x++){
+                                    ids.push(rows[x].id);
+                                }
+
+                                $.ajax({
+                                    url: '/api/mesas',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function(){
+                                        table.ajax.reload();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+    });
+</script>
+}

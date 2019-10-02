@@ -15,5 +15,6 @@ namespace Restaurantes.Core.Entities
         public DateTime FechaDeAlta { get; set; }
         public int? HoraDeCierre { get; set; }
         public ICollection<Mesa> Mesas { get; set; } = new List<Mesa>();
+        public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
     }
 }

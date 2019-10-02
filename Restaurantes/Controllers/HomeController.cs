@@ -108,17 +108,17 @@ namespace Restaurantes.Controllers
             return View(restaurante.Mesas);
         }
 
-        public IActionResult AgregarMesa(int restaurante)
+        public IActionResult AgregarMesa(int id)
         {
             ViewData["Accion"] = "AgregarMesa";
             return View(new MesaViewModel
             {
-                RestauranteId = restaurante
+                RestauranteId = id
             });
         }
 
         [HttpPost]
-        public IActionResult AgregarMesa(MesaViewModel model)
+        public IActionResult AgregarMesa(MesaViewModel model, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -130,13 +130,52 @@ namespace Restaurantes.Controllers
             {
                 Identificador = model.Identificador,
                 Capacidad = model.Capacidad,
-                RestauranteId = model.RestauranteId
+                RestauranteId = id
             };
-            var id = _mesaService.Agregar(mesa);
-            return View(model);
+            var resId = _mesaService.Agregar(mesa);
+            return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult EditarMesa(int id)
+        {
+            ViewData["Accion"] = "EditarMesa";
+            var mesa = _mesaService.Obtener(id);
+            var viewModel = new MesaViewModel
+            {
+                Id = mesa.Id,
+                Identificador = mesa.Identificador,
+                Capacidad = mesa.Capacidad
+                
+            };
 
+            return View("AgregarMesa", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditarMesa(MesaViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var mesa = _mesaService.Obtener(model.Id);
+            mesa.Identificador = model.Identificador;
+            mesa.Capacidad = model.Capacidad;
+            _mesaService.Editar(mesa);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult EliminarMesa(int id)
+        {
+            ViewData["Accion"] = "EliminarMesa";
+            var mesa = _mesaService.Obtener(id);
+            _mesaService.Eliminar(mesa);
+            return RedirectToAction("Index");
+        }
 
         public IActionResult Privacy()
         {

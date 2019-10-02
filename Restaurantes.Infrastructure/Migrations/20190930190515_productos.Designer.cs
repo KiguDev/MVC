@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurantes.Infrastructure.Data;
 
 namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190930190515_productos")]
+    partial class productos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,8 +34,6 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.Property<int>("RestauranteId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Empleados");
                 });
@@ -134,14 +134,6 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurantes");
-                });
-
-            modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
-                {
-                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany("Empleados")
-                        .HasForeignKey("RestauranteId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Mesa", b =>

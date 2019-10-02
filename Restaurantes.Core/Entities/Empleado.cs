@@ -10,5 +10,6 @@ namespace Restaurantes.Core.Entities
         public string Nombre { get; set; }
         public int RestauranteId { get; set; }
         public int Puesto { get; set; }
+        public Restaurante Restaurante { get; set; }
     }
 }

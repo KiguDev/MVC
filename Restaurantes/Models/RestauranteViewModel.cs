@@ -17,6 +17,7 @@ namespace Restaurantes.Models
         [Display(Name = "Página Web")]
         [Url]
         public string PaginaWeb { get; set; }
+        public string Logo { get; set; }
         [Range(0, 23)]
         public int HoraDeCierre { get; set; }
         public DateTime FechaDeAlta { get; set; }
