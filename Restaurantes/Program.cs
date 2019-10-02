@@ -25,6 +25,16 @@ namespace Restaurantes
                 AppDbContextSeed.Seed(catalogContext);
             }
 
+            var userManager = IExternalScopeProvider.ServiceProvider.GetRequiredService<UserManager><IdentityUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<roleManager> < IdentityRole >> ();
+            AppIdentityContextSeed.SeedASync(userManager, roleManager).Wait();
+            AppDbContextSeed(CatalogContext);
+
+
+
+
+
+
             host.Run();
         }
 

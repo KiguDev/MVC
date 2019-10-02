@@ -12,6 +12,7 @@ namespace Restaurantes.Controllers
     {
 
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public CuentaController(UserManager<IdentityUser> userManager)
         {
@@ -59,6 +60,13 @@ namespace Restaurantes.Controllers
                 }
             }
             return View(model);
+        }
+
+        public async Task<IActionResult> Loggout()
+
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login");
         }
     }
 }

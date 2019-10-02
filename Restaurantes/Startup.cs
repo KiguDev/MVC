@@ -42,14 +42,26 @@ namespace Restaurantes
 
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
-            }
-            ).AddEntityFrameworkStores<AppIdentityContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
 
 
+            
+            
+            //services.AddDefaultIdentity<IdentityUser>(options =>
+            //{
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 5;
+            //}
+            //).AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.LoginPath = "/Cuenta/Login";
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        IsEssential = true
+            //    };
+            //});
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
