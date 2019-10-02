@@ -95,6 +95,13 @@ namespace Restaurantes.Controllers
             return View(restaurante.Mesas);
         }
 
+        public IActionResult Perfil(int id)
+        {
+            var restaurante = _restauranteService.Obtener(id);
+
+            return View(restaurante);
+        }
+
         public IActionResult AgregarMesa(int restaurante, int id)
         {
             return View(new Mesa
