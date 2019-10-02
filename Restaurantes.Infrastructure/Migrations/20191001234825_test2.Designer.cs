@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurantes.Infrastructure.Data;
 
 namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191001234825_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Ordenes");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenProducto", b =>
                 {
                     b.Property<int>("OrdenId");
 
@@ -90,7 +92,7 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("OrdenTieneProducto");
+                    b.ToTable("OrdenProducto");
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
@@ -152,7 +154,7 @@ namespace Restaurantes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenProducto", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Orden", "Orden")
                         .WithMany("Productos")
