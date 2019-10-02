@@ -43,14 +43,16 @@ namespace Restaurantes.Infrastructure.Services
 
         public void Eliminar(int id)
         {
-            var restaurante = _context.Restaurantes.FirstOrDefault(c=>c.Id == id);
-            _context.Restaurantes.Remove(restaurante);
+            var restaurante = _context.Restaurantes.FirstOrDefault(c => c.Id == id);
+
+            _context.Remove(restaurante);
             _context.SaveChanges();
         }
 
-        public void Eliminar(Restaurante restaurante)
+        public void Eliminar(int[] ids)
         {
-            throw new NotImplementedException();
+            _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
         }
     }
 }

@@ -18,12 +18,12 @@ namespace Restaurantes.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public void Eliminar(Restaurante restaurante)
+        public void Eliminar(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Eliminar(int id)
+        public void Eliminar(int[] ids)
         {
             throw new NotImplementedException();
         }

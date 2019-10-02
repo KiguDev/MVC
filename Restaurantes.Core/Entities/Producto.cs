@@ -10,6 +10,6 @@ namespace Restaurantes.Core.Entities
         public string Nombre { get; set; }
         public string Ingredientes { get; set; }
         public int Cantidad { get; set; }
-        public ICollection <OrdenProducto> Ordenes { get; set; }
+        public ICollection<OrdenTieneProducto> Ordenes { get; set; }
     }
 }

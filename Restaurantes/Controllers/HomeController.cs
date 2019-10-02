@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
+using System;
+using System.Diagnostics;
 
 namespace Restaurantes.Controllers
 {
@@ -21,7 +18,7 @@ namespace Restaurantes.Controllers
 
         public IActionResult Index()
         {
-            var restaurantes =_restauranteService.ObtenerRestaurantes();
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
             return View(restaurantes);
         }
 
@@ -37,11 +34,12 @@ namespace Restaurantes.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("","Te hacen falta campos");
+                ModelState.AddModelError("", "Te hacen falta campos");
                 return View(model);
             }
 
-            var restaurante = new Restaurante {
+            var restaurante = new Restaurante
+            {
                 Nombre = model.Nombre,
                 Domicilio = model.Direccion,
                 HoraDeCierre = model.HoraDeCierre,
@@ -67,7 +65,7 @@ namespace Restaurantes.Controllers
                 PaginaWeb = restaurante.PaginaWeb,
                 Telefono = restaurante.Telefono.ToString(),
             };
-            return View("Agregar",viewModel);
+            return View("Agregar", viewModel);
         }
 
         [HttpPost]
@@ -95,10 +93,10 @@ namespace Restaurantes.Controllers
             return View(restaurante.Mesas);
         }
 
-        public IActionResult AgregarMesa(int restaurante)
+        public IActionResult AgregarMesa(int restaurante, int id)
         {
-
-            return View(new Mesa {
+            return View(new Mesa
+            {
                 RestauranteId = restaurante
             });
         }
@@ -108,10 +106,9 @@ namespace Restaurantes.Controllers
         {
             // utilizar el servicio de mesa y pbtemer la entidad
             // modificar las propiedades de Mesa con los del view model
-            // enviar la entidad al metodo de actualizar del servicio 
+            // enviar la entidad al metodo de actualizar del servicio
             return RedirectToAction("Index");
         }
-
 
         public IActionResult Privacy()
         {
@@ -122,6 +119,12 @@ namespace Restaurantes.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Restaurantes()
+        {
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            return View(restaurantes);
         }
     }
 }

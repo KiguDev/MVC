@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
-using Restaurantes.Infrastructure.Services;
 
 namespace Restaurantes.API
 {
@@ -13,9 +12,9 @@ namespace Restaurantes.API
     [ApiController]
     public class OrdenesController : ControllerBase
     {
-        private readonly IOrdenService _ordenService;
+        private readonly IordenService _ordenService;
 
-        public OrdenesController(IOrdenService ordenService)
+        public OrdenesController(IordenService ordenService)
         {
             _ordenService = ordenService;
         }
@@ -30,6 +29,7 @@ namespace Restaurantes.API
         public ActionResult Post([FromBody] Orden model)
         {
             return Ok();
+
         }
 
         [HttpPut("{id}")]
@@ -42,7 +42,7 @@ namespace Restaurantes.API
         public ActionResult Delete(int id)
         {
             return Ok();
-        }
 
+        }
     }
 }

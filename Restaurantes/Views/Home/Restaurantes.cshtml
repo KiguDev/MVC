@@ -1,0 +1,108 @@
+﻿@model List<Restaurante>
+
+    <h1>
+        Restaurantes
+    </h1>
+
+<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
+<table class="table table-bordered tabla-completa-restaurantes">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Domicilio</th>
+            <th>Teléfono</th>
+            <th>Mesas</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tabla-restaurantes">
+        @foreach(var restaurante in Model)
+        {
+        <tr class="row-@restaurante.Id">
+            <td>@restaurante.Id</td>
+            <td>
+            <input type="hidden" class="id-restaurante" value="@restaurante.Id"/>
+            @restaurante.Nombre
+            </td>
+            <td>@restaurante.Domicilio</td>
+            <td>@restaurante.Telefono</td>
+            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{ 
+<script>
+    $('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
+        event.preventDefault();
+        //var id = $(this).attr('data-id');
+        var id = $(this).data('id');
+        var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+
+        if (IsConfirmed) {
+            // eliminar elemento
+            $.ajax({
+                url: 'https://localhost:44343/api/restaurantes/' + id, 
+                type: 'DELETE',
+                success: recargarElementos
+            });
+
+          
+        }    
+    });
+
+    function recargarElementos() {
+        // obtener elementos 
+        $.getJSON('https://localhost:44343/api/restaurantes/', function (data) {
+            var rows;
+            data.forEach(function (element) {
+                var row = '<tr>'
+                + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                + '<td>' + element.direccion + '</td>'
+                + '<td>' + element.telefono + '</td>'
+                + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
+                + '</tr>';
+
+                rows += row;
+            });
+
+            $('#tabla-restaurantes').html(rows);
+        });
+    }
+
+    $(function () {
+        var table = $('.tabla-completa-restaurantes').DataTable(
+            {
+                select: true,
+                dom: 'Bfrtip',
+                 buttons: [
+                {
+                    text: 'Eliminar',
+                    action: function ( e, dt, node, config ) {
+                        var rows = table.rows({ selected: true } ).data();
+
+                        var ids = [];
+
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x][0]);
+                        }
+
+                        console.log(ids);
+
+                        $
+
+                        //dt.ajax.reload();
+                    }
+                }
+    ]
+            }
+        );
+    })
+</script>
+}

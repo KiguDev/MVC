@@ -39,11 +39,9 @@ namespace Restaurantes
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
 
             services.AddScoped<IRestauranteService, RestauranteService>();
-            services.AddScoped<IOrdenService, OrdenService>();
-            services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IordenService, OrdenService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -72,7 +70,6 @@ namespace Restaurantes
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            //Test
         }
     }
 }

@@ -16,21 +16,29 @@ namespace Restaurantes.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Restaurante>(ConfigureRestaurante);
-            modelBuilder.Entity<OrdenProducto>(ConfigureOrdenProducto);
+            modelBuilder.Entity<OrdenTieneProducto>(ConfigureOrdenTieneProducto);
+        }
+
+        private void ConfigureOrdenTieneProducto(EntityTypeBuilder<OrdenTieneProducto> builder)
+        {
+            builder.HasKey(c => new {
+                c.OrdenId,
+                c.ProductoId
+            });
+
+            builder.HasOne(c => c.Producto)
+                .WithMany(c => c.Ordenes)
+                .HasForeignKey(c => c.ProductoId);
+
+            builder.HasOne(c => c.Orden)
+              .WithMany(c => c.Productos)
+              .HasForeignKey(c => c.OrdenId);
         }
 
         private void ConfigureRestaurante(EntityTypeBuilder<Restaurante> builder)
         {
             builder.Property(r => r.HoraDeCierre)
                 .IsRequired();
-        }
-
-        //Se establece la relación, 1 a muchos, y muchos a muchos
-        private void ConfigureOrdenProducto(EntityTypeBuilder<OrdenProducto> builder)
-        {
-            builder.HasKey(c => new {c.OrdenId, c.ProductoId });
-            builder.HasOne(c => c.Producto).WithMany(c=>c.Ordenes).HasForeignKey(c=>c.ProductoId);
-            builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId);
         }
 
         public DbSet<Restaurante> Restaurantes { get; set; }
