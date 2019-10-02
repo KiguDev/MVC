@@ -31,6 +31,13 @@ namespace Restaurante.infrastructure.Services
             return true;
         }
 
+        public bool EliminarMesas(int[] ids)
+        {
+            _context.RemoveRange(_context.Mesas.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+            return true;
+        }
+
         public int InsertarMesa(core.Entities.Mesa mesa)
         {
             _context.Mesas.Add(mesa);

@@ -26,11 +26,22 @@ namespace RestauranteMVC.API
         [HttpGet]
         public ActionResult<List<RestauranteDTO>> Get()
         {
-            return _restauranteService.ObtenerRestaurante().Select(c => new RestauranteDTO {
+            var restaurantes = _restauranteService.ObtenerRestaurante();
+            var model = new List<RestauranteDTO>();
+            _mapper.Map(restaurantes, model);
+            return model;
+            /*return _restauranteService.ObtenerRestaurante().Select(c => new RestauranteDTO {
+                Logo = c.Logo,
                 Nombre = c.Nombre,
                 Domicilio = c.Domicilio,
-                CantidadMesas = c.mesas.Count
-            }).ToList();
+                CantidadMesas = c.mesas.Count,
+                HoraDeCierre = c.HoraDeCierre,
+                PaginaWeb = c.PaginaWeb,
+                Telefono = c.Telefono,
+                CantidadEmpleados = c.empleados.Count,
+                FechaDeAlta = c.FechaDeAlta,
+                Id = c.Id
+            }).ToList();*/
         }
 
         [HttpGet("{id}")]
@@ -83,6 +94,13 @@ namespace RestauranteMVC.API
         public ActionResult Delete(int id)
         {
             _restauranteService.EliminarRestaurante(id);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public ActionResult Delete([FromBody]int[] ids)
+        {
+            _restauranteService.EliminarRestaurantes(ids);
             return Ok();
         }
     }

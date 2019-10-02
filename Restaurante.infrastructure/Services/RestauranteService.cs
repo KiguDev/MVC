@@ -32,6 +32,13 @@ namespace Restaurante.infrastructure.Services
             return true;
         }
 
+        public bool EliminarRestaurantes(int[] ids)
+        { 
+            _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+            return true;
+        }
+
         public int InsertarRestaurante(core.Entities.Restaurante restaurante)
         {
             _context.Restaurantes.Add(restaurante);

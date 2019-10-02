@@ -11,5 +11,6 @@ namespace Restaurante.core.Interfaces
         int InsertarMesa(Entities.Mesa mesa);
         int EditarMesa(Entities.Mesa mesa);
         bool EliminarMesa(int id);
+        bool EliminarMesas(int[] ids);
     }
 }

@@ -1,13 +1,10 @@
-﻿@model List<Restaurante>
-@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<h1>Restaurantes</h1>
+<!--<a class="btn btn-primary" asp-action="Agregar">Agregar</a>-->
 
-<h1>Restaurantes</h1>
-<a class="btn btn-primary" asp-action="Agregar">Agregar</a>
-<table class="table table-bordered">
+<table class="table table-bordered" id="tabla-restaurantes-contenido">
     <thead>
         <tr>
+            <th hidden>ID</th>
             <th>Logo</th>
             <th>Nombre</th>
             <th>Dirección</th>
@@ -21,33 +18,33 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var restaurante in Model)
-        {
-        <tr>
-            <td><img src="@restaurante.Logo" width="50" height="50"></td>
-            <td>@restaurante.Nombre</td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td>@restaurante.PaginaWeb</td>
-            <td>@restaurante.FechaDeAlta.ToString("dd/MM/yyyy")</td>
-            <td>@restaurante.HoraDeCierre:00</td>
-            
-            <td><a asp-controller="Empleados" asp-action="Index" asp-route-id="@restaurante.Id">@restaurante.empleados.Count()</a></td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.mesas.Count()</a></td>
-            <td>
-                <a asp-action="Editar" asp-route-id="@restaurante.Id" class="fa fa-pencil"></a>
-                <!--<a asp-action="Eliminar" asp-route-id="@restaurante.Id" class="fa fa-trash"></a>-->
+        @*@foreach (var restaurante in Model)
+            {
+            <tr>
+                <td hidden>@restaurante.Id</td>
+                <td><img src="@restaurante.Logo" width="50" height="50"></td>
+                <td>@restaurante.Nombre</td>
+                <td>@restaurante.Domicilio</td>
+                <td>@restaurante.Telefono</td>
+                <td>@restaurante.PaginaWeb</td>
+                <td>@restaurante.FechaDeAlta.ToString("dd/MM/yyyy")</td>
+                <td>@restaurante.HoraDeCierre:00</td>
 
-                <a href="#" class="fa fa-trash ejecutar-eliminacion" data-id="@restaurante.Id"></a>
-            </td>
-        </tr>          
-        }
+                <td><a asp-controller="Empleados" asp-action="Index" asp-route-id="@restaurante.Id">@restaurante.empleados.Count()</a></td>
+                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.mesas.Count()</a></td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@restaurante.Id" class="fa fa-pencil"></a>
+                    <a asp-action="Eliminar" asp-route-id="@restaurante.Id" class="fa fa-trash"></a>
+                    <a href="#" class="fa fa-trash ejecutar-eliminacion" data-id="@restaurante.Id"></a>
+                </td>
+            </tr>
+            }*@
     </tbody>
 </table>
-@section Scripts{ 
-<script>
+@section Scripts{
+    <script>
 
-    $('a.ejecutar-eliminacion').click(function (event) {
+    /*$('a.ejecutar-eliminacion').click(function (event) {
         event.preventDefault();
         //var resId = $(this).attr('data-id');
         var resId = $(this).data('id');
@@ -59,22 +56,147 @@
                 success: function (result) {
                     //alert('Se elimino el restauratnte');
                     //window.location.reload();
-                    $.getJSON('https://localhost:44317/api/restaurantes/', function (data) {
-                        var row =
-                            '<tr>' +
-                                '<td>' + data.nombre + '</td>' +
-                                '<td>' + data.logo + '</td>' +
-                                '<td>' + data.domicilio + '</td>' +
-                                '<td>' + data.telefono + '</td>' +
-                                '<td><a href='@Url.Action("Mesas","Index")/' + resId + '">' + data.mesas.count() + '</td>' +
-                                '<td>' + data.empleados +'</td>'+
-                            '</tr > ';
-                    });
-                }                
-            })
+                    recargarElementos
+                }
+            });
         }
+    });*/
+
+    //$('#tabla-restaurantes-contenido').on('click','.ejecutar-eliminacion', function (event) {
+    //    event.preventDefault();
+    //    var id = $(this).attr('data-id');
+    //    var id = $(this).data('id');
+
+    //    bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
+    //        if (result) {
+    //         eliminar elemento
+    //            $.ajax({
+    //                url: '/api/restaurantes/' + id,
+    //                type: 'DELETE',
+    //                success: recargarElementos
+    //            });
+    //        }
+    //    });
+
+        /*if (IsConfirmed) {
+            // eliminar elemento
+            $.ajax({
+                url: 'https://localhost:44343/api/restaurantes/' + id,
+                type: 'DELETE',
+                success: recargarElementos
+            });
+
+        }
+    });*/
+
+    @*function recargarElementos() {
+        // obtener elementos
+        $.getJSON('/api/restaurantes/', function (data) {
+            var rows;
+            data.forEach(function (element) {
+                var row = '<tr>'
+                    + '<td>' + '<img src="'+element.logo+'" width="50" height="50">' + '</td>'
+                    + '<td class="clase">' + element.nombre + '</td>'
+                    + '<td>' + element.domicilio + '</td>'
+                    + '<td>' + element.telefono + '</td>'
+                    + '<td>' + element.paginaWeb + '</td>'
+                    + '<td>' + element.fechaDeAlta + '</td>'
+                    + '<td>' + element.horaDeCierre + '</td>'
+                    + '<td><a href="@Url.Action("Index","Empleados")/Index/"' + element.id + '">' + element.cantidadEmpleados + '</a></td>'
+                    + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                    + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
+                    + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion" > Eliminar</a ></td > '
+                    + '</tr>';
+                rows += row;
+            });
+            $('#tabla-restaurantes').html(rows);
+        });
+    }*@
+
+
+    $(document).ready( function () {
+        var table = $('#tabla-restaurantes-contenido').DataTable({
+            ajax: {
+                url: 'api/restaurantes',
+                dataSrc : ''
+            },
+            columns: [
+                { data: 'id', visible: false },
+                {
+                    data: 'logo',
+                    render: function (data, type, row) {
+                        return '<img src="' + data + '"width="50" height="50">';
+                    }
+                },
+                {data:'nombre'},
+                {data:'domicilio'},
+                {data:'telefono'},
+                {data:'paginaWeb' },
+                {data:'fechaDeAlta' },
+                {data: 'horaDeCierre'},
+                {
+                    data: 'cantidadEmpleados',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Index","Empleados")/Index/' + row.id + '">' + data + '</a>';
+                    }
+                },
+                {
+                    data: 'cantidadMesas',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>';
+                    }
+                },
+                {
+                    data: '',
+                    render: function (data, type, row) {
+                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a>'
+                    }
+                }
+
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'Agregar',
+                    action: function () {
+                       window.location="@Url.Action("Agregar")";
+                    }
+                },
+                {
+                    text: 'Eliminar',
+                    action: function () {
+                        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
+                            if (result) {
+                                var rows = table.rows({ selected: true }).data();
+                                console.log(rows);
+                                var ids = [];
+                                for (var x = 0; x < rows.length; ++x) {
+                                    ids.push(rows[x].id);
+                                }
+
+                                $.ajax({
+                                    type: 'DELETE',
+                                    contentType: 'application/json',
+                                    data: '[' + ids.toString() + ']',
+                                    url: '/api/restaurantes/',
+                                    success: function () {
+                                        table.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+                
+                'copy','excel','pdf'
+            ]
+        });
+
+        //table.buttons().container().appendTo($('.col-sm-6:eq(0)', table.table().container()));
+
     });
 
-</script>
+    </script>
 }
 

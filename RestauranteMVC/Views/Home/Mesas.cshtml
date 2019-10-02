@@ -1,31 +1,92 @@
-﻿@model List<Mesa>
-@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<h1>Mesas</h1>
 
-<h1>Mesas</h1>
-
-<a class="btn btn-primary" asp-action="AgregarMesa" asp-route-id="@ViewData["resId"]">Agregar</a>
-<table class="table table-bordered">
+<!--<a class="btn btn-primary" asp-action="AgregarMesa" asp-route-id="@ViewData["resId"]">Agregar</a>-->
+<table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
         <tr>
+            <th>ID</th>
+            <th>IDRestaurante</th>
             <th>Identificador</th>
             <th>Capacidad</th>
             <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var mesa in Model)
+        @*@foreach (var mesa in Model)
         {
-        <tr>
-            <td>@mesa.Identificador</td>
-            <td>@mesa.Capacidad</td>
-            <td>
-                <a asp-action="EditarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
-                <a asp-action="EliminarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
-            </td>
-        </tr>
-        }
+            <tr>
+                <td>@mesa.Identificador</td>
+                <td>@mesa.Capacidad</td>
+                <td>
+                    <a asp-action="EditarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
+                    <a asp-action="EliminarMesa" asp-route-id="@mesa.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
+                </td>
+            </tr>
+        }*@
     </tbody>
 </table>
 
+@section Scripts{
+    <script>
+
+    $(document).ready( function () {
+        var table = $('#tabla-mesas-contenido').DataTable({
+            ajax: {
+                url: '/api/mesas/'+@ViewData["resId"],
+                dataSrc : ''
+            },
+            columns: [
+                { data: 'id', visible: false },
+                { data: 'restauranteId', visible: false },
+                {data:'identificador'},
+                { data: 'capacidad' },
+                {
+                    data: '',
+                    render: function (data, type, row) {
+                        return '<a class="fa fa-pencil" href="@Url.Action("EditarMesa")/' + row.id + '"></a>'
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'Agregar',
+                    action: function () {
+                       window.location="@Url.Action("AgregarMesa")/@ViewData["resId"]";
+                    }
+                },
+                {
+                    text: 'Eliminar',
+                    action: function () {
+                        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
+                            if (result) {
+                                var rows = table.rows({ selected: true }).data();
+                                console.log(rows);
+                                var ids = [];
+                                for (var x = 0; x < rows.length; ++x) {
+                                    ids.push(rows[x].id);
+                                }
+
+                                $.ajax({
+                                    type: 'DELETE',
+                                    contentType: 'application/json',
+                                    data: '[' + ids.toString() + ']',
+                                    url: '/api/mesas/',
+                                    success: function () {
+                                        table.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+
+                'copy','excel','pdf'
+            ]
+        });
+
+    });
+
+    </script>
+}
