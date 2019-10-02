@@ -18,8 +18,7 @@ namespace Restaurantes.Controllers
 
         public IActionResult Index()
         {
-            var restaurantes = _restauranteService.ObtenerRestaurantes();
-            return View(restaurantes);
+            return View();
         }
 
         public IActionResult Agregar()

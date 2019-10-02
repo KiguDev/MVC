@@ -1,8 +1,7 @@
-﻿@model List<Restaurante>
-
-    <h1>
-        Restaurantes
-    </h1>
+﻿
+<h1>
+    Restaurantes
+</h1>
 
 <a class="btn btn-primary mb-3" asp-action="Agregar">Agregar restaurante</a>
 <div>
@@ -25,26 +24,27 @@
                 </thead>
                 <tbody>
                     @*@foreach (var restaurante in Model)
-                    {
-                        <tr class="row-@restaurante.Id">
-                            <td>@restaurante.Id</td>
-                            <td>@restaurante.Nombre</td>
-                            <td>@restaurante.Domicilio</td>
-                            <td>@restaurante.Telefono</td>
-                            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                            <td>
-                                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
-                            </td>
-                        </tr>
-                    }*@
+                        {
+                            <tr class="row-@restaurante.Id">
+                                <td>@restaurante.Id</td>
+                                <td>@restaurante.Nombre</td>
+                                <td>@restaurante.Domicilio</td>
+                                <td>@restaurante.Telefono</td>
+                                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+                                <td>
+                                    <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                                    <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
+                                </td>
+                            </tr>
+                        }*@
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-@section Scripts{ 
-<script>
+@Html.Partial("Privacy")
+@section Scripts{
+    <script>
     $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
@@ -62,10 +62,10 @@
             }
         });
     });
-        
+
 
     function recargarElementos() {
-            // obtener elementos 
+            // obtener elementos
             $.getJSON('/api/restaurantes/', function (data) {
                 var rows = "";
                 data.forEach(function (element) {
@@ -74,7 +74,7 @@
                         + '<td>' + element.direccion + '</td>'
                         + '<td>' + element.telefono + '</td>'
                         + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
-                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>' 
+                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
                         + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
                         + '</tr>';
 
@@ -92,7 +92,7 @@
                 dataSrc: '',
             },
             columns: [
-                { data: 'id' },
+                {data: 'id' },
                 {data: 'nombre' },
                 {data: 'domicilio' },
                 {data: 'telefono' },
@@ -100,7 +100,7 @@
                     data: 'mesas',
                     render: function (data, type, row) {
                         return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
-                    },                  
+                    },
                 },
                 {
                     render: function (data, type, row) {
@@ -115,24 +115,28 @@
                 {
                     text: 'Eliminar',
                     action: function () {
-                        var rows = table.rows({ selected: true }).data();
+                         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
+                             if (IsConfirmed) {
+                                 var rows = table.rows({ selected: true }).data();
 
-                        var ids = [];
-                        for (var x = 0; x < rows.length; x++) {
-                            ids.push(rows[x].id);
-                        }
+                                var ids = [];
+                                for (var x = 0; x < rows.length; x++) {
+                                    ids.push(rows[x].id);
+                                }
 
-                         $.ajax({
-                             url: '/api/restaurantes',
-                             data: '[' + ids.toString() + ']',
-                             contentType: 'application/json',
-                            type: 'DELETE',
-                             success: function () {
-                                 table.ajax.reload();
-                             }
-                         });
+                                 $.ajax({
+                                     url: '/api/restaurantes',
+                                     data: '[' + ids.toString() + ']',
+                                     contentType: 'application/json',
+                                    type: 'DELETE',
+                                     success: function () {
+                                         table.ajax.reload();
+                                     }
+                                 });
 
-                        console.log(ids);
+                                console.log(ids);
+                            }
+                        });
                     }
                 }
             ]
@@ -142,5 +146,5 @@
     //.appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
 
     } );
-</script>
+    </script>
 }
