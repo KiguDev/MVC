@@ -4,7 +4,7 @@
     Mesas
 </h1>
 
-<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar mesa</a>
+<a class="btn btn-primary mb-3" asp-action="AgregarMesa">Agregar mesa</a>
 <div>
     <div>
         <div>
@@ -16,11 +16,8 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Domicilio</th>
-                        <th>Teléfono</th>
-                        <th>Mesas</th>
-                        <th></th>
+                        <th>Identificador</th>
+                        <th>Capacidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,7 +42,7 @@
 </div>
 @section Scripts{
     <script>
-    $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
+    $('#tabla-mesas-contenido').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
         var id = $(this).data('id');
@@ -70,10 +67,9 @@
                 var rows = "";
                 data.forEach(function (element) {
                     var row = '<tr>'
-                        + '<td class="clase">' + element.NombreRestaurante + '</td>'
-                        + '<td>' + element.direccion + '</td>'
-                        + '<td>' + element.telefono + '</td>'
-                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                        + '<td class="clase">' + element.Identificador
+                        + '</td>'
+                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.capacidad + '</a></td>'
                         + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
                         + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
                         + '</tr>';
@@ -145,6 +141,6 @@
 }
 
 
-@section Scripts{
+@*@section Scripts{
     @Html.Partial("_ValidationScriptsPartial")
-}
+}*@

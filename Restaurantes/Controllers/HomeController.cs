@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
 using System;
 using System.Diagnostics;
-
+//Hacer un mesas controller
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -107,6 +109,7 @@ namespace Restaurantes.Controllers
             // utilizar el servicio de mesa y pbtemer la entidad
             // modificar las propiedades de Mesa con los del view model
             // enviar la entidad al metodo de actualizar del servicio
+
             return RedirectToAction("Index");
         }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Restaurantes.Models
 {
     public class MesaViewModel
-    {      
+    {   
 
         public int Id { get; set; }
         public string Identificador { get; set; }
