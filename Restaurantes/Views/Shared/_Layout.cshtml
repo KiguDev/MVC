@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var isAuthorized = User.Identity.IsAuthenticated;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -34,9 +37,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (isAuthorized) { 
+                            <li class="nav-item">
+                                <div>@User.Identity.Name</div>
+                            </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cuenta" asp-action="Logout">Cerrar sesión</a>
                         </li>
+                        }
                     </ul>
                 </div>
             </div>

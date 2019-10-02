@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -16,6 +18,7 @@ namespace Restaurantes.Controllers
             _restauranteService = restauranteService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Infrastructure.Data;
+using Restaurantes.Infrastructure.Identity;
 using Restaurantes.Infrastructure.Services;
 
 namespace Restaurantes
@@ -37,6 +40,28 @@ namespace Restaurantes
             });
 
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
+
+            services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //{
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 5;
+            //})
+            //    .AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.ConfigureApplicationCookie(options => {
+            //    options.LoginPath = "/Cuenta/Login";
+            //    options.Cookie
+            //     = new CookieBuilder
+            //     {
+            //         IsEssential = true
+            //     };
+            //});
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IordenService, OrdenService>();
@@ -63,6 +88,8 @@ namespace Restaurantes
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
