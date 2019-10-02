@@ -95,6 +95,7 @@ namespace Restaurantes.Controllers
             return View(restaurante.Mesas);
         }
 
+        [AllowAnonymous]
         public IActionResult Perfil(int id)
         {
             var restaurante = _restauranteService.Obtener(id);

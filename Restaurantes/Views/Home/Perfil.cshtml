@@ -1,4 +1,4 @@
-﻿@model RestauranteViewModel
+﻿@model Restaurante
 @{
     ViewData["Title"] = Model.Nombre;
 }
@@ -6,16 +6,28 @@
 <div class="container">
     <div class="text-center">
         <h1>@Model.Nombre</h1>
-        <h2 class="text-center">@Model.Direccion</h2>
+        <h2 class="text-center">@Model.Domicilio</h2>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <div>Cierra a las: @Model.HoraDeCierre horas</div>
-            <div></div>
+            <h3>Contacto</h3>
+            <div><b>Cierra a las:</b> @Model.HoraDeCierre horas</div>
+            <div><b>Página web:</b> @Model.PaginaWeb</div>
+            <div><b>Teléfono:</b> @Model.Telefono</div>
         </div>
         <div class="col-md-6">
-            @Model.
+            <h3>Mesas</h3>
+            <ul>
+                @foreach (var m in Model.Mesas)
+                {
+                <li>
+                    <div class="text-success">@m.Identificador</div>
+                    <div>Capacidad: @m.Capacidad</div>
+                </li>
+                }
+
+            </ul>
         </div>
     </div>
 </div>
