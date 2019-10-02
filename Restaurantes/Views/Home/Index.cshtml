@@ -23,21 +23,21 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="tabla-restaurantes">
-                    @foreach (var restaurante in Model)
-                    {
-                        <tr class="row-@restaurante.Id">
-                            <td>@restaurante.Id</td>
-                            <td>@restaurante.Nombre</td>
-                            <td>@restaurante.Domicilio</td>
-                            <td>@restaurante.Telefono</td>
-                            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                            <td>
-                                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
-                            </td>
-                        </tr>
-                    }
+                <tbody>
+                    @*@foreach (var restaurante in Model)
+                        {
+                            <tr class="row-@restaurante.Id">
+                                <td>@restaurante.Id</td>
+                                <td>@restaurante.Nombre</td>
+                                <td>@restaurante.Domicilio</td>
+                                <td>@restaurante.Telefono</td>
+                                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+                                <td>
+                                    <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                                    <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
+                                </td>
+                            </tr>
+                        }*@
                 </tbody>
             </table>
         </div>
@@ -45,11 +45,12 @@
 </div>
 @section Scripts{
     <script>
-    $('#tabla-restaurantes').on('click', '.ejecutar-eliminacion', function (event) {
+    $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
         var id = $(this).data('id');
         //var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+
         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
             if (IsConfirmed) {
                 // eliminar elemento
@@ -61,6 +62,7 @@
             }
         });
     });
+
 
     function recargarElementos() {
             // obtener elementos
@@ -75,13 +77,27 @@
                         + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
                         + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
                         + '</tr>';
+
                     rows += row;
                 });
+
                 $('tbody').html(rows);
             });
     }
+
     $(document).ready( function () {
         var table = $('#tabla-restaurantes-contenido').DataTable({
+            ajax: {
+                url: '/api/restaurantes',
+                dataSrc: '',
+            },
+            columns: [
+                { data: 'id' },
+                {data: 'nombre' },
+                {data: 'domicilio' },
+                {data: 'telefono' },
+                {data: 'mesas' },
+            ],
             select: true,
             dom: 'Bfrtip',
             buttons: [
@@ -90,24 +106,31 @@
                     text: 'Eliminar',
                     action: function () {
                         var rows = table.rows({ selected: true }).data();
+
                         var ids = [];
                         for (var x = 0; x < rows.length; x++) {
-                            ids.push(rows[x][0]);
+                            ids.push(rows[x].id);
                         }
+
                          $.ajax({
-                             url: '/api/restaurantes/',
-                             data: {ids},
+                             url: '/api/restaurantes',
+                             data: '[' + ids.toString() + ']',
+                             contentType: 'application/json',
                             type: 'DELETE',
-                             success: function(){
+                             success: function () {
+                                 table.ajax.reload();
                              }
                          });
+
                         console.log(ids);
                     }
                 }
             ]
         });
+
     //    table.buttons().container()
     //.appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+
     } );
     </script>
 }

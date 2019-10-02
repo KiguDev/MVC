@@ -43,6 +43,7 @@
         //var id = $(this).attr('data-id');
         var id = $(this).data('id');
         var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+
         if (IsConfirmed) {
             // eliminar elemento
             $.ajax({
@@ -51,8 +52,10 @@
                 success: recargarElementos
             });
 
+
         }
     });
+
     function recargarElementos() {
         // obtener elementos
         $.getJSON('https://localhost:44343/api/restaurantes/', function (data) {
@@ -65,11 +68,14 @@
                 + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
                 + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
                 + '</tr>';
+
                 rows += row;
             });
+
             $('#tabla-restaurantes').html(rows);
         });
     }
+
     $(function () {
         var table = $('.tabla-completa-restaurantes').DataTable(
             {
@@ -80,12 +86,17 @@
                     text: 'Eliminar',
                     action: function ( e, dt, node, config ) {
                         var rows = table.rows({ selected: true } ).data();
+
                         var ids = [];
+
                         for (var x = 0; x < rows.length; x++) {
                             ids.push(rows[x][0]);
                         }
+
                         console.log(ids);
+
                         $
+
                         //dt.ajax.reload();
                     }
                 }

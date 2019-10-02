@@ -1,0 +1,43 @@
+﻿@model RegistrarseViewModel
+
+<div class="card card-body">
+   
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+        //Email
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+            <label asp- for="Email"></label>
+        </div>
+
+
+        //Contraseña
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <label asp- for="Password"></label>
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            <label asp- for="ConfirmPassword"></label>
+        </div>
+
+
+    
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+     </form>
+</div>
+
+@section Scripts 
+{
+@await Html.PartialAsync("_ValidationScriptsPartial")
+}

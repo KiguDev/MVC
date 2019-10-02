@@ -17,18 +17,39 @@ namespace Restaurantes.Infrastructure.Data
                     Nombre = "Restaurante Maestro",
                     Domicilio = "Ave. Prueba 123",
                     Telefono = 686156,
-                    HoraDeCierre = 1000
+                    HoraDeCierre = 500
 
-                }); ;
+                });
+
+
 
 
                 catalogContext.SaveChanges();
             }
 
+            if (!catalogContext.Ordenes.Any())
+            {
+                catalogContext.AddRange(
+                    new List<Orden> {
+                            new Orden
+                            {
+                                Estatus = (int) OrdenEstatus.Pendiente,
+                                RestauranteId = 1,
+                                FechaAlta = DateTime.Now,
+                                Total = 0
+                            },
+                                  new Orden
+                            {
+                                Estatus = (int) OrdenEstatus.Pendiente,
+                                RestauranteId = 1,
+                                FechaAlta = DateTime.Now,
+                                Total = 100
+                            }
+                    });
 
+                catalogContext.SaveChanges();
 
-
-
+            }
         }
     }
 }

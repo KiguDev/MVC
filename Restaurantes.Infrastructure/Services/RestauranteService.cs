@@ -49,90 +49,10 @@ namespace Restaurantes.Infrastructure.Services
             _context.SaveChanges();
         }
 
-
-        public void Eliminar( int [] ids )
+        public void Eliminar(int[] ids)
         {
             _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
             _context.SaveChanges();
         }
-        //Empleado
-        //--------------------------------------------------------------------------------------------
-        //Obtner Empleado por ID
-        public Empleado ObtenerE(int id)
-        {
-            return _context.Empleados.FirstOrDefault(c => c.Id == id);
-        }
-
-        //Listado de Empleados 
-        public List<Empleado> ObtenerEmpleado()
-        {
-            return _context.Empleados.Include(c => c.RestauranteId).ToList();
-        }
-
-        // Agregar Empleado 
-        public int Agregar(Empleado empleado)
-        {
-            _context.Add(empleado);
-            _context.SaveChanges();
-            return empleado.Id;
-        }
-
-        //Editar Empleado
-        public void Editar(Empleado empleado)
-        {
-            _context.Update(empleado);
-            _context.SaveChanges();
-        }
-
-        //Remover Empleado
-        public void Remove(Empleado empleado)
-        {
-            _context.Empleados.Remove(empleado);
-            _context.SaveChanges();
-        }
-
-        //Mesas
-//--------------------------------------------------------------------------------------------
-        //Obtener Mesa por ID
-        public Mesa ObtenerM(int id)
-        {
-            return _context.Mesas.FirstOrDefault(c => c.Id == id);
-        }
-        // Obtener el listado de Mesas
-        public List<Mesa> ObtenerMesa()
-        {
-            return _context.Mesas.Include(c => c.Id).ToList();
-        }
-        //Agregar Mesas
-        public int Agregar(Mesa mesa)
-        {
-            _context.Add(mesa);
-            _context.SaveChanges();
-            return mesa.Id;
-        }
-        //Editar Mesas
-        public void Editar(Mesa mesa)
-        {
-            _context.Update(mesa);
-            _context.SaveChanges();
-        }
-        //Eliminar Mesa
-        public void Remove(Mesa mesa)
-        {
-            _context.Mesas.Remove(mesa);
-            _context.SaveChanges();
-
-        }
-        //Ordenes
-        //--------------------------------------------------------------------------------------------
-        //public List<Orden> ObtenerTodo()
-        //{
-        //    return _context.Orden;
-        //}
-
-
-
-
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
@@ -6,7 +7,8 @@ using System;
 using System.Diagnostics;
 
 namespace Restaurantes.Controllers
-{
+{ 
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -48,7 +50,7 @@ namespace Restaurantes.Controllers
                 Telefono = int.Parse(model.Telefono)
             };
             var id = _restauranteService.Agregar(restaurante);
-            return View(model);
+            return RedirectToAction("Index");
         }
         //Editar Restaurante
         [HttpGet]

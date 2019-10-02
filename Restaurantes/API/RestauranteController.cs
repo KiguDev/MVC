@@ -32,8 +32,8 @@ namespace Restaurantes.API
                 {
                     Id = c.Id,
                     Nombre = c.Nombre,
-                    Direccion = c.Domicilio,
-                    CantidadMesas = c.Mesas.Count()
+                    Domicilio = c.Domicilio,
+                    Mesas = c.Mesas.Count()
                 }).ToList();
         }
 
