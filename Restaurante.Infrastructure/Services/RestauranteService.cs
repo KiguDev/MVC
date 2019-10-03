@@ -20,7 +20,7 @@ namespace Restaurante.Infrastructure.Services
 
         public Core.Entities.Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.FirstOrDefault(c => c.Id == id);
+            return _context.Restaurantes.Include(c => c.Mesas).FirstOrDefault(c => c.Id == id);
         }
 
         public List<Core.Entities.Restaurante> ObtenerRestaurantes()

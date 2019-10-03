@@ -3,29 +3,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.Core.Interfaces;
 using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
         private IMesasService _mesasService;
+        private IAsyncRepository _asyncRepository;
 
 
-        public HomeController(IRestauranteService restauranteService, IMesasService mesasService)
+        public HomeController(IRestauranteService restauranteService, IMesasService mesasService, IAsyncRepository asyncRepository)
         {
             _restauranteService = restauranteService;
             _mesasService = mesasService;
+            _asyncRepository = asyncRepository;
         }
 
         public IActionResult Index()
         {
-            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            //var restaurantes = _restauranteService.ObtenerRestaurantes();
+            _asyncRepository.ListAllASync<>();
                 
             return View(restaurantes);
+        }
+
+        public IActionResult Info()
+        {
+            return View();
         }
         
         public IActionResult Mesas(int id)
@@ -129,8 +139,9 @@ namespace Restaurantes.Controllers
                 HoraDeCierre = model.HoraDeCierre,
                 FechaDeAlta = DateTime.Now
             };
-            
-            var id = _restauranteService.Agregar(restaurante);
+
+            var id = _asyncRepository.AddASync(restaurante);
+            //var id = _restauranteService.Agregar(restaurante);
             return View(model);
         }
 

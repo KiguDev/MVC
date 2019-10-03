@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Restaurante.Core.Interfaces;
 using Restaurante.Infrastructure.Services;
 using AutoMapper;
+using Restaurante.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Restaurantes
 {
@@ -37,6 +39,38 @@ namespace Restaurantes
             });
 
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
+
+            services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "1227499694108925";
+                facebookOptions.AppSecret = "578773265cc6b867fa079ab7f76f983f";
+            });
+
+            services.AddScoped<IAsyncRepository, EfRepository>();
+
+            /*.AddMicrosoftAccount(microsoftOptions => { }).AddTwitter(twitterOptions => { }).AddGoogle(googleOptions => { });*/
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 5;
+                
+            //}
+            //).AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.ConfigureApplicationCookie(options => {
+            //    options.LoginPath = "/Cuenta/Login";
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        IsEssential = true
+            //    };
+            //});
+
             services.AddScoped<IMesasService, MesasService>();
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
@@ -64,6 +98,8 @@ namespace Restaurantes
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
