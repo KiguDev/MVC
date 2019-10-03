@@ -7,24 +7,23 @@
 
 <a href="/Home/Agregar" class="btn btn-outline-primary">Agregar</a>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="tabla-restaurante-contenido">
     <thead>
         <tr>
+            <th> ID </th>
             <th> Nombre </th>
             <th> Domicilio </th>
             <th> Telefono </th>
             <th> Mesas </th>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
         </tr>
         
     </thead>
     <tbody>
-        @foreach (var r in Model)
+        @*@foreach (var r in Model)
         {
         <tr>
+            <td>@r.Id</td>
             <td>@r.Nombre</td>
             <td>@r.Domicilio</td>
             <td>@r.Telefono</td>
@@ -39,9 +38,138 @@
                 </form>
             </td>
 
+            <td>
+                <a href="#" class="ejecutar-eliminacion btn btn-danger" data-id="@r.Id">Eliminar</a>
+            </td>
         </tr>
 
-        }
+        }*@
     </tbody>
 </table>
 
+@section Scripts{
+    <script>
+        //$('a.ejecutar-eliminacion').click(function (event) {
+        //    event.preventDefault();
+        //    var id = $(this).data('id')
+        //    var confirmed = confirm("Deseas eliminar el restaurante? ");
+        //    if (confirmed) {
+        //        $.ajax({
+        //            url: 'https://localhost:44358/api/restaurante/' + id,
+        //            type: 'DELETE',
+        //            success: (result) => {
+        //                window.location.reload();
+        //                alert('Se elimino el restaurante');
+        //            }
+        //        });
+        //    }
+            
+        //});
+
+         $('#tabla-restaurante-contenido').on('click','.ejecutar-eliminacion', function (event) {
+        event.preventDefault();
+        //var id = $(this).attr('data-id');
+             var id = $(this).data('id');
+
+
+        //var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+
+             bootbox.confirm("Deseas eliminar este elemento?", function (IsConfirmed) {
+                 if (IsConfirmed) {
+                     // eliminar elemento
+                     $.ajax({
+                         url: 'https://localhost:44358/api/restaurante/' + id,
+                         type: 'DELETE',
+                         success: recargarElementos
+                     });
+                 }
+             });     
+    });
+    @*function recargarElementos() {
+        // obtener elementos
+        $.getJSON('/api/restaurantes/', function (data) {
+            var rows;
+            data.forEach(function (element) {
+                var row = '<tr>'
+                + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                + '<td>' + element.direccion + '</td>'
+                + '<td>' + element.telefono + '</td>'
+                + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
+                + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion btn btn-danger">Eliminar</a></td>'
+                + '</tr>';
+                rows += row;
+            });
+            $('#tabla-restaurantes').html(rows);
+        });
+    }*@
+
+    $(document).ready( function () {
+        var table = $('#tabla-restaurante-contenido').DataTable({
+            ajax: {
+                url: '/api/restaurante',
+                dataSrc : ''
+
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'nombre'},
+                {data: 'domicilio'},
+                {data: 'telefono'},
+                {
+                    data: 'mesas',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
+                    }
+                },
+                {
+                    render: (data, type, row) => {
+                        return '<a class="btn btn-info" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function () {
+
+                        var rows = table.rows({ selected: true }).data();
+                        var ids = [];
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x].id)
+                        }
+                        //
+                         bootbox.confirm("Deseas eliminar este elemento?", function (IsConfirmed) {
+                             if (IsConfirmed) {
+                                 // eliminar elemento
+                                  $.ajax({
+                                        contentType: 'application/json',
+                                        url: '/api/restaurante/',
+
+                                        data: '[' + ids.toString() + ']',
+                                     type: 'DELETE',
+                                        success: () => {
+                                            table.ajax.reload();
+                                        }
+                                    });
+
+                            }
+                        });     
+                        //
+
+                        console.log(ids);
+                    }
+                }
+            ]
+        });
+
+
+        //table.buttons().container()
+        //    .appendTo($('.col-sm-6:eq(0)', table.table().container()));
+
+    } );
+    </script>
+
+}

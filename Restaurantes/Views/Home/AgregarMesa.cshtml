@@ -1,11 +1,11 @@
 ﻿@model MesaViewModel
 @{
-    ViewData["Title"] = "Agregar Mesa";
+    ViewData["Title"] = @ViewData["Accion"] + " Mesa";
 }
 
 <div class="card">
     <div class="card-header">
-        Agregar Restaurante
+        @ViewData["Accion"] Mesa
     </div>
     <div class="card-body">
         <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">

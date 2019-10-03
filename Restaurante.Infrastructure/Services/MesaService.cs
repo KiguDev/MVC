@@ -37,6 +37,20 @@ namespace Restaurante.Infrastructure.Services
             _context.SaveChanges();
         }
 
+
+
+        public void EliminarVarios(int[] ids)
+        {
+            var mesas = _context.Mesas;
+
+            //var restaurantesEliminar = restaurantes.Where(r => r.Id == ids.Where(id => id == r.Id).FirstOrDefault());
+            var mesasEliminar = mesas.Where(m => ids.Contains(m.Id));
+            _context.RemoveRange(mesasEliminar);
+            _context.SaveChanges();
+
+        }
+
+
         public Core.Entities.Mesa Obtener(int id)
         {
             return _context.Mesas.FirstOrDefault(m => m.Id == id);

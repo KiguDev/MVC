@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.Core.Interfaces;
@@ -14,14 +15,19 @@ namespace Restaurantes.API
     public class MesaController : ControllerBase
     {
         private readonly IMesaService _mesaService;
-        public MesaController(IMesaService mesaService)
+        private readonly IMapper _mapper;
+        public MesaController(IMesaService mesaService, IMapper mapper)
         {
             _mesaService = mesaService;
+            _mapper = mapper;
         }
         [HttpGet("{id}")]
-        public ActionResult<List<Restaurante.Core.Entities.Mesa>> getMesas(int id)
+        public ActionResult<List<MesaDTO>> getMesas(int id)
         {
-            return _mesaService.ObtenerMesas(id);
+            var mesas = _mesaService.ObtenerMesas(id);
+            var model = new List<MesaDTO>();
+            _mapper.Map(mesas, model);
+            return model;
         }
 
         [HttpPut("{id}")]
@@ -41,6 +47,14 @@ namespace Restaurantes.API
         public ActionResult deleteMesa(int id)
         {
             _mesaService.Eliminar(id);
+            return Ok();
+        }
+
+
+        [HttpDelete]
+        public ActionResult deleteMesa([FromBody]int[] ids)
+        {
+            _mesaService.EliminarVarios(ids);
             return Ok();
         }
 

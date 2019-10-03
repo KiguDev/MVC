@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.Core.Interfaces;
 using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteServices;
@@ -189,6 +191,12 @@ namespace Restaurantes.Controllers
         {
             _restauranteServices.Eliminar(id);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Inforestaurante(int id)
+        {
+            var restaurante = _restauranteServices.Obtener(id);
+            return View(restaurante);
         }
 
         public IActionResult Privacy()

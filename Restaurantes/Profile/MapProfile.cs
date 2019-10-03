@@ -11,6 +11,10 @@ namespace Restaurantes.Profile
         public MapProfile()
         {
             CreateMap<Restaurante.Core.Entities.Restaurante, RestauranteViewModel>().ReverseMap();
+
+            CreateMap<Restaurante.Core.Entities.Restaurante, RestauranteDTO>().ForMember(r => r.Mesas, opt => opt.MapFrom(src => src.Mesas.Count()));
+
+            CreateMap<Restaurante.Core.Entities.Mesa, MesaDTO>().ReverseMap();
         }
        
     }

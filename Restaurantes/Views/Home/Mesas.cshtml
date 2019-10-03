@@ -4,29 +4,99 @@
 <h1>Mesas de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
 <a asp-action="AgregarMesa" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Mesa +</a>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="tabla-mesas-contenido">
     <thead>
         <tr>
+            <th> ID </th>
             <th> Identificador </th>
             <th> Capacidad </th>
             <th></th>
-            <th></th>
-            
+
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var m in Model)
-        {
-        <tr>
-            <td> @m.Identificador </td>
-            <td> @m.Capacidad</td>
-            <td><a asp-action="EditarMesa" asp-route-id="@m.Id" class="btn btn-warning">Editar</a></td>
-            <td>
-                <form asp-action="EliminarMesa">
-                    <button name="Id" value="@m.Id" type="submit" class="btn btn-danger">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        }
+        @*@foreach (var m in Model)
+            {
+            <tr>
+                <td> @m.Identificador </td>
+                <td> @m.Capacidad</td>
+                <td><a asp-action="EditarMesa" asp-route-id="@m.Id" class="btn btn-warning">Editar</a></td>
+                <td>
+                    <form asp-action="EliminarMesa">
+                        <button name="Id" value="@m.Id" type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            }*@
     </tbody>
 </table>
+
+
+
+@section Scripts{
+    <script>
+        
+
+       
+   
+
+    $(document).ready( function () {
+        var table = $('#tabla-mesas-contenido').DataTable({
+            ajax: {
+                url: '/api/mesa/' + @ViewData["resId"],
+                dataSrc : ''
+
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'identificador'},
+                {data: 'capacidad'},
+                {
+                    render: (data, type, row) => {
+                        return '<a class="btn btn-info" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function () {
+
+                        var rows = table.rows({ selected: true }).data();
+                        var ids = [];
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x].id)
+                        }
+                        //
+                         bootbox.confirm("Deseas eliminar este elemento?", function (IsConfirmed) {
+                             if (IsConfirmed) {
+                                 // eliminar elemento
+                                  $.ajax({
+                                        contentType: 'application/json',
+                                        url: '/api/mesa/',
+
+                                        data: '[' + ids.toString() + ']',
+                                     type: 'DELETE',
+                                        success: () => {
+                                            table.ajax.reload();
+                                        }
+                                    });
+
+                            }
+                        });
+                        //
+
+                        console.log(ids);
+                    }
+                }
+            ]
+        });
+
+    } );
+    </script>
+
+}

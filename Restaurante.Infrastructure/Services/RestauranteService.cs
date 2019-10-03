@@ -18,7 +18,7 @@ namespace Restaurante.Infrastructure.Services
         }
         public Core.Entities.Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.FirstOrDefault(r => r.Id == id);
+            return _context.Restaurantes.Include(r => r.Mesas).FirstOrDefault(r => r.Id == id);
         }
 
         public List<Core.Entities.Restaurante> ObtenerRestaurantes()
@@ -44,6 +44,17 @@ namespace Restaurante.Infrastructure.Services
             var restaurante = _context.Restaurantes.FirstOrDefault(r => r.Id == id);
             _context.Remove(restaurante);
             _context.SaveChanges();
+        }
+
+        public void EliminarVarios(int[] ids)
+        {
+            var restaurantes = _context.Restaurantes;
+
+            //var restaurantesEliminar = restaurantes.Where(r => r.Id == ids.Where(id => id == r.Id).FirstOrDefault());
+            var restaurantesEliminar = restaurantes.Where(r => ids.Contains(r.Id));
+            _context.RemoveRange(restaurantesEliminar);
+            _context.SaveChanges();
+           
         }
     }
 }

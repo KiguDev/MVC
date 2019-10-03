@@ -22,9 +22,14 @@ namespace Restaurantes.API
             _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult<List<Restaurante.Core.Entities.Restaurante>> getRestaurantees()
+        public ActionResult<List<RestauranteDTO>> getRestaurantes()
         {
-            return _RestauranteService.ObtenerRestaurantes();
+            var restaurantes = _RestauranteService.ObtenerRestaurantes();
+
+            var model = new List<RestauranteDTO>();
+            _mapper.Map(restaurantes, model);
+
+            return model;
         }
 
         [HttpPut("{id}")]
@@ -49,6 +54,13 @@ namespace Restaurantes.API
         public ActionResult deleteRestaurante(int id)
         {
             _RestauranteService.Eliminar(id);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public ActionResult deleteRestaurante([FromBody ]int[] ids)
+        {
+            _RestauranteService.EliminarVarios(ids);
             return Ok();
         }
 
