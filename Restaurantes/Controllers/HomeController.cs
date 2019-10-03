@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
@@ -10,15 +11,19 @@ using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
+        private IAsyncRepository _repository;
         private IMesaService _mesaService;
 
-        public HomeController(IRestauranteService restauranteService, IMesaService mesaService)
+        public HomeController(IRestauranteService restauranteService,
+            IMesaService mesaService, IAsyncRepository asyncRepository)
         {
             _restauranteService = restauranteService;
             _mesaService = mesaService;
+            _repository = asyncRepository;
         }
 
         public IActionResult Index()
@@ -31,6 +36,14 @@ namespace Restaurantes.Controllers
         {
             ViewData["Accion"] = "Agregar";
             return View(new RestauranteViewModel());
+        }
+
+        public IActionResult Perfil(int id)
+        {
+            ViewData["Accion"] = "Perfil";
+            ViewData["RestauranteId"] = id;
+            var restaurante = _restauranteService.Obtener(id);
+            return View("Perfil",restaurante);
         }
 
         [HttpPost]
@@ -50,7 +63,7 @@ namespace Restaurantes.Controllers
                 FechaDeAlta = DateTime.Now,
                 Telefono = int.Parse(model.Telefono)
             };
-            var id = _restauranteService.Agregar(restaurante);
+            var id = _repository.AddAsync(restaurante);
             return View(model);
         }
 

@@ -31,5 +31,6 @@
     <Folder Include="API\" />
     <Folder Include="Views\Empleados\" />
     <Folder Include="Profile\" />
+    <Folder Include="Views\Cuenta\" />
   </ItemGroup>
 </Project>

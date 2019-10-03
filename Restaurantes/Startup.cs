@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Infrastructure.Data;
+using Restaurantes.Infrastructure.Identity;
 using Restaurantes.Infrastructure.Services;
 
 namespace Restaurantes
@@ -36,12 +38,37 @@ namespace Restaurantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
+            services.AddDbContext<AppDbContext>(c => c.UseSqlServer
+            (Configuration.GetConnectionString("CatalogConnection")));
+            services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer
+            (Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IOrdenService, OrdenService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IAsyncRepository, EfRepository>();
+            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //    {
+            //        //password options
+            //    }
+            //).AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.ConfigureApplicationCookie(options => {
+            //    options.LoginPath = "/Cuenta/Login";
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        IsEssential = true
+            //    };
+            //});
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(
+                Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<AppIdentityContext>();
+
+            services.AddAuthentication().AddFacebook(fbOptions => {
+                fbOptions.AppId = "2496817240411224";
+                fbOptions.AppSecret = "df8f2962502d8228b3dae04994588281";
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -63,6 +90,8 @@ namespace Restaurantes
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

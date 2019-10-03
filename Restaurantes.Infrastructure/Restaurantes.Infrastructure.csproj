@@ -9,6 +9,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,5 +17,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Services\RestauranteDummyService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Identity\" />
   </ItemGroup>
 </Project>

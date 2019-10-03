@@ -3,6 +3,7 @@
 <h1>Restaurantes</h1>
 
 <a class="btn btn-outline-primary" asp-action="Agregar">Agregar restaurante</a>
+
 <table class="table table-bordered" id="tabla-restaurantes-contenido">
     <thead>
         <tr>
@@ -78,7 +79,12 @@
             },
             columns:[
                 {data: 'id'},
-                {data: 'nombre'},
+                {
+                    data: 'nombre',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Perfil")/' + row.id + '">' + data + '</a>'
+                    }
+                },
                 {data: 'domicilio'},
                 {data: 'telefono'},
                 {

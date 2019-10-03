@@ -1,0 +1,31 @@
+﻿@model Restaurante
+<h1>Restaurante @Model.Nombre</h1>
+<h6>@Model.Domicilio</h6>
+
+<hr>
+<label>Hora de cierre: @Model.HoraDeCierre</label>
+<h6><b>CONTACTO</b></h6>
+<label>@Model.PaginaWeb</label>
+<br />
+<label>@Model.Telefono</label>
+<hr>
+
+<h5>Mesas</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>Identificador</td>
+            <td>Capacidad</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Mesas)
+         {
+            <tr>
+                <td>@m.Identificador</td>
+                <td>@m.Capacidad</td>
+           </tr>
+         }
+
+    </tbody>
+</table>
