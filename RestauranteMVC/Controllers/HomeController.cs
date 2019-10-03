@@ -16,13 +16,15 @@ namespace RestauranteMVC.Controllers
     {
         private IRestauranteService _restauranteService;
         private IMesasService _mesasService;
+        private IAsyncRepository _repository;
         private readonly IMapper _mapper;
 
-        public HomeController(IRestauranteService restauranteService, IMesasService mesasService, IMapper mapper)
+        public HomeController(IRestauranteService restauranteService, IMesasService mesasService, IMapper mapper, IAsyncRepository repository)
         {
             _restauranteService = restauranteService;
             _mesasService = mesasService;
             _mapper = mapper;
+            _repository = repository;
         }
         //[AllowAnonymous]
         public IActionResult Index()
@@ -64,7 +66,8 @@ namespace RestauranteMVC.Controllers
                 PaginaWeb = model.PaginaWeb
             };
 
-            var id = _restauranteService.InsertarRestaurante(restaurante);
+            var id = _repository.AddAsync(restaurante);
+            //var id = _restauranteService.InsertarRestaurante(restaurante);
             //return View(model);
             return RedirectToAction("Index");
         }
