@@ -50,8 +50,8 @@ namespace RestauranteMVC
             services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AppIdentityContext>();
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppSecret = "1add0c96fc602ee7b9a79bc8bd9d5cb8";
-                facebookOptions.AppId = "555227418584340";
+                facebookOptions.AppSecret = "";
+                facebookOptions.AppId = "";
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
