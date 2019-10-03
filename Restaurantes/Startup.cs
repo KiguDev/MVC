@@ -42,20 +42,28 @@ namespace Restaurantes
 
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
-            }).AddEntityFrameworkStores<AppIdentityContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
 
-            services.ConfigureApplicationCookie(options=>
+            services.AddAuthentication().AddFacebook(facebookoptions =>
             {
-                options.LoginPath = "/cuenta/login";
-                options.Cookie = new CookieBuilder
-                {
-                    IsEssential = true
-                };
-            }
-            );
+                facebookoptions.AppId = "2397037987046780";
+                facebookoptions.AppSecret = "481a13a59a3e0eace7e581ddafa80fa3";
+            });
+
+            //services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 5;
+            //}).AddEntityFrameworkStores<AppIdentityContext>();
+
+            //services.ConfigureApplicationCookie(options=>
+            //{
+            //    options.LoginPath = "/cuenta/login";
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        IsEssential = true
+            //    };
+            //}
+            //);
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IordenService, OrdenService>();

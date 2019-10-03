@@ -8,7 +8,7 @@ using System.Diagnostics;
 //Hacer un mesas controller
 namespace Restaurantes.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -68,6 +68,15 @@ namespace Restaurantes.Controllers
                 Telefono = restaurante.Telefono.ToString(),
             };
             return View("Agregar", viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Perfil(int id)
+        {
+            ViewData["Accion"] = "Perfil";
+            var restaurante = _restauranteService.Obtener(id);
+
+            return View("Restaurant", restaurante);
         }
 
         [HttpPost]

@@ -8,6 +8,7 @@ using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    //[Route("identity/account/[action]")]
     public class CuentaController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
