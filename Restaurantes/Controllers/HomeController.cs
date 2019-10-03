@@ -12,10 +12,12 @@ namespace Restaurantes.Controllers
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
+        private IAsyncRepository _repository;
 
-        public HomeController(IRestauranteService restauranteService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository)
         {
             _restauranteService = restauranteService;
+            _repository = repository;
         }
 
         public IActionResult Index()
@@ -48,7 +50,7 @@ namespace Restaurantes.Controllers
                 FechaDeAlta = DateTime.Now,
                 Telefono = int.Parse(model.Telefono)
             };
-            var id = _restauranteService.Agregar(restaurante);
+            var id = _repository.AddAsync(restaurante);
             return View(model);
         }
 
@@ -79,7 +81,7 @@ namespace Restaurantes.Controllers
             return View("Restaurant", restaurante);
         }
 
-        [HttpPost]
+        [HttpPost]in
         public IActionResult Editar(RestauranteViewModel model)
         {
             if (!ModelState.IsValid)
