@@ -1,0 +1,47 @@
+﻿@model Restaurante
+<h1>Restaurante Profile</h1>
+<div class="container" style="padding:5px;border:1px white;border-radius: 5px;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)">
+    <div class="row">
+        <div class="col-sm-4">
+            <img height="200" width="200" src="@Model.Logo" />
+        </div>
+        <div class="col-sm-8">
+            <p>Columna 2</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <a href="@Model.PaginaWeb">Restaurante Web site</a>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="Domicilio"></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <p>@Model.Domicilio</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label asp-for="HoraDeCierre"></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <p>@Model.HoraDeCierre</p>
+        </div>
+    </div>
+    <div class="row">
+        <label></label>
+    </div>
+    <div class="row">
+        <p>
+
+        </p>
+    </div>
+</div>
+

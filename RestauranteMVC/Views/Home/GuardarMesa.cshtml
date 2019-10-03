@@ -1,0 +1,35 @@
+﻿@model MesaViewModel
+
+<h2>MesaEditar</h2>
+
+<form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+    <div class="form-group">
+        <label asp-for="Identificador"></label>
+        <input class="form-control" value="@Model.Identificador" asp-for="Identificador" />
+        <span asp-validation-for="Identificador" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Capacidad"></label>
+        <input class="form-control" value="@Model.Capacidad" asp-for="Capacidad" />
+        <span asp-validation-for="Capacidad" class="text-danger"></span>
+    </div>
+    @if (Model.Restaurante != null)
+    {
+        <div class="form-group">
+            <label asp-for="Restaurante.Nombre"></label>
+            <input disabled class="form-control" value="@Model.Restaurante.Nombre" asp-for="Restaurante.Nombre" />
+        </div>
+    }
+<div class="form-group">
+    @if (Model.Restaurante != null)
+    {
+        <input type="hidden" value="@Model.RestauranteId" asp-for="RestauranteId" />
+    }
+    else
+    {
+        <input type="hidden" value="@ViewData["RestauranteId"]" asp-for="RestauranteId" />
+    }
+
+</div>
+    <button class="btn btn-primary">Guardar</button>
+</form>

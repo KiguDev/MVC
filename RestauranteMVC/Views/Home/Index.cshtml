@@ -1,0 +1,90 @@
+﻿@model List<Restaurante>
+
+<h1>Restaurante</h1>
+
+<div align="right">
+    <a class="btn btn-primary" asp-action="Agregar">Agregar</a>
+</div>
+<table id="tabla-completa" class="table table-bordered tabla-completa-restaurantes">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Nombre</td>
+            <td>Domicilio</td>
+            <td>Telefono</td>
+            <td>Mesa</td>
+            <td>Options</td>
+        </tr>
+    </thead>
+    <tbody id="tabla-restaurantes">
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready( function () {
+            var table = $('#tabla-completa').DataTable(
+                {
+                    ajax: {
+                        url: '/api/restaurantes',
+                        dataSrc: '',
+
+                    },
+                    columns: [
+                        { data: 'id' },
+                        { data: 'nombre' },
+                        { data: 'domicilio' },
+                        { data: 'telefono' },
+                        {
+                            data: 'mesas',
+                            render: function (data, type, row) {
+                                return '<a href="@Url.Action("Mesas")?id=' + row.id + '">' + data + '</a>'
+                            }
+                        },
+                        {
+                            render: function (data,type,row) {
+                                return '<a href="Home/Update?id=' + row.id + '">Editar</a>'
+                            }
+                        }
+                    ],
+                    select: true,
+                    dom: 'Bfrtip',
+                    buttons:[
+                        'copy', 'excel', 'pdf',
+                        {
+                        text: 'Eliminar',
+                            action: function () {
+                                bootbox.confirm("Seguro que quieres borrar", function () {
+                                    if (IsConfirmed) {
+                                 var rows = table.rows({ selected: true }).data();
+                                 ids = [];
+                                for (var x = 0; x < rows.length; x++) {
+                                    ids.push(rows[x].id);
+                                    console.log(rows[x].id);
+                                }
+                                $.ajax({
+                                    url: '/api/restaurantes',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType:'application/json',
+                                    type: 'DELETE',
+                                    success: function () {
+                                        $('#tabla-completa').DataTable().ajax.reload();
+                                    }
+                                    });
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            text: 'Agregar',
+                            action: function () {
+                                
+                            }
+                        }
+                    ],
+                }
+            );
+} );
+    </script>
+}

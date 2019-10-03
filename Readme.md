@@ -1,1 +1,0 @@
-Projecto de Restaurante hecho con C# MVC.

@@ -1,0 +1,56 @@
+﻿
+@model RestauranteViewModel
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            @ViewData["Accion"] Restaurante
+        </div>
+        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <label asp-for="Nombre"></label>
+                <input class="form-control" id="Nombre" value="@Model.Nombre" asp-for="Nombre" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Domicilio"></label>
+                <input class="form-control" id="Direccion" value="@Model.Domicilio" asp-for="Domicilio" />
+                <span asp-validation-for="Domicilio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono"></label>
+                <input class="form-control" id="Telefono" value="@Model.Telefono" asp-for="Telefono" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Logo"></label>
+                <input class="form-control" id="Logo" value="@Model.Logo" asp-for="Logo" />
+                <span asp-validation-for="Logo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaginaWeb"></label>
+                <input class="form-control" id="PaginaWeb" value="@Model.PaginaWeb" asp-for="PaginaWeb">
+                <span asp-validation-for="PaginaWeb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" class="form-control" value="@Model.Id" asp-for="Id" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"
+            asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator"
+            crossorigin="anonymous"
+            integrity="sha384-rZfj/ogBloos6wzLGpPkkOr/gpkBNLZ6b6yLy4o+ok+t/SAKlL5mvXLr0OXNi1Hp">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"
+            asp-fallback-src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+            crossorigin="anonymous"
+            integrity="sha384-ifv0TYDWxBHzvAk2Z0n8R434FL1Rlv/Av18DXE43N/1rvHyOG4izKst0f2iSLdds">
+    </script>
+}

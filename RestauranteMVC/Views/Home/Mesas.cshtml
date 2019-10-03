@@ -1,0 +1,77 @@
+﻿<h1>Mesas</h1>
+@*<div align="right" style="padding:10px">
+    <a asp-action="GuardarMesa" asp-route-id="@Model.First().RestauranteId" class="btn btn-primary">Agregar +</a>
+</div>*@
+<table id="tabla" class=" table table-bordered">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Identificador</td>
+            <td>Capacidad</td>
+            <td>Acciones</td>
+
+        </tr>
+    </thead>
+    <tbody id="tabla-restaurante">
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $('#tabla').DataTable({
+                ajax: {
+                    url: '/api/mesas?id=' + window.location.search.substring(4),
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'Id' },
+                    { data: 'Identificador' },
+                    { data: 'Capacidad' },
+                    {
+                        data: '',
+                        render: function (data, type, row) {
+                            return "<a>Editar</a>"
+                        }
+                    }
+                ],
+                select: true,
+                dom: 'Bftrip',
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: 'Eliminar',
+                        action: function () {
+                            bootbox("Seguro que quieres borrar la mesa?", function () {
+                                if (IsConfirmed) {
+                                    var rows = table.rows({ selected: true }).data();
+                                    ids = [];
+                                    for (var x = 0; x < rows.length; x++) {
+                                        ids.push(rows[x].ids);
+                                        Console.log(rows[x].ids);
+                                    }
+                                    $.ajax({
+                                        url: 'api/mesas/',
+                                        data: '[' + ids.toString() + ']',
+                                        contextType: 'application/json',
+                                        type: 'DELETE',
+                                        success: function () {
+                                            $('#tabla').DataTable.ajax.reload();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: 'Agregar',
+                        action: function () {
+
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}
