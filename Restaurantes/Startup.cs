@@ -44,6 +44,12 @@ namespace Restaurantes
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
 
+            services.AddAuthentication().AddFacebook
+                (facebookOptions =>
+              {
+                  facebookOptions.AppId = "535383407005687";
+                  facebookOptions.AppSecret = "f6235aa2ff869bec311f2dafb0aa27ae";
+              });
 
             
             
