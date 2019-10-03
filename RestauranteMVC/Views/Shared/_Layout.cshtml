@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var isAuthorized = User.Identity.IsAuthenticated;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -21,6 +24,7 @@
 
 </head>
 <body>
+    <!--@await  Html.PartialAsync("_LoginPartial")-->
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -37,6 +41,11 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (isAuthorized)
+                    {
+                        <li><a>Hello @User.Identity.Name</a></li>
+                        <li><a asp-area="" asp-controller="Cuenta" asp-action="Logout">Cerrar Sesión</a></li>
+                    }
                 </ul>
             </div>
         </div>

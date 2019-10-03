@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.core.Interfaces;
 using RestauranteMVC.Models;
 
 namespace RestauranteMVC.Controllers
 {
+
+    [Authorize(Roles ="Administrator")]
     public class EmpleadosController : Controller
     {
         private IEmpleadosService _empleadoService;

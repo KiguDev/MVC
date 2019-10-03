@@ -146,13 +146,13 @@
                         return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>';
                     }
                 },
+                
                 {
                     data: '',
                     render: function (data, type, row) {
-                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a>'
+                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
                     }
                 }
-
             ],
             select: true,
             dom: 'Bfrtip',

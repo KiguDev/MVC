@@ -3,27 +3,32 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.core.Interfaces;
 using RestauranteMVC.Models;
 
 namespace RestauranteMVC.Controllers
 {
+    [Authorize(Roles ="Administrator")]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
         private IMesasService _mesasService;
+        private readonly IMapper _mapper;
 
-        public HomeController(IRestauranteService restauranteService, IMesasService mesasService)
+        public HomeController(IRestauranteService restauranteService, IMesasService mesasService, IMapper mapper)
         {
             _restauranteService = restauranteService;
             _mesasService = mesasService;
+            _mapper = mapper;
         }
-
+        //[AllowAnonymous]
         public IActionResult Index()
         {
-            var restaurantes = _restauranteService.ObtenerRestaurante();
-            return View(restaurantes);
+            //var restaurantes = _restauranteService.ObtenerRestaurante();
+            return View();
         }
 
         public IActionResult Agregar()
@@ -176,6 +181,15 @@ namespace RestauranteMVC.Controllers
             ViewData["resId"] = id;
             var mesas = _mesasService.ObtenerMesas(id);
             return View(mesas);
+        }
+
+        [HttpGet]
+        public ActionResult<RestauranteDTO> Perfil(int id)
+        {
+            var restaurantes = _restauranteService.Obtener(id);
+            var model = new RestauranteDTO();
+            _mapper.Map(restaurantes, model);
+            return View(model);
         }
 
         public IActionResult About()
