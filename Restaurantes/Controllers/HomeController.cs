@@ -81,7 +81,7 @@ namespace Restaurantes.Controllers
             return View("Restaurant", restaurante);
         }
 
-        [HttpPost]in
+        [HttpPost]
         public IActionResult Editar(RestauranteViewModel model)
         {
             if (!ModelState.IsValid)
