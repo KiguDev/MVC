@@ -43,7 +43,6 @@
         </div>
     </div>
 </div>
-@Html.Partial("Privacy")
 @section Scripts{
     <script>
     $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
@@ -71,7 +70,7 @@
                 var rows = "";
                 data.forEach(function (element) {
                     var row = '<tr>'
-                        + '<td class="clase">' + element.NombreRestaurante + '</td>'
+                        + '<td class="clase"><a href="@Url.Action("Perfil")/' + element.id + '">' + element.NombreRestaurante + '</a></td>'
                         + '<td>' + element.direccion + '</td>'
                         + '<td>' + element.telefono + '</td>'
                         + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
@@ -94,7 +93,12 @@
             },
             columns: [
                 {data: 'id' },
-                {data: 'nombre' },
+                {
+                    data: 'nombre',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Perfil")/' + row.id + '">' + data + '</a>'
+                    }
+                },
                 {data: 'domicilio' },
                 {data: 'telefono' },
                 {

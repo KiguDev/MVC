@@ -47,6 +47,11 @@ namespace Restaurantes
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<AppIdentityContext>();
 
+            services.AddAuthentication().AddFacebook(facebookOptions => {
+                facebookOptions.AppId = "756602821444813";
+                facebookOptions.AppSecret = "2f86ebbd2b0c364cf2c32dff13e08dd4";
+            });
+
             //services.AddIdentity<IdentityUser, IdentityRole>(options =>
             //{
             //    options.Password.RequireDigit = false;
@@ -65,6 +70,8 @@ namespace Restaurantes
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IordenService, OrdenService>();
+            // comentado ya que se quedó incompleto
+            //services.AddScoped<IAsyncRepository, EfRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

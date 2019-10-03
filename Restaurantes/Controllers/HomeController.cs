@@ -12,10 +12,12 @@ namespace Restaurantes.Controllers
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
+        private IAsyncRepository _repository;
 
-        public HomeController(IRestauranteService restauranteService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository)
         {
             _restauranteService = restauranteService;
+            _repository = repository;
         }
 
         [AllowAnonymous]
