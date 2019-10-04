@@ -42,9 +42,13 @@ namespace Restaurantes.API
 
 
         [HttpPost]
-        public void Post([FromBody] RestauranteViewModel model)
+        public IActionResult Post([FromBody] RestauranteViewModel model)
         {
-            var restaurante = new Restaurante();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Datos Invalidos");
+            }
+            var restaurante = new Restaurantes.Core.Entities.Restaurante();
             _mapper.Map(model, restaurante);
             //var restaurante = new Restaurante
             //{
@@ -53,7 +57,8 @@ namespace Restaurantes.API
             //    PaginaWeb = model.PaginaWeb,
             //    HoraDeCierre = model.HoraDeCierre
             //};
-            _restauranteService.Agregar(restaurante);
+            var respuesta = _restauranteService.Agregar(restaurante);
+            return Ok();
         }
 
         [HttpPut("{id}")]

@@ -19,7 +19,7 @@ namespace Restaurantes.Infrastructure.Services
 
         public Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.FirstOrDefault(c => c.Id == id);
+            return _context.Restaurantes.Include(c => c.Mesas).FirstOrDefault(c => c.Id == id);
         }
 
         public List<Restaurante> ObtenerRestaurantes()

@@ -5,7 +5,7 @@
     </h1>
 
 
-<a class="btn btn-primary mb-3" asp-action="Agregar">Agregar restaurante</a>
+<a class="btn btn-primary mb-3" onclick="MostrarAgregar()">Agregar restaurante</a>
 <a class="btn btn-primary mb-3" asp-controller="Empleados">Ver empleados</a>
 <div>
     <div>
@@ -46,8 +46,77 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarRestaurant()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{ 
 <script>
+    function MostrarAgregar() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "@Url.Action("Agregar", "Home")", true);
+
+            req.send();
+
+        req.onreadystatechange = function () {
+            if (req.status==200) {
+                document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                $('#agregarModal').modal("show");//Jquery
+            }
+        }            
+    };
+
+   
+
+    function GuardarRestaurant() {
+
+        var Nombre = document.getElementById("Nombre").value;
+        var Domicilio = document.getElementById("Domicilio").value;
+        var Telefono = document.getElementById("Telefono").value;
+        var PaginaWeb = document.getElementById("PaginaWeb").value;
+        var HoraDeCierre = document.getElementById("HoraDeCierre").value;
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Domicilio"] = Domicilio;
+        fd["Telefono"] = Telefono;
+        fd["PaginaWeb"] = PaginaWeb;
+        fd["HoraDeCierre"] = HoraDeCierre;
+
+
+        fetch("/Api/restaurantes/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fd)
+        }).then(function (response) {
+            if (response.ok) {
+                $("#agregarModal").modal("hide");//JQUERY
+                table.ajax.reload();
+            }
+        });
+    }
+
     $('#tabla-restaurantes-contenido').on('click', '.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
@@ -67,7 +136,7 @@
     });
         
 
-    function recargarElementos() {
+    @*function recargarElementos() {
             // obtener elementos 
             $.getJSON('/api/restaurantes/', function (data) {
                 var rows = "";
@@ -87,10 +156,10 @@
 
                 $('tbody').html(rows);
             });
-    }
-
+    }*@
+    var table;
     $(document).ready( function () {
-        var table = $('#tabla-restaurantes-contenido').DataTable({
+            table = $('#tabla-restaurantes-contenido').DataTable({
             ajax: {
                 url: '/api/restaurantes',
                 dataSrc: '',

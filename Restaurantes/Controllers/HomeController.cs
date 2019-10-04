@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
+using Restaurantes.Infrastructure.Services;
 using Restaurantes.Models;
 using System;
 using System.Diagnostics;
@@ -13,11 +14,13 @@ namespace Restaurantes.Controllers
     {
         private IRestauranteService _restauranteService;
         private IAsyncRepository _repository;
+        private IMesaService _mesaService;
 
-        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService)
         {
             _restauranteService = restauranteService;
             _repository = repository;
+            _mesaService = mesaService;
         }
 
         public IActionResult Index()
@@ -29,29 +32,36 @@ namespace Restaurantes.Controllers
         public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
-            return View(new RestauranteViewModel());
+            return PartialView("_AgregarEditarRestaurant",new RestauranteViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestauranteViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ModelState.AddModelError("", "Te hacen falta campos");
-                return View(model);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Te hacen falta campos");
+                }
+
+                var restaurante = new Restaurante
+                {
+                    Nombre = model.Nombre,
+                    Domicilio = model.Domicilio,
+                    HoraDeCierre = model.HoraDeCierre,
+                    FechaDeAlta = DateTime.Now,
+                    Telefono = int.Parse(model.Telefono)
+                };
+                var respuesta = _restauranteService.Agregar(restaurante);
+                return Ok();
+            }
+            catch(Exception err)
+            {
+                return BadRequest();
             }
 
-            var restaurante = new Restaurante
-            {
-                Nombre = model.Nombre,
-                Domicilio = model.Direccion,
-                HoraDeCierre = model.HoraDeCierre,
-                FechaDeAlta = DateTime.Now,
-                Telefono = int.Parse(model.Telefono)
-            };
-            var id = _repository.AddAsync(restaurante);
-            return View(model);
         }
 
         [HttpGet]
@@ -64,7 +74,7 @@ namespace Restaurantes.Controllers
             {
                 Id = restaurante.Id,
                 Nombre = restaurante.Nombre,
-                Direccion = restaurante.Domicilio,
+                Domicilio = restaurante.Domicilio,
                 HoraDeCierre = restaurante.HoraDeCierre.GetValueOrDefault(),
                 PaginaWeb = restaurante.PaginaWeb,
                 Telefono = restaurante.Telefono.ToString(),
@@ -101,27 +111,35 @@ namespace Restaurantes.Controllers
         public IActionResult Mesas(int id)
         {
             ViewData["restauranteId"] = id;
+
             var restaurante = _restauranteService.Obtener(id);
 
             return View(restaurante.Mesas);
         }
 
-        public IActionResult AgregarMesa(int restaurante, int id)
+        public IActionResult AgregarMesa()
         {
-            return View(new Mesa
-            {
-                RestauranteId = restaurante
-            });
+            ViewData["Accion"] = "AgregarMesa";
+            return PartialView("_AgregarEditarMesa", new MesaViewModel());
         }
 
         [HttpPost]
-        public IActionResult AgregarMesa(Mesa model)
+        public IActionResult AgregarMesa(MesaViewModel model, int id)
         {
-            // utilizar el servicio de mesa y pbtemer la entidad
-            // modificar las propiedades de Mesa con los del view model
-            // enviar la entidad al metodo de actualizar del servicio
-
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("","Te hacen falta campos");
+                return View(model);
+            }
+            var mesa = new Restaurantes.Core.Entities.Mesa()
+            {
+                Identificador = model.Identificador,
+                Capacidad = model.Capacidad,
+                RestauranteId = id
+            };
+            var Id = _mesaService.Agregar(mesa);
+            return Ok();
+            
         }
 
         public IActionResult Privacy()

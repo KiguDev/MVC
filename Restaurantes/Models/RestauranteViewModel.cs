@@ -11,7 +11,7 @@ namespace Restaurantes.Models
         [Required(ErrorMessage ="Nombre es requerido")]
         public string Nombre { get; set; }
         [Required]
-        public string Direccion { get; set; }
+        public string Domicilio { get; set; }
         [Phone]
         public string Telefono { get; set; }
         [Display(Name = "Página Web")]

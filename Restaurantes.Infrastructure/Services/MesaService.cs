@@ -22,9 +22,9 @@ namespace Restaurantes.Infrastructure.Services
             return _context.Mesas.FirstOrDefault(c => c.Id == id);
         }
 
-        public List<Mesa> ObtenerMesas()
+        public List<Mesa> ObtenerMesas(int id)
         {
-            return _context.Mesas.ToList();
+            return _context.Mesas.Where(c => c.RestauranteId == id).ToList();
         }
 
         public int Agregar(Mesa mesa)

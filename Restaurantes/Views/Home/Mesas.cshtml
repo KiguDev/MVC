@@ -4,7 +4,7 @@
     Mesas
 </h1>
 
-<a class="btn btn-primary mb-3" asp-action="AgregarMesa">Agregar mesa</a>
+<a class="btn btn-primary mb-3" onclick="MostrarAgregarMesa()">Agregar mesa</a>
 <div>
     <div>
         <div>
@@ -18,6 +18,7 @@
                         <th>ID</th>
                         <th>Identificador</th>
                         <th>Capacidad</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,63 +41,84 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarMesa()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script>
-    $('#tabla-mesas-contenido').on('click', '.ejecutar-eliminacion', function (event) {
-        event.preventDefault();
-        //var id = $(this).attr('data-id');
-        var id = $(this).data('id');
-        //var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
+        
 
-        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (IsConfirmed) {
-            if (IsConfirmed) {
-                // eliminar elemento
-                $.ajax({
-                    url: '/api/mesas/' + id,
-                    type: 'DELETE',
-                    success: recargarElementos
-                });
+    function MostrarAgregarMesa() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "@Url.Action("AgregarMesa", "Home")", true);
+
+            req.send();
+
+        req.onreadystatechange = function () {
+            if (req.status==200) {
+                document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                $('#agregarModal').modal("show");//Jquery
+            }
+        }
+    };
+
+        function GuardarMesa() {
+
+        var RestauranteId = @ViewData["RestauranteId"];
+        var Identificador = document.getElementById("Identificador").value;
+        var Capacidad = document.getElementById("Capacidad").value;
+
+        var fd = {};
+
+        fd["Identificador"] = Identificador;
+        fd["Capacidad"] = Capacidad;
+        fd["RestauranteId"] = RestauranteId;
+
+
+        fetch("/Api/mesas/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fd)
+        }).then(function (response) {
+            if (response.ok) {
+                $("#agregarModal").modal("hide");//JQUERY
+                table.ajax.reload();
             }
         });
-    });
-
-
-    function recargarElementos() {
-            // obtener elementos
-            $.getJSON('/api/restaurantes/', function (data) {
-                var rows = "";
-                data.forEach(function (element) {
-                    var row = '<tr>'
-                        + '<td class="clase">' + element.Identificador
-                        + '</td>'
-                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.capacidad + '</a></td>'
-                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
-                        + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
-                        + '</tr>';
-
-                    rows += row;
-                });
-
-                $('tbody').html(rows);
-            });
     }
-
+    var table;
     $(document).ready( function () {
-        var table = $('#tabla-mesas-contenido').DataTable({
+            table = $('#tabla-mesas-contenido').DataTable({
             ajax: {
-                url: '/api/mesas',
+                url: '/api/mesas/@ViewData["restauranteId"]',
                 dataSrc: '',
             },
             columns: [
                 { data: 'id' },
                 {data: 'identificador' },
                 {data: 'capacidad' },
-                {
-                    data: 'mesas',
-                    render: function (data, type, row) {
-                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
-                    },
-                },
                 {
                     render: function (data, type, row) {
                         return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
@@ -142,5 +164,5 @@
 
 
 @*@section Scripts{
-    @Html.Partial("_ValidationScriptsPartial")
-}*@
+        @Html.Partial("_ValidationScriptsPartial")
+    }*@

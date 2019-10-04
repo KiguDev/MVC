@@ -23,11 +23,10 @@ namespace Mesas.API
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public ActionResult<List<MesaDTO>> Get()
+        [HttpGet("{id}")]
+        public ActionResult<List<MesaDTO>> Get(int id)
         {
-            var mesas = _mesaService
-                .ObtenerMesas();
+            var mesas = _mesaService.ObtenerMesas(id);
             var model = new List<MesaDTO>();
 
             _mapper.Map(mesas, model);
@@ -35,27 +34,20 @@ namespace Mesas.API
             return model;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Mesa> Get(int id)
-        {
-            return _mesaService.Obtener(id);
-        }
-
 
         [HttpPost]
-        public void Post([FromBody] MesaViewModel model)
+        public IActionResult Post([FromBody] MesaViewModel model)
         {
-            var mesa = new Mesa();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Datos Invalidos");
+            }
+            var mesa = new Restaurantes.Core.Entities.Mesa();
             _mapper.Map(model, mesa);
-            //var restaurante = new Restaurante
-            //{
-            //    Nombre = model.Nombre,
-            //    Domicilio = model.Direccion,
-            //    PaginaWeb = model.PaginaWeb,
-            //    HoraDeCierre = model.HoraDeCierre
-            //};
-            _mesaService.Agregar(mesa);
+            var respuesta = _mesaService.Agregar(mesa);
+            return Ok();
         }
+
 
         [HttpPut("{id}")]
         public ActionResult Put(int id, MesaViewModel model)
