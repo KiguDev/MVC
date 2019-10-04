@@ -35,7 +35,7 @@ namespace Restaurantes.Controllers
         public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
-            return View(new RestauranteViewModel());
+            return PartialView("_AgregarEditarRestaurante",new RestauranteViewModel());
         }
 
         public IActionResult Perfil(int id)
@@ -50,21 +50,28 @@ namespace Restaurantes.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestauranteViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ModelState.AddModelError("","Te hacen falta campos");
-                return View(model);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Te hacen falta campos");
+                }
 
-            var restaurante = new Restaurante {
-                Nombre = model.Nombre,
-                Domicilio = model.Direccion,
-                HoraDeCierre = model.HoraDeCierre,
-                FechaDeAlta = DateTime.Now,
-                Telefono = int.Parse(model.Telefono)
-            };
-            var id = _repository.AddAsync(restaurante);
-            return View(model);
+                var restaurante = new Restaurante
+                {
+                    Nombre = model.Nombre,
+                    Domicilio = model.Direccion,
+                    HoraDeCierre = model.HoraDeCierre,
+                    FechaDeAlta = DateTime.Now,
+                    Telefono = int.Parse(model.Telefono)
+                };
+                var id = _restauranteService.Agregar(restaurante);
+                return Ok();
+            }
+            catch(Exception err)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
@@ -124,7 +131,7 @@ namespace Restaurantes.Controllers
         public IActionResult AgregarMesa(int id)
         {
             ViewData["Accion"] = "AgregarMesa";
-            return View(new MesaViewModel
+            return PartialView("_AgregarEditarMesa",new MesaViewModel
             {
                 RestauranteId = id
             });

@@ -43,8 +43,8 @@ namespace Restaurantes.API
             var mesa = new Mesa
             {
                 Identificador = model.Identificador,
-                Capacidad = model.Capacidad
-
+                Capacidad = model.Capacidad,
+                RestauranteId = model.RestauranteId
             };
 
             _mesaService.Agregar(mesa);
