@@ -37,7 +37,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <h3 class="modal-title" id="exampleModalLabel"></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -46,7 +46,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarEmpleado">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -57,8 +57,31 @@
 @section Scripts{
 
     <script>
-        function ModalAgregar() {
-            var req = new XMLHttpRequest();
+
+        function LimpiarModales() {
+            var bodies = document.getElementsByClassName("modal-body");
+            for (i = 0; i < bodies.length; ++i) {
+                bodies[i].innerHTML = "";
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById("btnGuardarEmpleado").addEventListener("click", function () {
+                GuardarEmpleado()
+            });
+        };
+
+
+        function ModalAgregarEditar(id) {
+            var url;
+            if (id == 0) {
+                document.getElementById("exampleModalLabel").innerHTML = "Agregar".bold()
+                url = "@Url.Action("Agregar","Empleados")";
+            } else {
+                document.getElementById("exampleModalLabel").innerHTML = "Editar".bold()
+                url = "@Url.Action("EditarEmpleado","Empleados")/" + id;
+            }
+            @*var req = new XMLHttpRequest();
             req.open("GET", "@Url.Action("Agregar","Empleados")", true);
             req.send();
             req.onreadystatechange = function () {
@@ -66,19 +89,30 @@
                     document.getElementById("modalCuerpo").innerHTML = req.responseText;
                     $("#agregarModal").modal("show");
                 }
-            };
-
+            };*@
+            fetch(url, {
+                    method: "GET"
+                 }).then(function (response) {
+                    if (response.ok) {
+                        response.text().then(function (text) {
+                            LimpiarModales()
+                            document.getElementById("modalCuerpo").innerHTML = text;
+                            $("#agregarModal").modal("show");
+                        })
+                    }
+            });
         }
 
         function GuardarEmpleado() {
+            var id = document.getElementById("Id").value;
             var nombre = document.getElementById("Nombre").value;
             var puesto = document.getElementById("Puesto").value;
+            var url;
+            var method;
 
-             //Se obtiene el valor de la URL desde el navegador
+             //Se obtiene el id del restaurante de la URL
              var actual = window.location+'';
-             //Se realiza la división de la URL
              var split = actual.split("/");
-             //Se obtiene el ultimo valor de la URL
              var resIid = split[split.length-1];
 
             var fd = {};
@@ -86,10 +120,16 @@
             fd["Puesto"] = puesto;
             fd["RestauranteId"] = resIid;
 
+            if (id == 0) {
+                url = "/api/empleados";
+                method = "POST";
+            } else {
+                url = "/api/empleados/" + id;
+                method = "PUT";
+            }
 
-
-            fetch("/api/empleados/", {
-                method: "POST",
+            fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type':'application/json'
                 },
@@ -97,7 +137,7 @@
             }).then(function (response) {
                 if (response.ok) {
                     $("#agregarModal").modal("hide");
-                    table.ajax.reload();
+                    table.ajax.reload(myCallBack);
                 }
             });
         }
@@ -106,9 +146,20 @@
 
 
     <script>
+
+        var myCallBack = function () {
+             var buttons = document.getElementsByClassName("fa fa-pencil");
+                for (i = 0; i < buttons.length; ++i) {
+                    buttons[i].addEventListener("click", function () {
+                        ModalAgregarEditar(this.dataset.id);
+                    })
+                }
+        }
+
         var table;
     $(document).ready( function () {
         table = $('#tabla-empleados-contenido').DataTable({
+            initComplete: myCallBack,
             ajax: {
                 url: '/api/empleados/'+@ViewData["resId"],
                 dataSrc : ''
@@ -121,7 +172,9 @@
                 {
                     data: '',
                     render: function (data, type, row) {
-                        return '<a class="fa fa-pencil" href="@Url.Action("EditarEmpleado","Empleados")/' + row.id + '"></a>'
+                        //return '<a class="fa fa-pencil" href="@Url.Action("EditarEmpleado","Empleados")/' + row.id + '"></a>'
+                        //return '<a class="fa fa-pencil" onclick="ModalAgregarEditar(' + row.id + ')"></a>'
+                        return '<a class="fa fa-pencil" data-id="' + row.id + '"></a>'
                     }
                 }
             ],
@@ -131,7 +184,7 @@
                 {
                     text: 'Agregar',
                     action: function () {
-                        ModalAgregar();
+                        ModalAgregarEditar(0);
                        //window.location="@Url.Action("Agregar")/@ViewData["resId"]";
                     }
                 },
@@ -141,12 +194,23 @@
                         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
                             if (result) {
                                 var rows = table.rows({ selected: true }).data();
-                                //console.log(rows);
                                 var ids = [];
                                 for (var x = 0; x < rows.length; ++x) {
                                     ids.push(rows[x].id);
                                 }
-                                $.ajax({
+
+                                fetch('/api/empleados/' + ids, {
+                                    method: "DELETE",
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    }).then(function (response) {
+                                        if (response.ok) {
+                                            table.ajax.reload(myCallBack);
+                                        }
+                                    });
+
+                                @*$.ajax({
                                     type: 'DELETE',
                                     contentType: 'application/json',
                                     data: '[' + ids.toString() + ']',
@@ -154,7 +218,7 @@
                                     success: function () {
                                         table.ajax.reload(null, false);
                                     }
-                                });
+                                });*@
                             }
                         });
                     }

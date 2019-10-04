@@ -56,7 +56,7 @@ namespace RestauranteMVC.API
         {
             var mesa = _mesaService.Obtener(id);
 
-            if (mesa == null)
+            if (mesa == null || mesa.RestauranteId != model.RestauranteId)
             {
                 return BadRequest();
             }

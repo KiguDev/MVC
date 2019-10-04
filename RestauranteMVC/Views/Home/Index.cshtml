@@ -51,7 +51,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <h3 class="modal-title" id="exampleModalLabel"></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -60,7 +60,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="GuardarRestaurante()">Guardar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarRestaurante">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -74,11 +74,59 @@
 
 @section Scripts{
 
-
     <script>
-        function ModalAgregar() {
+
+        function LimpiarModales() {
+            var bodies = document.getElementsByClassName("modal-body");
+            for (i = 0; i < bodies.length; ++i) {
+                bodies[i].innerHTML = "";
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById("btnGuardarRestaurante").addEventListener("click", function () {
+                GuardarRestaurante()
+            });
+        };
+
+        function ModalAgregarEditar(id) {
+            var url;
+            if (id == 0) {
+                document.getElementById("exampleModalLabel").innerHTML = "Agregar".bold()
+                url = "@Url.Action("Agregar","Home")";
+            } else {
+                document.getElementById("exampleModalLabel").innerHTML = "Editar".bold()
+                url = "@Url.Action("Editar","Home")/" + id;
+            }
+           
+            //var req = new XMLHttpRequest();
+            //req.open("GET", "@Url.Action("Agregar","Home")", true);
+            //req.open("GET", url, true);
+            //req.send();
+            //req.onreadystatechange = function () {
+                //if (req.status == 200) {
+                    //document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                    //$("#agregarModal").modal("show");
+                //}
+            //};
+
+            fetch(url, {
+                    method: "GET"
+                 }).then(function (response) {
+                    if (response.ok) {
+                        response.text().then(function (text) {
+                            LimpiarModales()
+                            document.getElementById("modalCuerpo").innerHTML = text;
+                            $("#agregarModal").modal("show");
+                        })
+                    }
+            });
+
+        }
+
+        @*function ModalEditar(id) {
             var req = new XMLHttpRequest();
-            req.open("GET", "@Url.Action("Agregar","Home")", true);
+            req.open("GET", "@Url.Action("Editar","Home")/"+id, true);
             req.send();
             req.onreadystatechange = function () {
                 if (req.status == 200) {
@@ -87,40 +135,47 @@
                 }
             };
 
-        }
+        }*@
 
         function GuardarRestaurante() {
+            var id = document.getElementById("Id").value;
             var nombre = document.getElementById("Nombre").value;
             var domicilio = document.getElementById("Domicilio").value;
             var telefono = document.getElementById("Telefono").value;
             var logo = document.getElementById("Logo").value;
             var paginaweb = document.getElementById("PaginaWeb").value;
             var horacierre = document.getElementById("HoraDeCierre").value;
-
-            /*var params = "nombre=" + nombre + "&domicilio=" + domicilio + "&telefono=" + telefono +
-                "&logo=" + logo + "&paginaweb=" + paginaweb + "&horadecierre=" + horacierre;*/
+            var url;
+            var method;
 
             var fd = {};
-            fd["Nombre"] = nombre;
-            fd["Domicilio"] = domicilio;
-            fd["Telefono"] = telefono;
-            fd["Logo"] = logo;
-            fd["PaginaWeb"] = paginaweb;
-            fd["HoraDeCierre"] = horacierre;
+                fd["Nombre"] = nombre;
+                fd["Domicilio"] = domicilio;
+                fd["Telefono"] = telefono;
+                fd["Logo"] = logo;
+                fd["PaginaWeb"] = paginaweb;
+                fd["HoraDeCierre"] = horacierre;
 
+            if (id == 0) {
+                url = "/api/restaurantes";
+                method = "POST";
+            } else {
+                url = "/api/restaurantes/" + id;
+                method = "PUT";
+            }
+            fetch(url, {
+                method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(fd)
+                }).then(function (response) {
+                    if (response.ok) {
+                        $("#agregarModal").modal("hide");
+                        table.ajax.reload(myCallBack);
+                    }
+                });
 
-            fetch("/api/restaurantes", {
-                method: "POST",
-                headers: {
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify(fd)
-            }).then(function (response) {
-                if (response.ok) {
-                    $("#agregarModal").modal("hide");
-                    table.ajax.reload();
-                }
-            });
         }
     </script>
 
@@ -196,10 +251,21 @@
             $('#tabla-restaurantes').html(rows);
         });
     }*@
+
+        var myCallBack = function () {
+             var buttons = document.getElementsByClassName("fa fa-pencil");
+                for (i = 0; i < buttons.length; ++i) {
+                    buttons[i].addEventListener("click", function () {
+                        ModalAgregarEditar(this.dataset.id);
+                    })
+                }
+        }
+
         var table;
 
     $(document).ready( function () {
         table = $('#tabla-restaurantes-contenido').DataTable({
+            initComplete: myCallBack,
             ajax: {
                 url: 'api/restaurantes',
                 dataSrc : ''
@@ -234,7 +300,9 @@
                 {
                     data: '',
                     render: function (data, type, row) {
-                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
+                        //return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
+                        //return '<a class="fa fa-pencil" onclick="ModalAgregarEditar(' + row.id + ')"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
+                        return '<a class="fa fa-pencil" data-id="' + row.id + '"></a> <a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
                     }
                 }
             ],
@@ -244,7 +312,7 @@
                 {
                     text: 'Agregar',
                     action: function () {
-                       ModalAgregar();
+                       ModalAgregarEditar(0);
                        //window.location="@Url.Action("Agregar")";
                     }
                 },
@@ -254,21 +322,31 @@
                         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
                             if (result) {
                                 var rows = table.rows({ selected: true }).data();
-                                console.log(rows);
                                 var ids = [];
                                 for (var x = 0; x < rows.length; ++x) {
                                     ids.push(rows[x].id);
                                 }
 
-                                $.ajax({
+                                fetch('/api/restaurantes/' + ids, {
+                                    method: "DELETE",
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    }).then(function (response) {
+                                        if (response.ok) {
+                                            table.ajax.reload(myCallBack);
+                                        }
+                                    });
+
+                               @* $.ajax({
                                     type: 'DELETE',
                                     contentType: 'application/json',
                                     data: '[' + ids.toString() + ']',
                                     url: '/api/restaurantes/',
                                     success: function () {
-                                        table.ajax.reload(null, false);
+                                        table.ajax.reload(myCallBack);
                                     }
-                                });
+                                });*@
                             }
                         });
                     }

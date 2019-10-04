@@ -160,7 +160,7 @@ namespace RestauranteMVC.Controllers
             //return View(model);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult Editar(int id)
         {
             ViewData["Accion"] = "Editar";
@@ -176,7 +176,38 @@ namespace RestauranteMVC.Controllers
                 Logo = restaurante.Logo
             };
             return View("Agregar",viewModel);
+        }*/
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            ViewData["Accion"] = "Editar";
+            var restaurante = _restauranteService.Obtener(id);
+            var viewModel = new RestauranteViewModel
+            {
+                Id = restaurante.Id,
+                Nombre = restaurante.Nombre,
+                Domicilio = restaurante.Domicilio,
+                HoraDeCierre = restaurante.HoraDeCierre.GetValueOrDefault(),
+                PaginaWeb = restaurante.PaginaWeb,
+                Telefono = restaurante.Telefono,
+                Logo = restaurante.Logo
+            };
+            return PartialView("_AgregarEditarRestaurante", viewModel);
         }
+
+        /*[HttpGet]
+        public IActionResult EditarMesa(int id)
+        {
+            ViewData["AccionMesa"] = "EditarMesa";
+            var mesa = _mesasService.Obtener(id);
+            var viewModel = new MesaViewModel
+            {
+                Identificador = mesa.Identificador,
+                Capacidad = mesa.Capacidad
+            };
+            return View("AgregarMesa", viewModel);
+        }*/
 
         [HttpGet]
         public IActionResult EditarMesa(int id)
@@ -188,7 +219,7 @@ namespace RestauranteMVC.Controllers
                 Identificador = mesa.Identificador,
                 Capacidad = mesa.Capacidad
             };
-            return View("AgregarMesa", viewModel);
+            return PartialView("_AgregarEditarMesa", viewModel);
         }
 
         [HttpPost]

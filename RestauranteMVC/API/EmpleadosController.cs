@@ -47,6 +47,24 @@ namespace RestauranteMVC.API
             return Ok();
         }
 
+        [HttpPut("{id}")]
+        public ActionResult Put(int id, EmpleadoViewModel model)
+        {
+            var empleado = _empleadoService.Obtener(id);
+
+            if (empleado == null || empleado.RestauranteId != model.RestauranteId)
+            {
+                return BadRequest();
+            }
+
+            empleado.Nombre = model.Nombre;
+            empleado.Puesto = model.Puesto;
+
+            _empleadoService.EditarEmpleado(empleado);
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

@@ -58,7 +58,7 @@ namespace RestauranteMVC.Controllers
             return RedirectToAction("/Index/" + model.RestauranteId);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult EditarEmpleado(int id)
         {
             ViewData["Accion"] = "EditarEmpleado";
@@ -69,6 +69,19 @@ namespace RestauranteMVC.Controllers
                 Puesto = empleado.Puesto
             };
             return View("Agregar", viewModel);
+        }*/
+
+        [HttpGet]
+        public IActionResult EditarEmpleado(int id)
+        {
+            ViewData["Accion"] = "EditarEmpleado";
+            var empleado = _empleadoService.Obtener(id);
+            var viewModel = new EmpleadoViewModel
+            {
+                Nombre = empleado.Nombre,
+                Puesto = empleado.Puesto
+            };
+            return PartialView("_AgregarEditarEmpleado", viewModel);
         }
 
         [HttpPost]
