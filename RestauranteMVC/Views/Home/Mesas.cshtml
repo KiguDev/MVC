@@ -140,7 +140,7 @@
                         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
                             if (result) {
                                 var rows = table.rows({ selected: true }).data();
-                                console.log(rows);
+                                //console.log(rows);
                                 var ids = [];
                                 for (var x = 0; x < rows.length; ++x) {
                                     ids.push(rows[x].id);

@@ -11,5 +11,6 @@ namespace Restaurante.core.Interfaces
         int InsertarEmpleado(Entities.Empleado empleado);
         int EditarEmpleado(Entities.Empleado Empleado);
         bool EliminarEmpleado(int id);
+        bool EliminarEmpleados(int[] ids);
     }
 }

@@ -5,9 +5,11 @@
 
 <h1>Empleados</h1>
 <!--<a class="btn btn-primary" asp-action="Agregar" asp-route-id="@ViewData["resId"]">Agregar</a>-->
-<table class="table table-bordered" id="tabla-mesas-contenido">
+<table class="table table-bordered" id="tabla-empleados-contenido">
     <thead>
         <tr>
+            <th>ID</th>
+            <th>IDRestaurante</th>
             <th>Nombre</th>
             <th>Puesto</th>
             <th>Opciones</th>
@@ -55,9 +57,9 @@
 @section Scripts{
 
     <script>
-        @*function ModalAgregar() {
+        function ModalAgregar() {
             var req = new XMLHttpRequest();
-            req.open("GET", "@Url.Action("AgregarMesa","Home")", true);
+            req.open("GET", "@Url.Action("Agregar","Empleados")", true);
             req.send();
             req.onreadystatechange = function () {
                 if (req.status == 200) {
@@ -68,9 +70,9 @@
 
         }
 
-        function GuardarMesa() {
-            var identificador = document.getElementById("Identificador").value;
-            var capacidad = document.getElementById("Capacidad").value;
+        function GuardarEmpleado() {
+            var nombre = document.getElementById("Nombre").value;
+            var puesto = document.getElementById("Puesto").value;
 
              //Se obtiene el valor de la URL desde el navegador
              var actual = window.location+'';
@@ -80,13 +82,13 @@
              var resIid = split[split.length-1];
 
             var fd = {};
-            fd["Identificador"] = identificador;
-            fd["Capacidad"] = capacidad;
+            fd["Nombre"] = nombre;
+            fd["Puesto"] = puesto;
             fd["RestauranteId"] = resIid;
 
 
 
-            fetch("/api/mesas/", {
+            fetch("/api/emple/", {
                 method: "POST",
                 headers: {
                     'Content-Type':'application/json'
@@ -98,7 +100,7 @@
                     table.ajax.reload();
                 }
             });
-        }*@
+        }
     </script>
 
 
@@ -106,9 +108,9 @@
     <script>
         var table;
     $(document).ready( function () {
-        table = $('#tabla-mesas-contenido').DataTable({
+        table = $('#tabla-empleados-contenido').DataTable({
             ajax: {
-                url: '/api/empleados/'+@ViewData["resId"],
+                url: '/api/emple/'+@ViewData["resId"],
                 dataSrc : ''
             },
             columns: [
@@ -119,7 +121,7 @@
                 {
                     data: '',
                     render: function (data, type, row) {
-                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a>'
+                        return '<a class="fa fa-pencil" href="@Url.Action("EditarEmpleado","Empleados")/' + row.id + '"></a>'
                     }
                 }
             ],
@@ -139,17 +141,16 @@
                         bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
                             if (result) {
                                 var rows = table.rows({ selected: true }).data();
-                                console.log(rows);
+                                //console.log(rows);
                                 var ids = [];
                                 for (var x = 0; x < rows.length; ++x) {
                                     ids.push(rows[x].id);
                                 }
-
                                 $.ajax({
                                     type: 'DELETE',
                                     contentType: 'application/json',
                                     data: '[' + ids.toString() + ']',
-                                    url: '/api/empleados/',
+                                    url: '/api/emple',
                                     success: function () {
                                         table.ajax.reload(null, false);
                                     }

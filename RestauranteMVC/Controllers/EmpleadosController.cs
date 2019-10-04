@@ -25,10 +25,16 @@ namespace RestauranteMVC.Controllers
             return View(empleados);
         }
 
-        public IActionResult Agregar()
+        /*public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
             return View(new EmpleadoViewModel());
+        }*/
+
+        public IActionResult Agregar()
+        {
+            ViewData["Accion"] = "Agregar";
+            return PartialView("_AgregarEditarEmpleado",new EmpleadoViewModel());
         }
 
         [HttpPost]

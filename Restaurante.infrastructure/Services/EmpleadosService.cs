@@ -31,6 +31,13 @@ namespace Restaurante.infrastructure.Services
             return true;
         }
 
+        public bool EliminarEmpleados(int[] ids)
+        {
+            _context.RemoveRange(_context.Empleados.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+            return true;
+        }
+
         public int InsertarEmpleado(Empleado empleado)
         {
             _context.Empleados.Add(empleado);
