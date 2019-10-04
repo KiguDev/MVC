@@ -6,41 +6,57 @@ using System.Threading.Tasks;
 
 namespace Restaurante.Infrastructure.Data
 {
-    public class EfRepository : IAsyncRepository
+    public class EfRepository 
     {
-        private readonly AppDbContext _appDbContext;
+        //private readonly AppDbContext _appDbContext;
 
-        public EfRepository(AppDbContext appdbContext)
-        {
-            _appDbContext = appdbContext;
-        }
-        public async Task<T> AddASync<T>(T entity)
-        {
-            _appDbContext.Add(entity);
-            await _appDbContext.SaveChangesAsync();
+        //public EfRepository(AppDbContext appdbContext)
+        //{
+        //    _appDbContext = appdbContext;
+        //}
 
-            return entity;
-        }
+        //public Task<T> AddASync<T>(T entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public async Task DeleteAsync<T>(T entity)
-        {
-            _appDbContext.Remove(entity);
-            await _appDbContext.SaveChangesAsync();
-        }
+        //public Task DeleteAsync<T>(T entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task GetByIdAsync<T>(int id)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<T> AddASync<T>(T entity)
+        //{
+        //    _appDbContext.Add(entity);
+        //    await _appDbContext.SaveChangesAsync();
 
-        public async Task<List<T>> ListAllASync<T>()
-        {
-            //return await _appDbContext.Set<T>.ToListAsync();
-        }
+        //    return entity;
+        //}
 
-        public Task UpdateAsync<T>(T entity)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task DeleteAsync<T>(T entity)
+        //{
+        //    _appDbContext.Remove(entity);
+        //    await _appDbContext.SaveChangesAsync();
+        //}
+
+        //public Task GetByIdAsync<T>(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<List<T>> ListAllASync<T>()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public async Task<List<T>> ListAllASync<T>()
+        //{
+        //    //return await _appDbContext.Set<T>.ToListAsync();
+        //}
+
+        //public Task UpdateAsync<T>(T entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

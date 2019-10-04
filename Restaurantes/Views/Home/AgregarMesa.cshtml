@@ -4,7 +4,7 @@
         Agregar Mesa
     </div>
     <div class="card-body">
-        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+        <form  asp-antiforgery="true">
             @Html.ValidationSummary(true)
             <div class="form-group">
                 <label asp-for="Identificador">Identificador</label>
@@ -17,7 +17,7 @@
                 <span asp-validation-for="Capacidad" class="text-danger"></span>
 
             </div>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+              
 
         </form>
     </div>

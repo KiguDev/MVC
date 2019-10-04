@@ -1,6 +1,7 @@
 ﻿<h1>
     Mesas
 </h1>
+<a onclick="MostrarAgregar()" class="btn btn-outline-primary">Agregar</a>
 <a class="btn btn-primary" asp-action="AgregarMesa">Agregar Mesa</a>
 <table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
@@ -15,8 +16,75 @@
         
     </tbody>
 </table>
+<div class="modal" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="GuardarMesa()">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
+
     <script>
+         function MostrarAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET","@Url.Action("AgregarMesa","Home")", true);
+            req.send();
+            req.onreadystatechange = function () {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                    $("#agregarModal").modal("show");
+                }
+            }
+           
+
+        }
+        function GuardarMesa() {
+            var Identificador = document.getElementById("Identificador").value;
+            var Capacidad = document.getElementById("Capacidad").value;
+            
+            
+            
+            var fd = {};
+            fd["Identificador"] = Identificador;
+            fd["Capacidad"] = Capacidad;
+            
+
+            fetch("/api/mesas/", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+            if (response.ok) {
+                $("#agregarModal").modal("hide");
+                table.ajax.reload();
+            }
+
+        });
+            
+        }
+    </script>
+    <script>
+
+
+
+
+            
     @*$('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');

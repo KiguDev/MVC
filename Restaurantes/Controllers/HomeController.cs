@@ -10,25 +10,25 @@ using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
-    [Authorize]
+    
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
         private IMesasService _mesasService;
-        private IAsyncRepository _asyncRepository;
+       
 
 
-        public HomeController(IRestauranteService restauranteService, IMesasService mesasService, IAsyncRepository asyncRepository)
+        public HomeController(IRestauranteService restauranteService, IMesasService mesasService)
         {
             _restauranteService = restauranteService;
             _mesasService = mesasService;
-            _asyncRepository = asyncRepository;
+            
         }
 
         public IActionResult Index()
         {
-            //var restaurantes = _restauranteService.ObtenerRestaurantes();
-            _asyncRepository.ListAllASync<>();
+            var restaurantes = _restauranteService.ObtenerRestaurantes();
+            
                 
             return View(restaurantes);
         }
@@ -49,7 +49,7 @@ namespace Restaurantes.Controllers
         {
        
             ViewData["Accion"] = "AgregarMesa";
-            return View(new MesaViewModel());
+            return PartialView(new MesaViewModel());
         }
 
         [HttpPost]
@@ -70,7 +70,7 @@ namespace Restaurantes.Controllers
              
             };
             var Id = _mesasService.Agregar(mesas);
-            return View(model);
+            return Ok();
         }
         [HttpGet]
         public IActionResult EditarMesa(int id)
@@ -119,30 +119,37 @@ namespace Restaurantes.Controllers
         public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
-            return View(new RestaurantesViewModel());
+            return PartialView(new RestaurantesViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestaurantesViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ModelState.AddModelError("", "Te hacen falta campos");
-                return View(model);
-            }
-            var restaurante = new Restaurante.Core.Entities.Restaurante
-            {
-                Nombre = model.Nombre,
-                Domicilio = model.Direccion,
-                Telefono = int.Parse(model.Telefono),
-                HoraDeCierre = model.HoraDeCierre,
-                FechaDeAlta = DateTime.Now
-            };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Te hacen falta campos");
+                }
+                var restaurante = new Restaurante.Core.Entities.Restaurante
+                {
+                    Nombre = model.Nombre,
+                    Domicilio = model.Domicilio,
+                    Telefono = int.Parse(model.Telefono),
+                    HoraDeCierre = model.HoraDeCierre,
+                    FechaDeAlta = DateTime.Now
+                };
 
-            var id = _asyncRepository.AddASync(restaurante);
-            //var id = _restauranteService.Agregar(restaurante);
-            return View(model);
+                var id = _restauranteService.Agregar(restaurante);
+                //var id = _restauranteService.Agregar(restaurante);
+                return Ok();
+            }
+            catch(Exception err)
+            {
+                return BadRequest();
+            }
+        
         }
 
         [HttpGet]
@@ -154,7 +161,7 @@ namespace Restaurantes.Controllers
             {
                 Id = restaurantes.Id,
                 Nombre = restaurantes.Nombre,
-                Direccion = restaurantes.Domicilio,
+                Domicilio = restaurantes.Domicilio,
                 HoraDeCierre = restaurantes.HoraDeCierre.GetValueOrDefault(),
                 PaginaWeb = restaurantes.PaginaWeb,
                 Telefono = restaurantes.Telefono.ToString()
@@ -173,6 +180,7 @@ namespace Restaurantes.Controllers
             var restaurante = _restauranteService.Obtener(model.Id);
             restaurante.Nombre = model.Nombre;
             restaurante.Id = model.Id;
+            restaurante.Domicilio = model.Domicilio;
             restaurante.PaginaWeb = model.PaginaWeb;
             restaurante.HoraDeCierre = model.HoraDeCierre;
             restaurante.Telefono = int.Parse(model.Telefono);

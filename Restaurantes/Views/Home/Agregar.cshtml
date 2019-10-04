@@ -1,10 +1,11 @@
 ﻿@model RestaurantesViewModel
-<div class="card">
+
+<div class="card" >
     <div class="card-header">
         @ViewData["Accion"] Restaurante
     </div>
     <div class="card-body">
-        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+        <form asp-antiforgery="true">
             @Html.ValidationSummary(true)
             <div class="form-group">
                 <label asp-for="Nombre">Nombre</label>
@@ -12,39 +13,45 @@
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Direccion">Direccion</label>
-                <input class="form-control" asp-for="Direccion" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
+                <label asp-for="Domicilio">Direccion</label>
+                <input class="form-control" asp-for="Domicilio" />
+                <span asp-validation-for="Domicilio" class="text-danger"></span>
 
             </div>
             <div class="form-group">
                 <label asp-for="Telefono">Telefono</label>
                 <input class="form-control" asp-for="Telefono" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
-                </div>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="PaginaWeb">Pagina Web</label>
-                    <input class="form-control" asp-for="PaginaWeb" />
-                    <span asp-validation-for="PaginaWeb" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Logo">Logo</label>
+                <input class="form-control" asp-for="Logo" />
+                <span asp-validation-for="Logo" class="text-danger"></span>
 
-                </div>
-                <div class="form-group">
-                    <label asp-for="HoraDeCierre">Hora de Cierre</label>
-                    <input class="form-control" asp-for="HoraDeCierre" />
-                    <span asp-validation-for="HoraDeCierre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaginaWeb">Pagina Web</label>
+                <input class="form-control" asp-for="PaginaWeb" />
+                <span asp-validation-for="PaginaWeb" class="text-danger"></span>
 
-                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="HoraDeCierre">Hora de Cierre</label>
+                <input class="form-control" asp-for="HoraDeCierre" />
+                <span asp-validation-for="HoraDeCierre" class="text-danger"></span>
 
-                @*<div class="form-group">
+            </div>
+
+            @*<div class="form-group">
             <label asp-for="FechaDeAlta">Fecha</label>
             <input class="form-control" type="datetime-local" asp-for="FechaDeAlta" />
 
         </div>*@
 
-                <button type="submit" class="btn btn-primary">Guardar</button>
 
-</form>
+
+        </form>
     </div>
 </div>
 @section Scripts{

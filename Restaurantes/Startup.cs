@@ -52,7 +52,7 @@ namespace Restaurantes
                 facebookOptions.AppSecret = "578773265cc6b867fa079ab7f76f983f";
             });
 
-            services.AddScoped<IAsyncRepository, EfRepository>();
+            //services.AddScoped<IAsyncRepository, EfRepository>();
 
             /*.AddMicrosoftAccount(microsoftOptions => { }).AddTwitter(twitterOptions => { }).AddGoogle(googleOptions => { });*/
 
