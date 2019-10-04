@@ -4,8 +4,8 @@
 }
 
 <h1>Empleados</h1>
-<a class="btn btn-primary" asp-action="Agregar" asp-route-id="@ViewData["resId"]">Agregar</a>
-<table class="table table-bordered">
+<!--<a class="btn btn-primary" asp-action="Agregar" asp-route-id="@ViewData["resId"]">Agregar</a>-->
+<table class="table table-bordered" id="tabla-mesas-contenido">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -14,18 +14,156 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var empleado in Model)
-        {
-            <tr>
-                <td>@empleado.Nombre</td>
-                <td>@empleado.Puesto</td>
-                <td>
-                    <a asp-action="EditarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
-                    <a asp-action="EliminarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
-                </td>
-            </tr>
+        @*@foreach (var empleado in Model)
+            {
+                <tr>
+                    <td>@empleado.Nombre</td>
+                    <td>@empleado.Puesto</td>
+                    <td>
+                        <a asp-action="EditarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-pencil"></a>
+                        <a asp-action="EliminarEmpleado" asp-route-id="@empleado.Id" asp-route-resId="@ViewData["resId"]" class="fa fa-trash"></a>
+                    </td>
+                </tr>
 
-        }
+            }*@
     </tbody>
 </table>
 
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="agregarModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+        @*function ModalAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET", "@Url.Action("AgregarMesa","Home")", true);
+            req.send();
+            req.onreadystatechange = function () {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                    $("#agregarModal").modal("show");
+                }
+            };
+
+        }
+
+        function GuardarMesa() {
+            var identificador = document.getElementById("Identificador").value;
+            var capacidad = document.getElementById("Capacidad").value;
+
+             //Se obtiene el valor de la URL desde el navegador
+             var actual = window.location+'';
+             //Se realiza la división de la URL
+             var split = actual.split("/");
+             //Se obtiene el ultimo valor de la URL
+             var resIid = split[split.length-1];
+
+            var fd = {};
+            fd["Identificador"] = identificador;
+            fd["Capacidad"] = capacidad;
+            fd["RestauranteId"] = resIid;
+
+
+
+            fetch("/api/mesas/", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+                if (response.ok) {
+                    $("#agregarModal").modal("hide");
+                    table.ajax.reload();
+                }
+            });
+        }*@
+    </script>
+
+
+
+    <script>
+        var table;
+    $(document).ready( function () {
+        table = $('#tabla-mesas-contenido').DataTable({
+            ajax: {
+                url: '/api/empleados/'+@ViewData["resId"],
+                dataSrc : ''
+            },
+            columns: [
+                { data: 'id', visible: false },
+                { data: 'restauranteId', visible: false },
+                {data:'nombre'},
+                { data: 'puesto' },
+                {
+                    data: '',
+                    render: function (data, type, row) {
+                        return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a>'
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'Agregar',
+                    action: function () {
+                        ModalAgregar();
+                       //window.location="@Url.Action("Agregar")/@ViewData["resId"]";
+                    }
+                },
+                {
+                    text: 'Eliminar',
+                    action: function () {
+                        bootbox.confirm("Seguro que quieres eliminar este elemento?", function (result) {
+                            if (result) {
+                                var rows = table.rows({ selected: true }).data();
+                                console.log(rows);
+                                var ids = [];
+                                for (var x = 0; x < rows.length; ++x) {
+                                    ids.push(rows[x].id);
+                                }
+
+                                $.ajax({
+                                    type: 'DELETE',
+                                    contentType: 'application/json',
+                                    data: '[' + ids.toString() + ']',
+                                    url: '/api/empleados/',
+                                    success: function () {
+                                        table.ajax.reload(null, false);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+
+                'copy','excel','pdf'
+            ]
+        });
+
+    });
+
+    </script>
+}

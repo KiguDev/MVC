@@ -41,7 +41,6 @@ namespace RestauranteMVC.API
         [HttpPost]
         public ActionResult Post([FromBody] MesaViewModel model)
         {
-            //model.RestauranteId = id;
             var mesa = new Restaurante.core.Entities.Mesa
             {
                 Identificador = model.Identificador,

@@ -1,0 +1,38 @@
+﻿@model RestauranteViewModel
+
+    <form id="Formulario">
+        <!--<div class="text-danger">
+            @Html.ValidationSummary(true)
+        </div>-->
+        <div class="form-group">
+            <label asp-for="Nombre"></label>
+            <input class="form-control" asp-for="Nombre" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Domicilio"></label>
+            <input class="form-control" asp-for="Domicilio" />
+            <span asp-validation-for="Domicilio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Logo"></label>
+            <input class="form-control" asp-for="Logo" />
+            <span asp-validation-for="Logo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telefono"></label>
+            <input class="form-control" asp-for="Telefono" />
+            <span asp-validation-for="Telefono " class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PaginaWeb"></label>
+            <input class="form-control" asp-for="PaginaWeb" />
+            <span asp-validation-for="PaginaWeb" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HoraDeCierre"></label>
+            <input class="form-control" asp-for="HoraDeCierre" />
+            <span asp-validation-for="HoraDeCierre" class="text-danger"></span>
+        </div>
+    </form>
+<!--<button type="submit" class="btn btn-primary">Guardar</button>-->

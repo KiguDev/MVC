@@ -53,6 +53,7 @@ namespace RestauranteMVC.API
         [HttpPost]
         public ActionResult Post([FromBody] RestauranteViewModel model)
         {
+            model.FechaDeAlta = DateTime.Now;
             var restaurante = new Restaurante.core.Entities.Restaurante();
             _mapper.Map(model, restaurante);
             /*var restaurante = new Restaurante.core.Entities.Restaurante

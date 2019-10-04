@@ -33,19 +33,29 @@ namespace RestauranteMVC.Controllers
             return View();
         }
 
-        public IActionResult Agregar()
+        /*public IActionResult Agregar()
         {
             ViewData["Accion"] = "Agregar";
             return View(new RestauranteViewModel());
+        }*/
+        public IActionResult Agregar()
+        {
+            ViewData["Accion"] = "Agregar";
+            return PartialView("_AgregarEditarRestaurante",new RestauranteViewModel());
         }
 
-        public IActionResult AgregarMesa()
+        /*public IActionResult AgregarMesa()
         {
             ViewData["AccionMesa"] = "AgregarMesa";
             return View(new MesaViewModel());
+        }*/
+        public IActionResult AgregarMesa()
+        {
+            ViewData["AccionMesa"] = "AgregarMesa";
+            return PartialView("_AgregarEditarMesa",new MesaViewModel());
         }
 
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestauranteViewModel model)
         {
@@ -70,7 +80,63 @@ namespace RestauranteMVC.Controllers
             //var id = _restauranteService.InsertarRestaurante(restaurante);
             //return View(model);
             return RedirectToAction("Index");
+        }*/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Agregar(RestauranteViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    //ModelState.AddModelError("", "Te hacen falta campos");
+                    return BadRequest("Te hacen falta campos");
+                }
+
+                var restaurante = new Restaurante.core.Entities.Restaurante
+                {
+                    Nombre = model.Nombre,
+                    Domicilio = model.Domicilio,
+                    HoraDeCierre = model.HoraDeCierre,
+                    FechaDeAlta = DateTime.Now,
+                    Telefono = model.Telefono,
+                    Logo = model.Logo,
+                    PaginaWeb = model.PaginaWeb
+                };
+
+                var id = _repository.AddAsync(restaurante);
+                //var id = _restauranteService.InsertarRestaurante(restaurante);
+                //return View(model);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
+
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarMesa(MesaViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            model.RestauranteId = id;
+            var mesa = new Restaurante.core.Entities.Mesa
+            {
+                Identificador = model.Identificador,
+                Capacidad = model.Capacidad,
+                RestauranteId = model.RestauranteId
+            };
+
+            var idMesa = _mesasService.InsertarMesa(mesa);
+            return RedirectToAction("Mesas/"+model.RestauranteId);
+            //return View(model);
+        }*/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,7 +156,7 @@ namespace RestauranteMVC.Controllers
             };
 
             var idMesa = _mesasService.InsertarMesa(mesa);
-            return RedirectToAction("Mesas/"+model.RestauranteId);
+            return RedirectToAction("Mesas/" + model.RestauranteId);
             //return View(model);
         }
 
