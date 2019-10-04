@@ -20,18 +20,10 @@ namespace Restaurantes.Controllers
             _empleadoService = empleadoService;
         }
 
-
-        public IActionResult Index()
-        {
-            var empleados = _empleadoService.ObtenerEmpleados();
-
-            return View(empleados);
-        }
-
         public IActionResult Empleados(int id)
         {
             ViewData["restauranteId"] = id;
-            var empleados = _empleadoService.ObtenerEmpleados();
+            var empleados = _empleadoService.ObtenerEmpleados(id);
             return View(empleados);
         }
         

@@ -1,15 +1,16 @@
-﻿<h1>
+﻿@model List<Mesa>
+<h1>
     Mesas
 </h1>
 <a onclick="MostrarAgregar()" class="btn btn-outline-primary">Agregar</a>
 <a class="btn btn-primary" asp-action="AgregarMesa">Agregar Mesa</a>
-<table class="table table-bordered" id="tabla-mesas-contenido">
+<table class="table table-bordered" id="tablamesas">
     <thead>
         <tr>
             <th>Id</th>
             <th>Identificador</th>
             <th>Capacidad</th>
-            <th>Editar</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -37,11 +38,11 @@
 </div>
 
 @section Scripts{
-
     <script>
+        var restauranteid = @ViewData["RestauranteId"];
          function MostrarAgregar() {
-            var req = new XMLHttpRequest();
-            req.open("GET","@Url.Action("AgregarMesa","Home")", true);
+             var req = new XMLHttpRequest();
+            req.open("GET", "@Url.Action("AgregarMesa","Home")/" + restauranteid, true);
             req.send();
             req.onreadystatechange = function () {
                 if (req.status == 200) {
@@ -49,20 +50,16 @@
                     $("#agregarModal").modal("show");
                 }
             }
-           
-
         }
         function GuardarMesa() {
             var Identificador = document.getElementById("Identificador").value;
             var Capacidad = document.getElementById("Capacidad").value;
-            
-            
-            
+             
             var fd = {};
             fd["Identificador"] = Identificador;
             fd["Capacidad"] = Capacidad;
+            fd["RestauranteId"] = restauranteid;
             
-
             fetch("/api/mesas/", {
                 method: "POST",
                 headers: {
@@ -80,11 +77,7 @@
         }
     </script>
     <script>
-
-
-
-
-            
+     
     @*$('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
@@ -118,10 +111,11 @@
             $('#tabla-restaurantes').html(rows);
         });
         }*@
+        var table;
         $(document).ready(function () {
-            var table = $('#tabla-mesas-contenido').DataTable({
+            table = $('#tablamesas').DataTable({
                 ajax: {
-                    url: '/api/Mesas',
+                    url: '/api/mesas/@ViewData["RestauranteId"]',
                     dataSrc: '',
                 },
                 columns: [
@@ -135,36 +129,7 @@
                         }
                     }
                 ],
-                select: true,
-                dom : 'Bfrtip',
-                buttons: [
-                    'copy', 'excel', 'pdf',
-                    {
-                        text: 'Eliminar',
-                        action: function () {
-                            var rows = table.rows({ selected: true }).data();
-                            var ids = [];
-                            for (var x = 0; x < rows.length; x++) {
-                                ids.push(rows[x].id);
-                            }
-                        bootbox.confirm("¿Seguro que quieres eliminar esta mesa?", function (ConfirmedDelete) {
-                            if (ConfirmedDelete) {
-                                $.ajax({
-                                    url: '/api/mesas/',
-                                    data: '[' + ids.toString() + ']',
-                                    contentType: 'application/json',
-                                    type: 'DELETE',
-                                    success: function () {
-                                        table.ajax.reload();
-                                    }
-                                });
-                            }
-                        });
-
-                            console.log(ids);
-                        }
-                    }
-                ]
+               
             });
 
         });

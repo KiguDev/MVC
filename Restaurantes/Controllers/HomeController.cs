@@ -41,7 +41,7 @@ namespace Restaurantes.Controllers
         public IActionResult Mesas(int id)
         {
             ViewData["restauranteId"] = id;
-            var mesas = _mesasService.ObtenerMesas();
+            var mesas = _mesasService.ObtenerMesas(id);
             return View(mesas);
             
         }

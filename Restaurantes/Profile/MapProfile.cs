@@ -13,6 +13,7 @@ namespace Restaurantes.Profile
             CreateMap<Restaurante.Core.Entities.Restaurante, RestauranteViewModel>().ReverseMap();
             CreateMap<Restaurante.Core.Entities.Restaurante, RestauranteDTO>().ForMember(c => c.Mesas, opt => opt.MapFrom(src => src.Mesas.Count()));
             CreateMap<Restaurante.Core.Entities.Mesa, MesaDTO>();
+            CreateMap<Restaurante.Core.Entities.Empleado, EmpleadoDTO>();
         }
     }
 }

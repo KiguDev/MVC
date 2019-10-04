@@ -22,10 +22,10 @@ namespace Restaurantes.API
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public ActionResult<List<MesaDTO>> Get()
+        [HttpGet("{id}")]
+        public ActionResult<List<MesaDTO>> Get(int id)
         {
-            var mesas = _mesaService.ObtenerMesas();
+            var mesas = _mesaService.ObtenerMesas(id);
             var model = new List<MesaDTO>();
             _mapper.Map(mesas, model);
             return model;
@@ -34,9 +34,17 @@ namespace Restaurantes.API
         [HttpPost]
         public ActionResult Post([FromBody] MesaViewModel model)
         {
-            var mesa = new Restaurante.Core.Entities.Mesa();
-            _mapper.Map(model, mesa);
-            _mesaService.Agregar(mesa);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Elementos no validos");
+            }
+            var mesas = new Restaurante.Core.Entities.Mesa
+            {
+                Identificador = model.Identificador,
+                Capacidad = model.Capacidad,
+                RestauranteId = model.RestauranteId,
+            };
+            _mesaService.Agregar(mesas);
             return Ok();
         }
 

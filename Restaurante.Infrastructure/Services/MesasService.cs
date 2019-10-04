@@ -18,9 +18,10 @@ namespace Restaurante.Infrastructure.Services
             _context = context;
         }
 
-        public List<Mesa> ObtenerMesas()
+        public List<Core.Entities.Mesa> ObtenerMesas(int id)
         {
-            return _context.Mesas.Include(c => c.Restaurante).ToList();
+            var mesas = _context.Mesas.Include(m => m.Restaurante).Where(mes => mes.RestauranteId == id).ToList();
+            return mesas;
         }
         public Mesa Obtener(int id)
         {

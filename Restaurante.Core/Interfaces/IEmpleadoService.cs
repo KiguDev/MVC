@@ -7,7 +7,7 @@ namespace Restaurante.Core.Interfaces
 {
     public interface IEmpleadoService
     {
-        List<Empleado> ObtenerEmpleados();
+        List<Empleado> ObtenerEmpleados(int id);
         Empleado Obtener(int id);
         int Agregar(Empleado empleado);
         void Editar(Empleado empleado);

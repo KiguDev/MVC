@@ -17,9 +17,10 @@ namespace Restaurante.Infrastructure.Services
             _context = context;
         }
 
-        public List<Empleado> ObtenerEmpleados()
+        public List<Empleado> ObtenerEmpleados(int id)
         {
-            return _context.Empleados.ToList();
+            var empleados = _context.Empleados.Where(e => e.RestauranteId == id).ToList();
+            return empleados;
         }
         public Empleado Obtener(int id)
         {

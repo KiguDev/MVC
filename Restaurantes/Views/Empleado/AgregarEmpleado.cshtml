@@ -4,7 +4,7 @@
         Agregar Empleado
     </div>
     <div class="card-body">
-        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
+        <form asp-antiforgery="true">
             @Html.ValidationSummary(true)
             <div class="form-group">
                 <label asp-for="Nombre">Nombre</label>
@@ -17,12 +17,12 @@
                 <span asp-validation-for="Puesto" class="text-danger"></span>
 
             </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+        
 
         </form>
     </div>
 </div>
-@section Scripts{
+@*@section Scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"
             asp-fallback-src="~/lib/jquery-validation/dist/jquery.validate.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.validator"
@@ -35,5 +35,5 @@
             crossorigin="anonymous"
             integrity="sha256-9GycpJnliUjJDVDqP0UEu/bsm9U+3dnQUH8+3W10vkY=">
     </script>
-}
+}*@
 
