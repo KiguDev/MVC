@@ -54,7 +54,7 @@ namespace Restaurantes.API
             return Ok();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public ActionResult Put(int id, RestauranteViewModel model)
         {
             var restaurante = _restauranteService.Obtener(id);

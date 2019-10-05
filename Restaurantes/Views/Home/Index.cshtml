@@ -62,21 +62,123 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalEditarCuerpo">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnEditarModal">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script> 
-        function MostrarAgregar() {
-            var req = new XMLHttpRequest();
-            req.open("GET","@Url.Action("Agregar","Home")", true);
-            req.send();
-            req.onreadystatechange = function () {
-                if (req.status == 200) {
-                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
-                    $("#agregarModal").modal("show");
+
+        window.onload = function () {
+
+            document.getElementById("btnEditarModal").addEventListener("click", function () {
+                EditarRestaurant();
+            })
+        }
+        function EditarRestaurant() {
+
+            var Nombre = document.getElementById("Nombre").value;
+            var Domicilio = document.getElementById("Domicilio").value;
+            var Telefono = document.getElementById("Telefono").value;
+            var Logo = document.getElementById("Logo").value;
+            var PaginaWeb = document.getElementById("PaginaWeb").value;
+            var HoraCierre = document.getElementById("HoraCierre").value;
+            var Id = document.getElementById("Id").value;
+
+            var fd = {};
+
+            fd["Nombre"] = Nombre;
+            fd["Domicilio"] = Domicilio;
+            fd["Telefono"] = Telefono;
+            fd["Logo"] = Logo;
+            fd["PaginaWeb"] = PaginaWeb;
+            fd["HoraCierre"] = HoraCierre;
+            fd["Id"] = Id;
+
+
+            fetch("/Api/Restaurante/", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+                if (response.ok) {
+                    $("#editarModal").modal("hide");//JQUERY
+                    table.ajax.reload(AddListeners);
+
                 }
-            }
-           
+            });
 
         }
+
+        function AddListeners() {
+            //JAVASCRIPT NATIVO PARA AGREGAR EVENTOS
+            var buttons = document.getElementsByClassName("editar-restaurant");
+            for (i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function () {
+                    MostrarEditar(this.dataset.id)
+                })
+            }
+        }
+
+       function MostrarEditar(id) {
+
+       fetch(`@Url.Action("Editar","Home")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+       function MostrarAgregar() {
+
+       fetch("@Url.Action("Agregar","Home")", {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalCuerpo").innerHTML = text;
+                    $("#agregarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+        }
+
+
+        function LimpiarModales() {
+
+            var bodies = document.getElementsByClassName("modal-body");
+
+            for (i = 0; i < bodies.length; i++) {
+                bodies[i].innerHTML = ""
+            }
+        }
+
         function GuardarRestaurant() {
             var nombre = document.getElementById("Nombre").value;
             var domicilio = document.getElementById("Domicilio").value;
@@ -103,7 +205,7 @@
             }).then(function (response) {
             if (response.ok) {
                 $("#agregarModal").modal("hide");
-                table.ajax.reload();
+                table.ajax.reload(AddListeners);
             }
 
         });
