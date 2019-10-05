@@ -12,6 +12,7 @@
             <th>Domicilio</th>
             <th>Teléfono</th>
             <th>Mesas</th>
+            <th>Empleados</th>
             <th></th>
         </tr>
     </thead>
@@ -32,7 +33,7 @@
     </tbody>
 </table>
 
-<!-- Modal -->
+<!-- Modal Agregar-->
 <div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -53,9 +54,104 @@
   </div>
 </div>
 
+<!-- Modal Editar-->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">Editar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalEditarCuerpo">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btnEditarModal">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @section Scripts{
 <script>
+    window.onload = function () {
+        document.getElementById("btnEditarModal").addEventListener("click", function () {
+            EditarRestaurante();
+        })
+    }
+
+    function EditarRestaurante() {
+
+        var Nombre = document.getElementById("Nombre").value;
+        var Direccion = document.getElementById("Direccion").value;
+        var Telefono = document.getElementById("Telefono").value;
+        var PaginaWeb = document.getElementById("PaginaWeb").value;
+        var HoraDeCierre = document.getElementById("HoraDeCierre").value;
+        var Id = document.getElementById("Id").value;
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Direccion"] = Direccion;
+        fd["Telefono"] = Telefono;
+        fd["PaginaWeb"] = PaginaWeb;
+        fd["HoraDeCierre"] = HoraDeCierre;
+        fd["Id"] = Id;
+
+
+        fetch("/Api/Restaurantes/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#editarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+
+    }
+
+    function MostrarEditar(id) {
+
+       fetch(`@Url.Action("Editar","Home")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+
+    function AddListeners() {
+        var buttons = document.getElementsByClassName("editar-restaurante");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function(){
+                MostrarEditar(this.dataset.id);
+            })
+        }
+    }
+
+    function LimpiarModales() {
+        var bodies = document.getElementsByClassName("modal-body");
+        for (i = 0; i < bodies.length; i++) {
+            bodies[i].innerHTML = "";
+        }
+    }
+
+
     function MostrarAgregar() {
         var req = new XMLHttpRequest();
         req.open("GET", "@Url.Action("Agregar", "Home")", true);
@@ -94,7 +190,7 @@
         }).then(function(response){
             if (response.ok) {
                 $("#agregarModal").modal("hide");
-                table.ajax.reload();
+                table.ajax.reload(AddListeners);
             }
         });
 
@@ -142,6 +238,9 @@
     var table;
     $(document).ready( function () {
         table = $('#tabla-restaurantes-contenido').DataTable({
+            "initComplete": function () {
+                 AddListeners();
+            },
             ajax: {
                 url: '/api/restaurantes',
                 dataSrc: '',
@@ -164,9 +263,15 @@
                     }
                 },
                 {
+                    data: 'empleados',
+                    render: function(data,type,row){
+                        return '<a href="@Url.Action("Index","Empleados")/Index/' + row.id + '">' + data + '</a>'
+                    }
+                },
+                {
                     data: '',
                     render: function(data,type,row){
-                        return '<a class="btn btn-outline-primary" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        return `<a class="btn btn-outline-primary editar-restaurante" data-id="${row.id}">Editar</a>`
                     }
                 }
             ],
@@ -193,7 +298,7 @@
                                     contentType: 'application/json',
                                     type: 'DELETE',
                                     success: function(){
-                                        table.ajax.reload();
+                                        table.ajax.reload(AddListeners);
                                     }
                                 });
                             }

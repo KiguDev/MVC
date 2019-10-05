@@ -1,5 +1,7 @@
 ﻿@model MesaViewModel
 
+<input type="hidden" id="Id" asp-for="Id" value="@Model.Id"/>
+
 <div class="text-danger">
 @Html.ValidationSummary(true)
 </div>
@@ -13,4 +15,3 @@
     <input class="form-control" asp-for="Capacidad" />
     <span asp-validation-for="Capacidad" class="text-danger"></span>
 </div>
-<input type="hidden" asp-for="RestauranteId" value="@Model.RestauranteId"/>

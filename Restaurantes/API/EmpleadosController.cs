@@ -13,57 +13,58 @@ namespace Restaurantes.API
     [Route("api/[controller]")]
     [ApiController]
 
-    public class MesasController : ControllerBase
+    public class EmpleadosController : ControllerBase
     {
-        private IMesaService _mesaService;
+        private IEmpleadoService _empleadoService;
         private readonly IMapper _mapper;
 
-        public MesasController(IMesaService mesaService, IMapper mapper)
+        public EmpleadosController(IEmpleadoService empleadoService, IMapper mapper)
         {
-            _mesaService = mesaService;
+            _empleadoService = empleadoService;
             _mapper = mapper;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<MesaDTO>> Get(int id)
+        public ActionResult<List<EmpleadoDTO>> Get(int id)
         {
-            var mesas = _mesaService.ObtenerMesas(id);
-            var model = new List<MesaDTO>();
-            _mapper.Map(mesas, model);
+            var empleados = _empleadoService.ObtenerEmpleados(id);
+            var model = new List<EmpleadoDTO>();
+            _mapper.Map(empleados, model);
             return model;
         }
 
         //ADD
         [HttpPost]
-        public ActionResult Post([FromBody] MesaViewModel model)
+        public ActionResult Post([FromBody] EmpleadoViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Datos inválidos");
 
-            var mesa = new Mesa
+            var empleado = new Empleado
             {
-                Identificador = model.Identificador,
-                Capacidad = model.Capacidad,
+                Nombre = model.Nombre,
+                Puesto = model.Puesto,
                 RestauranteId = model.RestauranteId
             };
 
-            _mesaService.Agregar(mesa);
+            _empleadoService.Agregar(empleado);
             return Ok();
         }
 
         //EDIT
         [HttpPut]
-        public ActionResult Put([FromBody] MesaViewModel model)
+        public ActionResult Put(EmpleadoViewModel model)
         {
-            var mesa = _mesaService.Obtener(model.Id);
-            if (mesa == null)
+            var empleado = _empleadoService.Obtener(model.Id);
+            if (empleado == null)
             {
                 return BadRequest();
             }
-            mesa.Identificador = model.Identificador;
-            mesa.Capacidad = model.Capacidad;
+            empleado.Nombre = model.Nombre;
+            empleado.Puesto = model.Puesto;
+            
 
-            _mesaService.Editar(mesa);
+            _empleadoService.Editar(empleado);
             return Ok();
         }
 
@@ -71,13 +72,13 @@ namespace Restaurantes.API
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var mesa = _mesaService.Obtener(id);
-            if (mesa == null)
+            var empleado = _empleadoService.Obtener(id);
+            if (empleado == null)
             {
                 return BadRequest();
             }
 
-            _mesaService.Eliminar(mesa);
+            _empleadoService.Eliminar(empleado);
             return Ok();
         }
 
@@ -85,7 +86,7 @@ namespace Restaurantes.API
         [HttpDelete]
         public ActionResult Delete([FromBody]int[] ids)
         {
-            _mesaService.Eliminar(ids);
+            _empleadoService.Eliminar(ids);
             return Ok();
         }
     }

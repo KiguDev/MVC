@@ -89,7 +89,7 @@ namespace Restaurantes.Controllers
                 PaginaWeb = restaurante.PaginaWeb,
                 Telefono = restaurante.Telefono.ToString(),
             };
-            return View("Agregar",viewModel);
+            return PartialView("_AgregarEditarRestaurante", viewModel);
         }
 
         [HttpPost]
@@ -169,7 +169,7 @@ namespace Restaurantes.Controllers
                 
             };
 
-            return View("AgregarMesa", viewModel);
+            return PartialView("_AgregarEditarMesa", viewModel);
         }
 
         [HttpPost]

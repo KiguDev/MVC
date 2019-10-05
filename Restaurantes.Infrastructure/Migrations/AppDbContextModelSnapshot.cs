@@ -27,7 +27,7 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
-                    b.Property<int>("Puesto");
+                    b.Property<string>("Puesto");
 
                     b.Property<int>("RestauranteId");
 

@@ -15,7 +15,7 @@
     </tbody>
 </table>
 
-<!-- Modal -->
+<!-- Modal Agregar-->
 <div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -36,10 +36,97 @@
   </div>
 </div>
 
+<!-- Modal Editar-->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalEditarCuerpo">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btnEditarModal">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @section Scripts{
 <script>
-
     var restauranteId = @ViewData["RestauranteId"]
+
+    window.onload = function () {
+        document.getElementById("btnEditarModal").addEventListener("click", function () {
+            EditarMesa();
+        })
+    }
+
+    function EditarMesa() {
+
+        var Identificador = document.getElementById("Identificador").value;
+        var Capacidad = document.getElementById("Capacidad").value;
+        var Id = document.getElementById("Id").value;
+
+        var fd = {};
+
+        fd["Identificador"] = Identificador;
+        fd["Capacidad"] = Capacidad;
+        fd["Id"] = Id;
+
+        fetch("/Api/Mesas/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#editarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+
+    }
+
+    function MostrarEditar(id) {
+
+       fetch(`@Url.Action("EditarMesa","Home")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+
+    function AddListeners() {
+        var buttons = document.getElementsByClassName("editar-mesa");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function(){
+                MostrarEditar(this.dataset.id);
+            })
+        }
+    }
+
+    function LimpiarModales() {
+        var bodies = document.getElementsByClassName("modal-body");
+        for (i = 0; i < bodies.length; i++) {
+            bodies[i].innerHTML = "";
+        }
+    }
 
     function MostrarAgregar() {
         var req = new XMLHttpRequest();
@@ -64,6 +151,7 @@
 
         fd["Identificador"] = Identificador;
         fd["Capacidad"] = Capacidad;
+        fd["RestauranteId"] = restauranteId;
 
         fetch("/API/Mesas/", {
             method: 'POST',
@@ -74,7 +162,7 @@
         }).then(function(response){
             if (response.ok) {
                 $("#agregarModal").modal("hide");
-                table.ajax.reload();
+                table.ajax.reload(AddListeners);
             }
         });
 
@@ -85,6 +173,9 @@
     var table;
      $(document).ready( function () {
         table = $('#tabla-mesas-contenido').DataTable({
+            "initComplete": function () {
+                 AddListeners();
+            },
             ajax: {
                 url: '/api/mesas/@ViewData["restauranteId"]',
                 dataSrc: '',
@@ -98,7 +189,7 @@
                 {
                     data: '',
                     render: function(data,type,row){
-                        return '<a class="btn btn-outline-primary" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                        return `<a class="btn btn-outline-primary editar-mesa" data-id="${row.id}">Editar</a>`
                     }
                 }
             ],
@@ -125,7 +216,7 @@
                                     contentType: 'application/json',
                                     type: 'DELETE',
                                     success: function(){
-                                        table.ajax.reload();
+                                        table.ajax.reload(AddListeners);
                                     }
                                 });
                             }

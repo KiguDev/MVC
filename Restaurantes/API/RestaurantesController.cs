@@ -51,10 +51,10 @@ namespace Restaurantes.API
         }
 
         //EDIT
-        [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] RestauranteViewModel model)
+        [HttpPut]
+        public ActionResult Put([FromBody] RestauranteViewModel model)
         {
-            var restaurante = _restauranteService.Obtener(id);
+            var restaurante = _restauranteService.Obtener(model.Id);
             if (restaurante == null)
             {
                 return BadRequest();

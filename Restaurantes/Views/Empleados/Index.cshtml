@@ -1,1 +1,229 @@
-﻿<h1>Empleados</h1>
+﻿@model List<Empleado>
+<h1>Empleados</h1>
+
+<a class="btn btn-outline-primary" onclick="MostrarAgregar()">Agregar empleado</a>
+<table class="table table-bordered" id="tabla-empleados-contenido">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Puesto</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<!-- Modal Agregar-->
+<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCuerpo">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar-->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalEditarCuerpo">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btnEditarModal">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+<script>
+
+    var restauranteId = @ViewData["RestauranteId"]
+
+    window.onload = function () {
+        document.getElementById("btnEditarModal").addEventListener("click", function () {
+            EditarEmpleado();
+        })
+    }
+
+    function EditarEmpleado() {
+
+        var Nombre = document.getElementById("Nombre").value;
+        var Puesto = document.getElementById("Puesto").value;
+        var Id = document.getElementById("Id").value;
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Puesto"] = Puesto;
+        fd["Id"] = Id;
+
+        fetch("/Api/Empleados/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#editarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+
+    }
+
+    function MostrarEditar(id) {
+
+       fetch(`@Url.Action("Editar","Empleados")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+
+    function AddListeners() {
+        var buttons = document.getElementsByClassName("editar-empleado");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function(){
+                MostrarEditar(this.dataset.id);
+            })
+        }
+    }
+
+    function LimpiarModales() {
+        var bodies = document.getElementsByClassName("modal-body");
+        for (i = 0; i < bodies.length; i++) {
+            bodies[i].innerHTML = "";
+        }
+    }
+
+
+
+    function MostrarAgregar() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "@Url.Action("Agregar", "Empleado")/empleados/agregar/"+restauranteId, true);
+        req.send();
+
+        req.onreadystatechange = function () {
+            if (req.status == 200) {
+                document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                $("#agregarModal").modal("show");
+            }
+        }
+        
+    }
+
+    function GuardarEmpleado() {
+        var Nombre = document.getElementById("Nombre").value;
+        var Puesto = document.getElementById("Puesto").value;
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Puesto"] = Puesto;
+        fd["RestauranteId"] = restauranteId;
+
+        fetch("/API/Empleados/", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(fd)
+        }).then(function(response){
+            if (response.ok) {
+                $("#agregarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+
+    }
+</script>
+
+<script>
+    var table;
+     $(document).ready( function () {
+        table = $('#tabla-empleados-contenido').DataTable({
+            "initComplete": function () {
+                 AddListeners();
+            },
+            ajax: {
+                url: '/api/empleados/@ViewData["restauranteId"]',
+                dataSrc: '',
+
+            },
+            columns:[
+                {data: 'nombre'},
+                {data: 'puesto'},
+                {
+                    data: '',
+                    render: function(data,type,row){
+                        return `<a class="btn btn-outline-primary editar-empleado" data-id="${row.id}">Editar</a>`
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy','excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function(){
+
+                        bootbox.confirm("¿Seguro que quieres eliminar estos elementos?", function(IsConfirmed){
+                            if (IsConfirmed) {
+                                var rows = table.rows( { selected: true } ).data();
+
+                                var ids = [];
+                                for(var x = 0; x < rows.length; x++){
+                                    ids.push(rows[x].id);
+                                }
+
+                                $.ajax({
+                                    url: '/api/empleados',
+                                    data: '[' + ids.toString() + ']',
+                                    contentType: 'application/json',
+                                    type: 'DELETE',
+                                    success: function(){
+                                        table.ajax.reload(AddListeners);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+    });
+</script>
+}

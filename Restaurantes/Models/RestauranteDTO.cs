@@ -9,6 +9,7 @@ namespace Restaurantes.Models
         public string Nombre { get; set; }
         public string Domicilio { get; set; }
         public int Telefono { get; set; }
-        public int Mesas { get; set; }   
+        public int Mesas { get; set; }
+        public int Empleados { get; set; }
     }
 }
