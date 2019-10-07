@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurante.Infrastructure.Services;
+using Restaurantes.Core.Entities;
+using Restaurantes.Core.Interfaces; 
+using Restaurantes.Infrastructure.Services;
 
 namespace Restaurantes.API
 {
@@ -11,16 +15,34 @@ namespace Restaurantes.API
     [ApiController]
     public class OrdenesController : ControllerBase
     {
+        private readonly IOrdenService _ordenService;
+        public OrdenesController(IOrdenService ordenService)
+        {
+            _ordenService = ordenService;
+        }
+        [HttpGet]
+        public ActionResult<List<Orden>> getOrdenes()
+        {
+            return _ordenService.ObtenerTodo();
+        }
 
-       //private readonly IordenService _ordenService;
+        [HttpPut("{id}")]
+        public ActionResult putOrden(int id, Orden model)
+        {
+            return Ok();
+        }
 
-       // public OrdenesController(IordenService ordenService)
-       // {
-       //     _ordenService = ordenService;
+        [HttpDelete("{id}")]
+        public ActionResult deleteOrden(int id, Orden model)
+        {
+            return Ok();
+        }
 
-       // }
 
-       // [Http]
-
+        [HttpPost("{id}")]
+        public ActionResult postOrden([FromBody] Orden model)
+        {
+            return Ok();
+        }
     }
 }

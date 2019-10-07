@@ -19,12 +19,12 @@ namespace Restaurantes.Infrastructure.Identity
 
             var defaultUser = new IdentityUser
             {
-                UserName = "alex@eladmin.com",
-                Email = "alex@eladmin.com",
+                UserName = "jemmyPC",
+                Email = "preciadojemmy@gmail.com",
                 EmailConfirmed = true,
             };
 
-            await userManager.CreateAsync(defaultUser, "Admin123.");
+            await userManager.CreateAsync(defaultUser, "Pastel19");
             await userManager.AddToRoleAsync(defaultUser, Role.Administrator.ToString());
         }
     }

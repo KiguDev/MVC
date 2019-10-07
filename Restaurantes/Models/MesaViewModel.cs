@@ -14,7 +14,7 @@ namespace Restaurantes.Models
         public int Capacidad { get; set; }
         public int RestauranteId { get; set; }
 
-        public  Restaurante Restaurante { get; set; }
+        public  Core.Entities.Restaurante Restaurante { get; set; }
         
     }
 }

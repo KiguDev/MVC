@@ -12,17 +12,16 @@ namespace Restaurantes.Infrastructure.Data
         {
             if (!catalogContext.Restaurantes.Any())
             {
-                catalogContext.Add(new Restaurante
+                catalogContext.Add(new Core.Entities.Restaurante
                 {
                     Nombre = "Restaurante Maestro",
-                    Domicilio = "Ave. Prueba 123",
-                    Telefono = 686156,
-                    HoraDeCierre = 500
-
+                    Domicilio = "Av. del Muerto 666",
+                    Telefono = 123,
+                    Logo = "img.jpg",
+                    PaginaWeb = "http://integon.com",
+                    FechaAlta = DateTime.Now,
+                    HoraCierre = 200
                 });
-
-
-
 
                 catalogContext.SaveChanges();
             }
@@ -31,24 +30,36 @@ namespace Restaurantes.Infrastructure.Data
             {
                 catalogContext.AddRange(
                     new List<Orden> {
-                            new Orden
-                            {
-                                Estatus = (int) OrdenEstatus.Pendiente,
-                                RestauranteId = 1,
-                                FechaAlta = DateTime.Now,
-                                Total = 0
-                            },
-                                  new Orden
-                            {
-                                Estatus = (int) OrdenEstatus.Pendiente,
-                                RestauranteId = 1,
-                                FechaAlta = DateTime.Now,
-                                Total = 100
-                            }
-                    });
-
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Pendiente,
+                            RestauranteId = 1,
+                            FechaAlta = DateTime.Now,
+                            Total = 0
+                        },
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Cocinando,
+                            RestauranteId = 1,
+                            FechaAlta = DateTime.Now,
+                            Total = 0
+                        },
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Enviado,
+                            RestauranteId = 1,
+                            FechaAlta = DateTime.Now,
+                            Total = 0
+                        },
+                        new Orden
+                        {
+                            Estatus = (int) OrdenEstatus.Entregado,
+                            RestauranteId = 1,
+                            FechaAlta = DateTime.Now,
+                            Total = 0
+                        }
+                        });
                 catalogContext.SaveChanges();
-
             }
         }
     }

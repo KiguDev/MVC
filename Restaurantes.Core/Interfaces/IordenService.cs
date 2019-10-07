@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Restaurantes.Core.Interfaces
 {
-    public interface IordenService
+    public interface IOrdenService
     {
         List<Orden> ObtenerTodo();
     }

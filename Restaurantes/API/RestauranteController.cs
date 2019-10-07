@@ -1,11 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
 
@@ -13,90 +12,82 @@ namespace Restaurantes.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RestaurantesController : ControllerBase
+    public class RestauranteController : ControllerBase
     {
-        private readonly IRestauranteService _restauranteService;
+        private readonly IRestauranteService _RestauranteService;
         private readonly IMapper _mapper;
-        public RestaurantesController(IRestauranteService restauranteService, IMapper mapper)
+        public RestauranteController(IRestauranteService restauranteService, IMapper mapper)
         {
-            _restauranteService = restauranteService;
+            _RestauranteService = restauranteService;
             _mapper = mapper;
         }
-
         [HttpGet]
-        public ActionResult<List<RestauranteDTO>> Get()
+        public ActionResult<List<RestauranteDTO>> getRestaurantes()
         {
-            return _restauranteService
-                .ObtenerRestaurantes()
-                .Select(c => new RestauranteDTO
-                {
-                    Id = c.Id,
-                    Nombre = c.Nombre,
-                    Domicilio = c.Domicilio,
-                    Mesas = c.Mesas.Count()
-                }).ToList();
-        }
+            var restaurantes = _RestauranteService.ObtenerRestaurantes();
 
-        [HttpGet("{id}")]
-        public ActionResult<Restaurante> Get(int id)
-        {
-            return _restauranteService.Obtener(id);
-        }
+            var model = new List<RestauranteDTO>();
+            _mapper.Map(restaurantes, model);
 
-
-        [HttpPost]
-        public void Post([FromBody] RestauranteViewModel model)
-        {
-            var restaurante = new Restaurante();
-            _mapper.Map(model, restaurante);
-            //var restaurante = new Restaurante
-            //{
-            //    Nombre = model.Nombre,
-            //    Domicilio = model.Direccion,
-            //    PaginaWeb = model.PaginaWeb,
-            //    HoraDeCierre = model.HoraDeCierre
-            //};
-            _restauranteService.Agregar(restaurante);
+            return model;
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, RestauranteViewModel model)
+        public ActionResult putRestaurante(int id, [FromBody] RestauranteViewModel model)
         {
-            var restaurante = _restauranteService.Obtener(id);
-
+            var restaurante = _RestauranteService.Obtener(id);
             if (restaurante == null)
                 return BadRequest();
-
             restaurante.Nombre = model.Nombre;
+            restaurante.Domicilio = model.Direccion;
+            restaurante.Telefono = model.Telefono;
+            restaurante.Logo = model.Logo;
             restaurante.PaginaWeb = model.PaginaWeb;
-            restaurante.Telefono = int.Parse(model.Telefono);
+            restaurante.FechaAlta = model.FechaAlta;
+            restaurante.HoraCierre = model.HoraCierre;
 
-            _restauranteService.Editar(restaurante);
-
+            _RestauranteService.Editar(restaurante);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult deleteRestaurante(int id)
         {
-            var restaurante = _restauranteService.Obtener(id);
-
-            if (restaurante == null)
-                return BadRequest();
-
-            _restauranteService.Eliminar(id);
-
+            _RestauranteService.Eliminar(id);
             return Ok();
-
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int [] ids)
+        [HttpDelete]
+        public ActionResult deleteRestaurante([FromBody]int[] ids)
         {
-           _restauranteService.Eliminar(ids);
-
+            _RestauranteService.EliminarVarios(ids);
             return Ok();
+        }
 
+
+        [HttpPost()]
+        public ActionResult postRestaurante([FromBody] RestauranteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Datos Invalidos");
+            }
+            var restaurante = new Restaurantes.Core.Entities.Restaurante();
+            model.FechaAlta = DateTime.Now;
+            _mapper.Map(model, restaurante);
+            //var restaurante = new Restaurante.Core.Entities.Restaurante
+            //{
+            //    Nombre = model.Nombre,
+            //    Domicilio = model.Direccion,
+            //    Telefono = model.Telefono,
+            //    Logo = model.Logo,
+            //    PaginaWeb = model.PaginaWeb,
+            //    FechaAlta = model.FechaAlta,
+            //    HoraCierre = model.HoraCierre
+
+            //};
+            var respuesta = _RestauranteService.Insertar(restaurante);
+            return Ok();
         }
     }
 }

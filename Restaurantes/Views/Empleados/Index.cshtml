@@ -1,0 +1,33 @@
+﻿@model List<Empleado>
+
+
+<h1>Empleados de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
+<a asp-action="Agregar" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Empleado +</a>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th> Identificador </th>
+            <th> Capacidad </th>
+            <th></th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td> @e.Nombre </td>
+                <td> @e.Puesto</td>
+
+                <td><a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-warning">Editar</a></td>
+                <td>
+                    <form asp-action="Eliminar">
+                        <button name="Id" value="@e.Id" type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

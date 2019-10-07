@@ -8,14 +8,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurantes.Core.Interfaces;
+using Restaurantes.Core; 
 using Restaurantes.Infrastructure.Data;
 using Restaurantes.Infrastructure.Identity;
 using Restaurantes.Infrastructure.Services;
+using Restaurante.Infrastructure.Services;
 
 namespace Restaurantes
 {
@@ -38,10 +41,12 @@ namespace Restaurantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<IRestauranteService, RestauranteService>();
+            services.AddScoped<IMesaService, MesaService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IOrdenService, OrdenService>();
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
-
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
-
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
 
             services.AddAuthentication().AddFacebook
@@ -51,8 +56,8 @@ namespace Restaurantes
                   facebookOptions.AppSecret = "f6235aa2ff869bec311f2dafb0aa27ae";
               });
 
-            
-            
+
+
             //services.AddDefaultIdentity<IdentityUser>(options =>
             //{
             //    options.Password.RequireDigit = false;
@@ -69,13 +74,14 @@ namespace Restaurantes
             //    };
             //});
 
-            services.AddScoped<IRestauranteService, RestauranteService>();
+     
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-           
-            
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +102,7 @@ namespace Restaurantes
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
-
+          //  app.UseEfRepository();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -18,10 +18,19 @@ namespace Restaurantes.Controllers
             _restauranteService = restauranteService;
         }
 
+
         public IActionResult Index()
         {
             var restaurantes = _restauranteService.ObtenerRestaurantes();
             return View(restaurantes);
+        }
+
+
+
+        public IActionResult AgregarP()
+        {
+            ViewData["Accion"] = "Agregar";
+            return PartialView("AgregarEditarRestaurant", new RestauranteViewModel());
         }
 
 
@@ -41,15 +50,15 @@ namespace Restaurantes.Controllers
                 return View(model);
             }
 
-            var restaurante = new Restaurante
+            var restaurante = new Core.Entities.Restaurante
             {
                 Nombre = model.Nombre,
                 Domicilio = model.Direccion,
-                HoraDeCierre = model.HoraDeCierre,
-                FechaDeAlta = DateTime.Now,
-                Telefono = int.Parse(model.Telefono)
+                HoraCierre = model.HoraCierre,
+                FechaAlta = DateTime.Now,
+                Telefono =  model.Telefono
             };
-            var id = _restauranteService.Agregar(restaurante);
+            var id = _restauranteService.Insertar(restaurante);
             return RedirectToAction("Index");
         }
         //Editar Restaurante
@@ -64,12 +73,35 @@ namespace Restaurantes.Controllers
                 Id = restaurante.Id,
                 Nombre = restaurante.Nombre,
                 Direccion = restaurante.Domicilio,
-                HoraDeCierre = restaurante.HoraDeCierre.GetValueOrDefault(),
+                HoraCierre = restaurante.HoraCierre.GetValueOrDefault(),
                 PaginaWeb = restaurante.PaginaWeb,
-                Telefono = restaurante.Telefono.ToString(),
+                Telefono = restaurante.Telefono,
             };
             return View("Agregar", viewModel);
         }
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
         public IActionResult Editar(RestauranteViewModel model)

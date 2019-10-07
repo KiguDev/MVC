@@ -12,6 +12,7 @@ namespace Controladores.Models
         public int NumeroExterior { get; set; }
         public string TipoDeComida { get; set; }
         public DateTime FechaDeAlta { get; set; }
+        public int HoraDeCierre { get; set; }
         public List<int> Ordenes { get; set; }
     }
 }
