@@ -15,9 +15,50 @@ namespace Restaurante.infrastructure.Services
         {
             _context = context;
         }
-        public List<Orden> ObtenerTodos()
+
+        public bool AgregarProductoOrden(Orden orden)
         {
-            return _context.Ordenes.ToList();
+            throw new NotImplementedException();
+        }
+
+        public bool CerrarOrden(int id)
+        {
+            var ordenA = _context.Ordenes.FirstOrDefault(c => c.Id == id);
+            ordenA.Estatus = 1;
+            _context.Update(ordenA);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public int EditarOrden(Orden orden)
+        {
+            _context.Update(orden);
+            _context.SaveChanges();
+            return orden.Id;
+        }
+
+        public bool EliminarProductoOrden(Orden orden)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int InsertaOrden(Orden orden)
+        {
+            orden.Estatus = 0;
+            _context.Ordenes.Add(orden);
+            _context.SaveChanges();
+            return orden.Id;
+        }
+
+        public Orden Obtener(int id)
+        {
+            return _context.Ordenes.FirstOrDefault(c => c.Id == id);
+        }
+
+        public List<Orden> ObtenerTodas(int id)
+        {
+            return _context.Ordenes.Where(c => c.RestauranteId == id).ToList();
         }
     }
 }

@@ -17,5 +17,7 @@ namespace RestauranteMVC.Models
         public int Telefono { get; set; }
         public int CantidadMesas { get; set; }
         public int CantidadEmpleados { get; set; }
+        public int CantidadProductos { get; set; }
+        public int CantidadOrdenes { get; set; }
     }
 }

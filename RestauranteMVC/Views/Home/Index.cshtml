@@ -15,6 +15,8 @@
             <th>Hora Cierre</th>
             <th>Empleados</th>
             <th>Mesas</th>
+            <th>Productos</th>
+            <th>Ordenes</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -287,13 +289,27 @@
                 {
                     data: 'cantidadEmpleados',
                     render: function (data, type, row) {
-                        return '<a href="@Url.Action("Index","Empleados")/Index/' + row.id + '">' + data + '</a>';
+                        return '<a title="Empleados" href="@Url.Action("Index","Empleados")/Index/' + row.id + '">' + data + '</a>';
                     }
                 },
                 {
                     data: 'cantidadMesas',
                     render: function (data, type, row) {
-                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>';
+                        return '<a title="Mesas" href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>';
+                    }
+                },
+
+                {
+                    data: 'cantidadProductos',
+                    render: function (data, type, row) {
+                        return '<a title="Productos" href="@Url.Action("Index","Productos")/Index/' + row.id + '">' + data + '</a>';
+                    }
+                },
+
+                {
+                    data: 'cantidadOrdenes',
+                    render: function (data, type, row) {
+                        return '<a title="Ordenes" href="@Url.Action("Index","Ordenes")/Index/' + row.id + '">' + data + '</a>';
                     }
                 },
 
@@ -302,7 +318,7 @@
                     render: function (data, type, row) {
                         //return '<a class="fa fa-pencil" href="@Url.Action("Editar")/' + row.id + '"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
                         //return '<a class="fa fa-pencil" onclick="ModalAgregarEditar(' + row.id + ')"></a><a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
-                        return '<a class="fa fa-pencil" data-id="' + row.id + '"></a> <a class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
+                        return '<a title="Editar" class="fa fa-pencil" data-id="' + row.id + '"></a> <a title="Ver Perfil" class="fa fa-address-card" href="@Url.Action("Perfil")/' + row.id + '"></a>'
                     }
                 }
             ],

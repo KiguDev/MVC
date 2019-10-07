@@ -1,9 +1,37 @@
-﻿
+﻿@model List<Orden>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ordenes";
 }
 
-<h2>Algo</h2>
+<h1>Ordenes</h1>
 
+<a class="btn btn-primary" onclick="Agregar()">Agregar</a>
 
+<table class="table table-bordered" id="tabla-ordenes-contenido">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Estatus</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orden in Model)
+        {
+        <tr>
+            <td hidden>@orden.Id</td>
+            <td>@Enum.GetName(typeof(OrdenEstatus), orden.Estatus)</td>
+            <td>@orden.Total.ToString("C2")</td>
+            <td>@orden.FechaDeAlta.ToString("dd/MM/yyyy - H:mm")</td>
+
+            <td>
+                <a title="Editar Orden" class="fa fa-pencil" data-id="@orden.Id"></a>
+                <a href="#" title="Cerrar Orden" class="fa fa-times" data-id="@orden.Id"></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
 

@@ -11,7 +11,7 @@ using RestauranteMVC.Models;
 
 namespace RestauranteMVC.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;

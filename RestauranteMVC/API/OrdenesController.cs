@@ -19,10 +19,10 @@ namespace RestauranteMVC.API
             _ordenService = ordenesService;
         }
 
-        [HttpGet]
-        public ActionResult<List<Orden>> Get()
+        [HttpGet("{id}")]
+        public ActionResult<List<Orden>> Get(int id)
         {
-            return _ordenService.ObtenerTodos();
+            return _ordenService.ObtenerTodas(id);
         }
 
         [HttpPost]

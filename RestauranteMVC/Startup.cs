@@ -43,14 +43,14 @@ namespace RestauranteMVC
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityContext>();
 
-            
+
 
             services.ConfigureApplicationCookie(options => {
-               options.LoginPath = "/Cuenta/Login";
-               options.Cookie = new CookieBuilder
-               {
-                   IsEssential = true
-               };
+                options.LoginPath = "/Cuenta/Login";
+                options.Cookie = new CookieBuilder
+                {
+                    IsEssential = true
+                };
             });
 
             //services.AddDefaultIdentity<IdentityUser>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework); 
@@ -67,6 +67,8 @@ namespace RestauranteMVC
             services.AddScoped<IEmpleadosService, EmpleadosService>();
             services.AddScoped<IOrdenesService, OrdenesService>();
             services.AddScoped<IAsyncRepository, EfRepository>();
+            services.AddScoped<IProductosService, ProductosService>();
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

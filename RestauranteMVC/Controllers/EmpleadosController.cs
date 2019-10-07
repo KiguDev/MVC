@@ -10,7 +10,7 @@ using RestauranteMVC.Models;
 namespace RestauranteMVC.Controllers
 {
 
-    [Authorize(Roles ="Administrator")]
+    [Authorize]
     public class EmpleadosController : Controller
     {
         private IEmpleadosService _empleadoService;

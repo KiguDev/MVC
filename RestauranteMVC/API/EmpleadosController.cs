@@ -11,7 +11,7 @@ namespace RestauranteMVC.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpleadosController : Controller
+    public class EmpleadosController : ControllerBase
     {
         private readonly IEmpleadosService _empleadoService;
         private readonly IMapper _mapper;

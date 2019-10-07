@@ -31,13 +31,13 @@ namespace Restaurante.infrastructure.Data
                 catalogContext.AddRange(new List<Orden> {
                         new Orden
                         {
-                            Estatus = (int) OrdenEstatus.Pendiente,
+                            Estatus = (int) OrdenEstatus.Abierta,
                             RestauranteId = 1,
                             FechaDeAlta = DateTime.Now,
                             Total = 0
                         }, new Orden
                         {
-                            Estatus = (int) OrdenEstatus.Pendiente,
+                            Estatus = (int) OrdenEstatus.Abierta,
                             RestauranteId = 1,
                             FechaDeAlta = DateTime.Now,
                             Total = 1000

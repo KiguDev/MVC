@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Restaurante.core.Entities
+namespace RestauranteMVC.Models
 {
-    public class Orden
+    public class OrdenViewModel
     {
         public int Id { get; set; }
         public int EmpleadoId { get; set; }
@@ -12,12 +13,5 @@ namespace Restaurante.core.Entities
         public DateTime FechaDeAlta { get; set; }
         public int Estatus { get; set; }
         public decimal Total { get; set; }
-        public ICollection<OrdenProducto> Productos { get; set; }
-    }
-
-    public enum OrdenEstatus
-    {
-        Abierta,
-        Cerrada
     }
 }

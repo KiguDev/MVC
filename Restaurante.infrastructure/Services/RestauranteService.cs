@@ -48,12 +48,12 @@ namespace Restaurante.infrastructure.Services
 
         public core.Entities.Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.Include(c => c.mesas).Include(d => d.empleados).FirstOrDefault(c => c.Id == id);
+            return _context.Restaurantes.Include(c => c.mesas).Include(d => d.empleados).Include(e => e.productos).Include(f => f.ordenes).FirstOrDefault(c => c.Id == id);
         }
 
         public List<core.Entities.Restaurante> ObtenerRestaurante()
         {
-            return _context.Restaurantes.Include(c => c.mesas).Include(d => d.empleados).ToList();
+            return _context.Restaurantes.Include(c => c.mesas).Include(d => d.empleados).Include(e => e.productos).Include(f => f.ordenes).ToList();
         }
     }
 }
