@@ -35,28 +35,28 @@ namespace Restaurantes.Infrastructure.Data
                             Estatus = (int) OrdenEstatus.Pendiente,
                             RestauranteId = 1,
                             FechaAlta = DateTime.Now,
-                            Total = 0
+                            Total = "0"
                         },
                         new Orden
                         {
                             Estatus = (int) OrdenEstatus.Cocinando,
                             RestauranteId = 1,
                             FechaAlta = DateTime.Now,
-                            Total = 0
+                            Total = "0"
                         },
                         new Orden
                         {
                             Estatus = (int) OrdenEstatus.Enviado,
                             RestauranteId = 1,
                             FechaAlta = DateTime.Now,
-                            Total = 0
+                            Total = "0"
                         },
                         new Orden
                         {
                             Estatus = (int) OrdenEstatus.Entregado,
                             RestauranteId = 1,
                             FechaAlta = DateTime.Now,
-                            Total = 0
+                            Total = "0"
                         }
                         });
                 catalogContext.SaveChanges();

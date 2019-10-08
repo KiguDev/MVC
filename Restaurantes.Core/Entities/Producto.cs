@@ -15,7 +15,7 @@ namespace Restaurantes.Core.Entities
         public int Categoria { get; set; }
         public List<Restaurante>  RestauranteId {get; set;}
         public ICollection<OrdenTieneProducto> Ordenes { get; set; }
-        public object Restaurante { get; set; }
+        public string Restaurante { get; set; }
 
         
     }
