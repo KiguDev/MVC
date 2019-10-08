@@ -19,12 +19,12 @@ namespace Restaurantes.Infrastructure.Services
 
         public Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.Include(m => m.Mesas).Include(e => e.Empleados).FirstOrDefault(c => c.Id == id);
+            return _context.Restaurantes.Include(m => m.Mesas).Include(e => e.Empleados).Include(p => p.Productos).FirstOrDefault(c => c.Id == id);
         }
 
         public List<Restaurante> ObtenerRestaurantes()
         {
-            return _context.Restaurantes.Include(c => c.Mesas).Include(e => e.Empleados).ToList();
+            return _context.Restaurantes.Include(c => c.Mesas).Include(e => e.Empleados).Include(p => p.Productos).ToList();
         }
 
         public int Agregar(Restaurante restaurante)

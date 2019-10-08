@@ -1,5 +1,6 @@
 ﻿@model Restaurante
-<h1>Restaurante @Model.Nombre</h1>
+<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/@Model.Id">Orden</a>
+<h1>Restaurante @Model.Nombre</h1> 
 <h6>@Model.Domicilio</h6>
 
 <hr>
@@ -10,22 +11,75 @@
 <label>@Model.Telefono</label>
 <hr>
 
-<h5>Mesas</h5>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <td>Identificador</td>
-            <td>Capacidad</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var m in Model.Mesas)
-         {
-            <tr>
-                <td>@m.Identificador</td>
-                <td>@m.Capacidad</td>
-           </tr>
-         }
+<div class="row">
+    <div class="col-sm">
+        <h5>Menú</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Descripción</td>
+                        <td>Precio</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Productos)
+                     {
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.Descripcion</td>
+                            <td>@p.Precio</td>
+                        </tr>
+                     }
 
-    </tbody>
-</table>
+                </tbody>
+            </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
+        <h5>Mesas</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Identificador</td>
+                    <td>Capacidad</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model.Mesas)
+                {
+                    <tr>
+                        <td>@m.Identificador</td>
+                        <td>@m.Capacidad</td>
+                    </tr>
+                 }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm">
+        <h5>Empleados</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Puesto</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Empleados)
+                {
+                    <tr>
+                        <td>@e.Nombre</td>
+                        <td>@e.Puesto</td>
+                    </tr>
+                 }
+
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

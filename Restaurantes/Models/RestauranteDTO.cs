@@ -11,5 +11,6 @@ namespace Restaurantes.Models
         public int Telefono { get; set; }
         public int Mesas { get; set; }
         public int Empleados { get; set; }
+        public int Productos { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurantes.Infrastructure.Data;
 
 namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191007175726_productos2")]
+    partial class productos2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,10 +77,6 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpleadoId");
-
-                    b.HasIndex("RestauranteId");
-
                     b.ToTable("Ordenes");
                 });
 
@@ -90,13 +88,11 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
-                    b.Property<decimal>("Subtotal");
-
                     b.HasKey("OrdenId", "ProductoId");
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("OrdenTieneProductos");
+                    b.ToTable("OrdenTieneProducto");
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
@@ -109,7 +105,7 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
-                    b.Property<decimal>("Precio");
+                    b.Property<double>("Precio");
 
                     b.Property<int>("RestauranteId");
 
@@ -162,30 +158,17 @@ namespace Restaurantes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.Orden", b =>
-                {
-                    b.HasOne("Restaurantes.Core.Entities.Empleado", "Empleado")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("RestauranteId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Orden", "Orden")
                         .WithMany("Productos")
                         .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Restaurantes.Core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>

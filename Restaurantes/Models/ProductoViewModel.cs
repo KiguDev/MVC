@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace Restaurantes.Core.Entities
+namespace Restaurantes.Models
 {
-    public class Producto
+    public class ProductoViewModel
     {
         public int Id { get; set; }
+        [Required]
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
+        [Required]
         public decimal Precio { get; set; }
         public int RestauranteId { get; set; }
-        public ICollection<OrdenTieneProducto> Ordenes { get; set; }
-        public Restaurante Restaurante { get; set; }
     }
 }

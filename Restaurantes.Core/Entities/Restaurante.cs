@@ -16,5 +16,7 @@ namespace Restaurantes.Core.Entities
         public int? HoraDeCierre { get; set; }
         public ICollection<Mesa> Mesas { get; set; } = new List<Mesa>();
         public ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+        public ICollection<Producto> Productos { get; set; } = new List<Producto>();
+        public ICollection<Orden> Ordenes { get; set; } = new List<Orden>();
     }
 }

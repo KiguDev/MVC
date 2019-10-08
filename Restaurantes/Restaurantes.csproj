@@ -32,6 +32,7 @@
     <Folder Include="Views\Empleados\" />
     <Folder Include="Profile\" />
     <Folder Include="Views\Cuenta\" />
+    <Folder Include="Views\Productos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Models\EmpleadoDTO.cshtml" />

@@ -6,6 +6,10 @@ namespace Restaurantes.Core.Interfaces
 {
     public interface IOrdenService
     {
-        List<Orden> ObtenerTodo();
+        List<Orden> ObtenerOrdenes(int id);
+        Orden Obtener(int id);
+        int Agregar(Orden orden);
+        void Editar(Orden orden);
+        void CerrarOrden(int id);
     }
 }

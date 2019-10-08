@@ -1,36 +1,17 @@
-﻿@model List<Restaurante>
+﻿@model List<Producto>
+<h1>Productos</h1>
 
-<h1>Restaurantes</h1>
-
-<a class="btn btn-outline-primary" onclick="MostrarAgregar()" <!--asp-action="Agregar"--> Agregar restaurante</a>
-
-<table class="table table-bordered" id="tabla-restaurantes-contenido">
+<a class="btn btn-outline-primary" onclick="MostrarAgregar()">Agregar producto</a>
+<table class="table table-bordered" id="tabla-productos-contenido">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>Teléfono</th>
-            <th>Mesas</th>
-            <th>Empleados</th>
-            <th>Productos</th>
+            <th>Descripción</th>
+            <th>Precio</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-      @*  @foreach (var restaurante in Model)
-        {
-        <tr>
-            <td>@restaurante.Id</td>
-            <td>@restaurante.Nombre</td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-            <td><a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-            <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminar</a></td>
-            <td><a asp-action="Eliminar" asp-route-id="@restaurante.Id">Eliminar</a></td>
-        </tr>
-        }*@
     </tbody>
 </table>
 
@@ -49,7 +30,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" onclick="GuardarRestaurante()">Guardar</button>
+        <button type="button" class="btn btn-primary" onclick="GuardarProducto()">Guardar</button>
       </div>
     </div>
   </div>
@@ -60,7 +41,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalLabel">Editar</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -79,32 +60,30 @@
 
 @section Scripts{
 <script>
+
+    var restauranteId = @ViewData["RestauranteId"]
+
     window.onload = function () {
         document.getElementById("btnEditarModal").addEventListener("click", function () {
-            EditarRestaurante();
+            EditarProducto();
         })
     }
 
-    function EditarRestaurante() {
+    function EditarProducto() {
 
         var Nombre = document.getElementById("Nombre").value;
-        var Direccion = document.getElementById("Direccion").value;
-        var Telefono = document.getElementById("Telefono").value;
-        var PaginaWeb = document.getElementById("PaginaWeb").value;
-        var HoraDeCierre = document.getElementById("HoraDeCierre").value;
+        var Descripcion = document.getElementById("Descripcion").value;
+        var Precio = document.getElementById("Precio").value;
         var Id = document.getElementById("Id").value;
 
         var fd = {};
 
         fd["Nombre"] = Nombre;
-        fd["Direccion"] = Direccion;
-        fd["Telefono"] = Telefono;
-        fd["PaginaWeb"] = PaginaWeb;
-        fd["HoraDeCierre"] = HoraDeCierre;
+        fd["Descripcion"] = Descripcion;
+        fd["Precio"] = Precio;
         fd["Id"] = Id;
 
-
-        fetch("/Api/Restaurantes/", {
+        fetch("/Api/Productos/", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -121,7 +100,7 @@
 
     function MostrarEditar(id) {
 
-       fetch(`@Url.Action("Editar","Home")/${id}`, {
+       fetch(`@Url.Action("Editar","Productos")/${id}`, {
             method: "GET"
          }).then(function (response) {
             if (response.ok) {
@@ -137,7 +116,7 @@
 
 
     function AddListeners() {
-        var buttons = document.getElementsByClassName("editar-restaurante");
+        var buttons = document.getElementsByClassName("editar-producto");
         for (i = 0; i < buttons.length; i++) {
             buttons[i].addEventListener("click", function(){
                 MostrarEditar(this.dataset.id);
@@ -153,9 +132,10 @@
     }
 
 
+
     function MostrarAgregar() {
         var req = new XMLHttpRequest();
-        req.open("GET", "@Url.Action("Agregar", "Home")", true);
+        req.open("GET", "@Url.Action("Agregar", "Productos")/"+restauranteId, true);
         req.send();
 
         req.onreadystatechange = function () {
@@ -167,22 +147,19 @@
         
     }
 
-    function GuardarRestaurante() {
+    function GuardarProducto() {
         var Nombre = document.getElementById("Nombre").value;
-        var Direccion = document.getElementById("Direccion").value;
-        var Telefono = document.getElementById("Telefono").value;
-        var HoraDeCierre = document.getElementById("HoraDeCierre").value;
-        var PaginaWeb = document.getElementById("PaginaWeb").value;
+        var Descripcion = document.getElementById("Descripcion").value;
+        var Precio = document.getElementById("Precio").value;
 
         var fd = {};
 
         fd["Nombre"] = Nombre;
-        fd["Direccion"] = Direccion;
-        fd["Telefono"] = Telefono;
-        fd["HoraDeCierre"] = HoraDeCierre;
-        fd["PaginaWeb"] = PaginaWeb;
+        fd["Descripcion"] = Descripcion;
+        fd["Precio"] = Precio;
+        fd["RestauranteId"] = restauranteId;
 
-        fetch("API/Restaurantes/", {
+        fetch("/API/Productos/", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -198,87 +175,26 @@
     }
 </script>
 
-
 <script>
-    @*
-    $('#tabla-restaurantes-contenido').on('click','.ejecutar-eliminacion', function (event) {
-        event.preventDefault();
-        var id = $(this).data('id');
-
-        bootbox.confirm("¿Seguro que quieres eliminar este elemento?", function(IsConfirmed){
-            if (IsConfirmed) {
-                // eliminar elemento
-                $.ajax({
-                    url: '/api/restaurantes/' + id,
-                    type: 'DELETE',
-                    success: recargarElementos
-                });
-            }
-        });
-    });
-
-    function recargarElementos() {
-        // obtener elementos
-        $.getJSON('/api/restaurantes/', function (data) {
-            var rows;
-            data.forEach(function (element) {
-                var row = '<tr>'
-                + '<td class="clase">' + element.NombreRestaurante + '</td>'
-                + '<td>' + element.direccion + '</td>'
-                + '<td>' + element.telefono + '</td>'
-                + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
-                + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>'
-                + '<a href="#" data-id="' + element.id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
-                + '</tr>';
-                rows += row;
-            });
-            $('#tabla-restaurantes-contenido').html(rows);
-        });
-    }
-        *@
     var table;
-    $(document).ready( function () {
-        table = $('#tabla-restaurantes-contenido').DataTable({
+     $(document).ready( function () {
+        table = $('#tabla-productos-contenido').DataTable({
             "initComplete": function () {
                  AddListeners();
             },
             ajax: {
-                url: '/api/restaurantes',
+                url: '/api/productos/@ViewData["restauranteId"]',
                 dataSrc: '',
 
             },
             columns:[
-                {data: 'id'},
-                {
-                    data: 'nombre',
-                    render: function (data, type, row) {
-                        return '<a href="@Url.Action("Perfil")/' + row.id + '">' + data + '</a>'
-                    }
-                },
-                {data: 'domicilio'},
-                {data: 'telefono'},
-                {
-                    data: 'mesas',
-                    render: function(data,type,row){
-                        return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
-                    }
-                },
-                {
-                    data: 'empleados',
-                    render: function(data,type,row){
-                        return '<a href="@Url.Action("Index","Empleados")/Index/' + row.id + '">' + data + '</a>'
-                    }
-                },
-                {
-                    data: 'productos',
-                    render: function(data,type,row){
-                        return '<a href="@Url.Action("Index","Productos")/Index/' + row.id + '">' + data + '</a>'
-                    }
-                },
+                {data: 'nombre'},
+                {data: 'descripcion'},
+                {data: 'precio'},
                 {
                     data: '',
                     render: function(data,type,row){
-                        return `<a class="btn btn-outline-primary editar-restaurante" data-id="${row.id}">Editar</a>`
+                        return `<a class="btn btn-outline-primary editar-producto" data-id="${row.id}">Editar</a>`
                     }
                 }
             ],
@@ -300,7 +216,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '/api/restaurantes',
+                                    url: '/api/productos',
                                     data: '[' + ids.toString() + ']',
                                     contentType: 'application/json',
                                     type: 'DELETE',
@@ -314,10 +230,6 @@
                 }
             ]
         });
-       @*
-       table.buttons().container()
-       .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
-        *@
-    } );
+    });
 </script>
 }
