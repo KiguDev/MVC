@@ -10,17 +10,23 @@ namespace Restaurantes.Models
     {
         [Required(ErrorMessage ="Nombre es requerido")]
         public string Nombre { get; set; }
+
         [Required]
         public string Direccion { get; set; }
+
         [Phone]
         public int Telefono { get; set; }
+
         [Display(Name = "Página Web")]
         [Url]
         public string Logo { get; set; }
+
         [Url]
         public string PaginaWeb { get; set; }
-        [Range(100, 2000)]
+
+        [Range(10, 20000)]
         public int HoraCierre { get; set; }
+
         public DateTime FechaAlta { get; set; }
         public List<int> Ordenes { get; set; }
         public bool EsEditar { get; set; }

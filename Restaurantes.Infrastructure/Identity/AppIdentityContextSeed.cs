@@ -22,9 +22,10 @@ namespace Restaurantes.Infrastructure.Identity
                 UserName = "jemmyPC",
                 Email = "preciadojemmy@gmail.com",
                 EmailConfirmed = true,
+               
             };
 
-            await userManager.CreateAsync(defaultUser, "Pastel19");
+            await userManager.CreateAsync(defaultUser, "Paste.l19"); 
             await userManager.AddToRoleAsync(defaultUser, Role.Administrator.ToString());
         }
     }

@@ -8,11 +8,10 @@ using System.Diagnostics;
 
 namespace Restaurantes.Controllers
 { 
-   // [Authorize]
+    //[Authorize (Roles="Administrator")]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
-
         public HomeController(IRestauranteService restauranteService)
         {
             _restauranteService = restauranteService;
@@ -23,6 +22,7 @@ namespace Restaurantes.Controllers
         {
             var restaurantes = _restauranteService.ObtenerRestaurantes();
             return View(restaurantes);
+            // return View();
         }
 
 

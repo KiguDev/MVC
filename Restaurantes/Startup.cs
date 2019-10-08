@@ -111,10 +111,6 @@ namespace Restaurantes
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-
-
-
-
         }
     }
 }

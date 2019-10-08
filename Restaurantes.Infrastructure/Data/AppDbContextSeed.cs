@@ -14,7 +14,7 @@ namespace Restaurantes.Infrastructure.Data
             {
                 catalogContext.Add(new Core.Entities.Restaurante
                 {
-                    Nombre = "Restaurante Maestro",
+                    Nombre = "Restaurante Maestro   ",
                     Domicilio = "Av. del Muerto 666",
                     Telefono = 123,
                     Logo = "img.jpg",

@@ -75,17 +75,7 @@ namespace Restaurantes.API
             var restaurante = new Restaurantes.Core.Entities.Restaurante();
             model.FechaAlta = DateTime.Now;
             _mapper.Map(model, restaurante);
-            //var restaurante = new Restaurante.Core.Entities.Restaurante
-            //{
-            //    Nombre = model.Nombre,
-            //    Domicilio = model.Direccion,
-            //    Telefono = model.Telefono,
-            //    Logo = model.Logo,
-            //    PaginaWeb = model.PaginaWeb,
-            //    FechaAlta = model.FechaAlta,
-            //    HoraCierre = model.HoraCierre
-
-            //};
+          
             var respuesta = _RestauranteService.Insertar(restaurante);
             return Ok();
         }
