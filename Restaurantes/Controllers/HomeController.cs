@@ -13,14 +13,17 @@ namespace Restaurantes.Controllers
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
+        private IProductoService _productoService;
         private IAsyncRepository _repository;
         private IMesaService _mesaService;
 
-        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService)
         {
             _restauranteService = restauranteService;
             _repository = repository;
             _mesaService = mesaService;
+            _productoService = productoService;
+            
         }
 
         public IActionResult Index()
@@ -108,6 +111,54 @@ namespace Restaurantes.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Empleados(int id)
+        {
+            ViewData["restauranteId"] = id;
+            //ViewData["Accion"] = "ProductosRes";
+            return View("Empleados", id);
+        }
+
+        public IActionResult AgregarEmpleado()
+        {
+            ViewData["Accion"] = "AgregarEmpleado";
+            return PartialView("_AgregarEditarEmpleado", new EmpleadoViewModel());
+        }
+
+        public IActionResult Productos(int id)
+        {
+            ViewData["restauranteId"] = id;
+            //ViewData["Accion"] = "ProductosRes";
+            return View("ProductosRes",id);
+        }
+
+
+        public IActionResult AgregarProducto()
+        {
+            ViewData["Accion"] = "AgregarProducto";
+            return PartialView("_AgregarEditarProducto", new ProductoViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AgregarProducto(ProductoViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            var producto = new Restaurantes.Core.Entities.Producto()
+            {
+                Nombre = model.Nombre,
+                Ingredientes = model.Ingredientes,
+                Cantidad = model.Cantidad,
+                Precio = model.Precio,
+                RestauranteId = id
+            };
+            var Id = _productoService.Agregar(producto);
+            return Ok();
+
+        }
+
         public IActionResult Mesas(int id)
         {
             ViewData["restauranteId"] = id;
@@ -142,10 +193,43 @@ namespace Restaurantes.Controllers
             
         }
 
+        [HttpGet]
+        public IActionResult EditarMesa(int id)
+        {
+            ViewData["Accion"] = "EditarMesa";
+            var mesa = _mesaService.Obtener(id);
+
+            var viewModel = new MesaViewModel
+            {
+                Id = mesa.Id,
+                Identificador = mesa.Identificador,
+                Capacidad = mesa.Capacidad
+            };
+            return View("EditarMesa", viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult EditarProducto(int id)
+        {
+            ViewData["Accion"] = "EditarProducto";
+            var producto = _productoService.Obtener(id);
+
+            var viewModel = new ProductoViewModel
+            {
+                Id = producto.Id,
+                Nombre = producto.Nombre,
+                Precio = producto.Precio,
+                Ingredientes = producto.Ingredientes,
+                Cantidad = producto.Cantidad,
+            };
+            return View("EditarProducto", viewModel);
+        }
+
         public IActionResult Privacy()
         {
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

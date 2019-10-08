@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 
-namespace Restaurantes.API
+namespace Ordenes.API
 {
     [Route("api/[controller]")]
     [ApiController]

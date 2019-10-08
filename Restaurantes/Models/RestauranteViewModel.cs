@@ -21,6 +21,8 @@ namespace Restaurantes.Models
         public int HoraDeCierre { get; set; }
         public DateTime FechaDeAlta { get; set; }
         public List<int> Ordenes { get; set; }
+        public List<int> Productos { get; set; }
+        public List<int> Empleados { get; set; }
         public bool EsEditar { get; set; }
         public int Id { get; set; }
     }

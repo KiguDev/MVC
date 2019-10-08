@@ -69,7 +69,8 @@ namespace Restaurantes
             services.AddScoped<IordenService, OrdenService>();
             services.AddScoped<IAsyncRepository, EfRepository>();
             services.AddScoped<IMesaService, MesaService>();
-
+            services.AddScoped<IProductoService, ProductoService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

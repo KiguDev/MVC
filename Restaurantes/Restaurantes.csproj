@@ -25,4 +25,10 @@
     <ProjectReference Include="..\Restaurantes.Infrastructure\Restaurantes.Infrastructure.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Views\Orden\" />
+    <Folder Include="Views\Producto\" />
+  </ItemGroup>
+
 </Project>

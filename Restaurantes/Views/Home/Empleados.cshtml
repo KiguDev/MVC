@@ -1,10 +1,9 @@
-﻿@model List<Mesa>
-
+﻿@model int  
 <h1>
-    Mesas
+    Empleados
 </h1>
 
-<a class="btn btn-primary mb-3" onclick="MostrarAgregarMesa()">Agregar mesa</a>
+<a class="btn btn-primary mb-3" onclick="MostrarAgregarEmpleado()">Agregar empleado</a>
 <div>
     <div>
         <div>
@@ -12,30 +11,16 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6"></div>
             </div>
-            <table class="table table-bordered " id="tabla-mesas-contenido">
+            <table class="table table-bordered " id="tabla-empleados-contenido">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Identificador</th>
-                        <th>Capacidad</th>
-                        <th>Opciones</th>
+                        <th>Nombre</th>
+                        <th>Puesto</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @*@foreach (var restaurante in Model)
-                        {
-                            <tr class="row-@restaurante.Id">
-                                <td>@restaurante.Id</td>
-                                <td>@restaurante.Nombre</td>
-                                <td>@restaurante.Domicilio</td>
-                                <td>@restaurante.Telefono</td>
-                                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                                <td>
-                                    <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                                    <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
-                                </td>
-                            </tr>
-                        }*@
                 </tbody>
             </table>
         </div>
@@ -58,7 +43,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="GuardarMesa()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
             </div>
         </div>
     </div>
@@ -66,11 +51,11 @@
 
 @section Scripts{
     <script>
-        
 
-    function MostrarAgregarMesa() {
+
+    function MostrarAgregarEmpleado() {
         var req = new XMLHttpRequest();
-        req.open("GET", "@Url.Action("AgregarMesa", "Home")", true);
+        req.open("GET", "@Url.Action("AgregarEmpleado", "Home")", true);
 
             req.send();
 
@@ -82,20 +67,21 @@
         }
     };
 
-        function GuardarMesa() {
+        function GuardarEmpleado() {
 
-        var RestauranteId = @ViewData["RestauranteId"];
-        var Identificador = document.getElementById("Identificador").value;
-        var Capacidad = document.getElementById("Capacidad").value;
+            var Nombre = document.getElementById("Nombre").value;
+            var Puesto = document.getElementById("Puesto").value;
+            var RestauranteId = @ViewData["RestauranteId"];
+            
 
         var fd = {};
 
-        fd["Identificador"] = Identificador;
-        fd["Capacidad"] = Capacidad;
-        fd["RestauranteId"] = RestauranteId;
+            fd["Nombre"] = Nombre;
+            fd["Puesto"] = Precio;
+            fd["RestauranteId"] = RestauranteId;
 
 
-        fetch("/Api/mesas/", {
+        fetch("/Api/empleados/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -110,18 +96,18 @@
     }
     var table;
     $(document).ready( function () {
-            table = $('#tabla-mesas-contenido').DataTable({
+            table = $('#tabla-empleados-contenido').DataTable({
             ajax: {
-                url: '/api/mesas/@ViewData["restauranteId"]',
+                url: '/api/empleados/?id=@Model',
                 dataSrc: '',
             },
             columns: [
                 { data: 'id' },
-                {data: 'identificador' },
-                {data: 'capacidad' },
+                { data: 'nombre' },
+                { data: 'puesto' },
                 {
                     render: function (data, type, row) {
-                        return '<a class="btn btn-outline-dark" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
+                        return '<a class="btn btn-outline-dark" href="@Url.Action("EditarEmpleado")/' + row.id + '">Editar</a>'
                     }
                 }
             ],
@@ -140,7 +126,7 @@
                         }
 
                          $.ajax({
-                             url: '/api/mesas',
+                             url: '/api/empleados',
                              data: '[' + ids.toString() + ']',
                              contentType: 'application/json',
                             type: 'DELETE',
@@ -155,13 +141,9 @@
             ]
         });
 
-    //    table.buttons().container()
-    //.appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
-
     } );
     </script>
 }
-
 
 @*@section Scripts{
         @Html.Partial("_ValidationScriptsPartial")

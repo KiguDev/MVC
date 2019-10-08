@@ -14,19 +14,31 @@ namespace Restaurantes.Infrastructure.Services
         //Se declara el contexto
         public AppDbContext _context;
 
+        public EmpleadoService(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public void Editar(Empleado empleado)
         {
             _context.Update(empleado);
             _context.SaveChanges();
         }
 
-        public void Eliminar(Empleado empleado)
+        public void Eliminar(int id)
         {
+            var empleado = _context.Empleados.Where(c => c.Id == id).FirstOrDefault();
             _context.Empleados.Remove(empleado);
             _context.SaveChanges();
         }
 
-        public int Insertar(Empleado empleado)
+        public void Eliminar(int[] ids)
+        {
+            _context.RemoveRange(_context.Empleados.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+        }
+
+        public int Agregar(Empleado empleado)
         {
             _context.Empleados.Add(empleado);
             return empleado.Id;
@@ -37,9 +49,10 @@ namespace Restaurantes.Infrastructure.Services
             return _context.Empleados.FirstOrDefault(c=>c.Id == id);
         }
 
-        public List<Empleado> ObtenerEmpleados()
+        public List<Empleado> ObtenerEmpleados(int ResId)
         {
-            return _context.Empleados.Include(c=>c.Restaurante).ToList();
+            var empleados = _context.Empleados.Where(c => c.RestauranteId == ResId);
+            return empleados.ToList();
         }
     }
 }

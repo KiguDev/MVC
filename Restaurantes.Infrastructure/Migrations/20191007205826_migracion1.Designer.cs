@@ -10,8 +10,8 @@ using Restaurantes.Infrastructure.Data;
 namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191001234825_test2")]
-    partial class test2
+    [Migration("20191007205826_migracion1")]
+    partial class migracion1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,7 +80,7 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.ToTable("Ordenes");
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenProducto", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
                 {
                     b.Property<int>("OrdenId");
 
@@ -92,7 +92,7 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("OrdenProducto");
+                    b.ToTable("OrdenTieneProducto");
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
@@ -107,7 +107,13 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
+                    b.Property<double>("Precio");
+
+                    b.Property<int>("RestauranteId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Productos");
                 });
@@ -154,7 +160,7 @@ namespace Restaurantes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenProducto", b =>
+            modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Orden", "Orden")
                         .WithMany("Productos")
@@ -164,6 +170,14 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.HasOne("Restaurantes.Core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
+                {
+                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
+                        .WithMany("Productos")
+                        .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

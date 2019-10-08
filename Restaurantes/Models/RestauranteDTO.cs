@@ -13,5 +13,7 @@ namespace Restaurantes.Models
         public string Domicilio { get; set; }
         public string Telefono { get; set; }
         public int Mesas { get; set; }
+        public int Productos { get; set; }
+        public int Empleados { get; set; }
     }
 }

@@ -86,6 +86,8 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<double>("precio");
+
                     b.HasKey("OrdenId", "ProductoId");
 
                     b.HasIndex("ProductoId");
@@ -105,7 +107,13 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
+                    b.Property<double>("Precio");
+
+                    b.Property<int>("RestauranteId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Productos");
                 });
@@ -139,7 +147,7 @@ namespace Restaurantes.Infrastructure.Migrations
             modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany()
+                        .WithMany("Empleados")
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -162,6 +170,14 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.HasOne("Restaurantes.Core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
+                {
+                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
+                        .WithMany("Productos")
+                        .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

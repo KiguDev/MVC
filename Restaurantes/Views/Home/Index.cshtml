@@ -6,7 +6,6 @@
 
 
 <a class="btn btn-primary mb-3" onclick="MostrarAgregar()">Agregar restaurante</a>
-<a class="btn btn-primary mb-3" asp-controller="Empleados">Ver empleados</a>
 <div>
     <div>
         <div>
@@ -22,6 +21,8 @@
                         <th>Domicilio</th>
                         <th>Teléfono</th>
                         <th>Mesas</th>
+                        <th>Productos</th>
+                        <th>Empleados</th>
                         <th>Perfil</th>
                         <th></th>
                     </tr>
@@ -135,28 +136,6 @@
         });
     });
         
-
-    @*function recargarElementos() {
-            // obtener elementos 
-            $.getJSON('/api/restaurantes/', function (data) {
-                var rows = "";
-                data.forEach(function (element) {
-                    var row = '<tr>'
-                        + '<td class="clase">' + element.NombreRestaurante + '</td>'
-                        + '<td>' + element.direccion + '</td>'
-                        + '<td>' + element.telefono + '</td>'
-                        + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
-                        + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a>' 
-                        + '<td><a href="@Url.Action("Perfil")/"' + element.id + '">Perfil</a>' 
-                        + '<a href = "#" data-id="' + element.id + '" class="ejecutar-eliminacion"> Eliminar</a ></td > '
-                        + '</tr>';
-
-                    rows += row;
-                });
-
-                $('tbody').html(rows);
-            });
-    }*@
     var table;
     $(document).ready( function () {
             table = $('#tabla-restaurantes-contenido').DataTable({
@@ -173,6 +152,18 @@
                     data: 'mesas',
                     render: function (data, type, row) {
                         return '<a href="@Url.Action("Mesas")/' + row.id + '">' + data + '</a>'
+                    },                  
+                },
+                {
+                    data: 'productos',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Productos")/?Id=' + row.id + '">' + "Ver" + '</a>'
+                    },                  
+                },
+                {
+                    data: 'empleados',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Empleados")/?Id=' + row.id + '">' + "Ver" + '</a>'
                     },                  
                 },
                 {
