@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurante.Infrastructure.Data;
 
 namespace Restaurante.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191007182103_productosid")]
+    partial class productosid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,8 +107,6 @@ namespace Restaurante.Infrastructure.Migrations
 
                     b.Property<string>("Nombre");
 
-                    b.Property<double>("Precio");
-
                     b.Property<int>("RestauranteId");
 
                     b.HasKey("Id");
@@ -145,7 +145,7 @@ namespace Restaurante.Infrastructure.Migrations
             modelBuilder.Entity("Restaurante.Core.Entities.Empleado", b =>
                 {
                     b.HasOne("Restaurante.Core.Entities.Restaurante", "restaurante")
-                        .WithMany("Empleados")
+                        .WithMany()
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -174,7 +174,7 @@ namespace Restaurante.Infrastructure.Migrations
             modelBuilder.Entity("Restaurante.Core.Entities.Producto", b =>
                 {
                     b.HasOne("Restaurante.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany("Productos")
+                        .WithMany()
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -17,6 +17,7 @@
             <th>Mesas</th>
             <th>Empleados</th>
             <th></th>
+            <th>Productos</th>
         
         </tr>
     </thead>
@@ -97,7 +98,7 @@
             var Telefono = document.getElementById("Telefono").value;
             var Logo = document.getElementById("Logo").value;
             var PaginaWeb = document.getElementById("PaginaWeb").value;
-            var HoraCierre = document.getElementById("HoraCierre").value;
+            var HoraDeCierre = document.getElementById("HoraDeCierre").value;
             var Id = document.getElementById("Id").value;
 
             var fd = {};
@@ -107,11 +108,11 @@
             fd["Telefono"] = Telefono;
             fd["Logo"] = Logo;
             fd["PaginaWeb"] = PaginaWeb;
-            fd["HoraCierre"] = HoraCierre;
+            fd["HoraDeCierre"] = HoraDeCierre;
             fd["Id"] = Id;
 
 
-            fetch("/Api/Restaurante/", {
+            fetch("/Api/Restaurantes/", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -250,6 +251,9 @@
         var table;
         $(document).ready(function () {
             table = $('#tabla-restaurantes-contenido').DataTable({
+                "initComplete": function () {
+                    AddListeners();
+                },
                 ajax: {
                     url: '/api/restaurantes',
                     dataSrc: '',
@@ -278,9 +282,14 @@
                         },
                     },
                     {
-                        render: function (data, type, row) {
-                            return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
-                        },
+                        render: (data, type, row) => {
+                        return `<a class="btn btn-info editar-restaurant" data-id="${row.id}">Editar</a>`
+                        }
+                    },
+                    {
+                        render: (data, type, row) => {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("Productos","Producto")/' + row.id + '">Productos</a>'
+                        }
                     },
                     
                     

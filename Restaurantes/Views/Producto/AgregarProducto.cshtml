@@ -1,0 +1,34 @@
+﻿@model ProductoViewModel
+<div class="card">
+    <div class="card-header">
+        Agregar Producto
+    </div>
+    <div class="card-body">
+        <form asp-antiforgery="true">
+            <div class="form-group">
+                <label asp-for="Nombre">Nombre</label>
+                <input class="form-control" asp-for="Nombre" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ingredientes">Ingredientes</label>
+                <input class="form-control" asp-for="Ingredientes" />
+                <span asp-validation-for="Ingredientes" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio">Precio</label>
+                <input class="form-control" asp-for="Precio" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>
+@section Scripts{
+    @Html.Partial("_ValidationScriptsPartial")
+}

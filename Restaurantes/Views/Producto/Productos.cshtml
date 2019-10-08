@@ -1,0 +1,145 @@
+﻿@model List<Producto>
+
+<h1>
+    Productos
+</h1>
+<a onclick="MostrarAgregar()" class="btn btn-outline-primary">Agregar</a>
+@*<a class="btn btn-primary" asp-action="Agregarproducto">Agregar Producto</a>*@
+<table class="table table-bordered" id="tablaproductos">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Ingredientes</th>
+            <th>Precio</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div class="modal" id="agregarproductosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="GuardarProducto()">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+       var restauranteid = @ViewData["RestauranteId"];
+       function MostrarAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET", '@Url.Action("AgregarProducto","Producto")/@ViewData["RestauranteId"]', true);
+            req.send();
+            req.onreadystatechange = function () {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                    $("#agregarproductosModal").modal("show");
+                }
+            }
+           
+
+        }
+
+        function GuardarProducto() {
+            var Nombre = document.getElementById("Nombre").value;
+            var Ingredientes = document.getElementById("Ingredientes").value;
+            var precio = document.getElementById("Precio").value;
+
+            var fd = {};
+            fd["Nombre"] = Nombre;
+            fd["Ingredientes"] = Ingredientes;
+            fd["Precio"] = precio;
+            fd["Restauranteid"] = restauranteid;
+
+            fetch("/api/productos/", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+            if (response.ok) {
+                $("#agregarproductosModal").modal("hide");
+                table.ajax.reload();
+            }
+
+        });
+
+        }
+        
+    </script>
+    <script>
+        var table;
+        $(document).ready(function () {
+            table = $('#tablaproductos').DataTable({
+                ajax: {
+                    url: '/api/productos/?id=@ViewData["RestauranteId"]',
+                    dataSrc: '',
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'nombre' },
+                    { data: 'ingredientes' },
+                    { data: 'precio'},
+
+                    {
+                        render: function (data, type, row) {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        }
+                    },
+                    
+                ],
+                select: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        text: 'Eliminar',
+                        action: function () {
+                            var rows = table.rows({ selected: true }).data();
+                            var ids = [];
+                            for (var x = 0; x < rows.length; x++) {
+                                ids.push(rows[x].id);
+                            }
+                            bootbox.confirm("¿Seguro que quieres eliminar este producto?", function (ConfirmedDelete) {
+                                if (ConfirmedDelete) {
+                                    $.ajax({
+                                        url: '/api/productos/',
+                                        data: '[' + ids.toString() + ']',
+                                        contentType: 'application/json',
+                                        type: 'DELETE',
+                                        success: () => {
+                                            table.ajax.reload();
+                                        }
+                                    });
+                                }
+                            });
+
+                            console.log(ids);
+                        }
+                    }
+
+                ]
+
+            });
+
+        });
+       
+
+    </script>
+}
+
+
