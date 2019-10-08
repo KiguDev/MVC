@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Restaurantes.Infrastructure.Services
 {
-    public class OrdenService : IordenService
+    public class OrdenService : IOrdenService
     {
         public AppDbContext _context;
 
@@ -17,9 +17,42 @@ namespace Restaurantes.Infrastructure.Services
             _context = context;
         }
 
-        public List<Orden> ObtenerTodo()
+        public Orden Obtener(int id)
         {
-            return _context.Ordenes.ToList();
+            return _context.Ordenes.FirstOrDefault(c => c.Id == id);
         }
+
+        public List<Orden> ObtenerOrdenes(int id)
+        {
+            return _context.Ordenes.Where(c => c.RestauranteId == id).ToList();
+        }
+
+        public int Agregar(Orden orden)
+        {
+            _context.Add(orden);
+            _context.SaveChanges();
+
+            return orden.Id;
+        }
+
+        public void Editar(Orden orden)
+        {
+            _context.Update(orden);
+            _context.SaveChanges();
+        }
+
+        public void Eliminar(int id)
+        {
+            var orden = _context.Ordenes.FirstOrDefault(c => c.Id == id);
+
+            _context.Remove(orden);
+            _context.SaveChanges();
+        }
+
+        public void Eliminar(int[] ids)
+        {
+            _context.RemoveRange(_context.Ordenes.Where(c => ids.Contains(c.Id)));
+            _context.SaveChanges();
+        }      
     }
 }
