@@ -22,6 +22,12 @@ namespace Restaurantes.Infrastructure.Services
             return _context.Restaurantes.Include(c => c.Mesas).FirstOrDefault(c => c.Id == id);
         }
 
+        public Restaurante ObtenerProductos(int id)
+        {
+            return _context.Restaurantes.Include(c => c.Productos).FirstOrDefault(c => c.Id == id);
+
+        }
+
         public List<Restaurante> ObtenerRestaurantes()
         {
             return _context.Restaurantes.Include(c => c.Mesas).ToList();

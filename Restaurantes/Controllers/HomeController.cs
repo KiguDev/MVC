@@ -16,14 +16,15 @@ namespace Restaurantes.Controllers
         private IProductoService _productoService;
         private IAsyncRepository _repository;
         private IMesaService _mesaService;
+        private IEmpleadoService _empleadoService;
 
-        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService, IEmpleadoService empleadoService)
         {
             _restauranteService = restauranteService;
             _repository = repository;
             _mesaService = mesaService;
             _productoService = productoService;
-            
+            _empleadoService = empleadoService;            
         }
 
         public IActionResult Index()
@@ -124,6 +125,59 @@ namespace Restaurantes.Controllers
             return PartialView("_AgregarEditarEmpleado", new EmpleadoViewModel());
         }
 
+        [HttpPost]
+        public IActionResult AgregarEmpleado(EmpleadoViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            var empleado = new Restaurantes.Core.Entities.Empleado()
+            {
+                Nombre = model.Nombre,
+                Puesto = model.Puesto,
+                RestauranteId = id
+            };
+            var Id = _empleadoService.Agregar(empleado);
+            return Ok();
+
+        }
+
+        [HttpGet]
+        public IActionResult EditarEmpleado(int id)
+        {
+            ViewData["Accion"] = "EditarEmpleado";
+            var empleado = _empleadoService.Obtener(id);
+
+            var viewModel = new EmpleadoViewModel
+            {
+                Id = empleado.Id,
+                Nombre = empleado.Nombre,
+                Puesto = empleado.Puesto,
+                RestauranteId = empleado.RestauranteId,
+            };
+            return View("EditarEmpleado", viewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditarEmpleado(EmpleadoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var empleado = _empleadoService.Obtener(model.Id);
+            empleado.Nombre = model.Nombre;
+            empleado.Puesto = model.Puesto;
+            _empleadoService.Editar(empleado);
+
+            return RedirectToAction("Mesas");
+        }
+
         public IActionResult Productos(int id)
         {
             ViewData["restauranteId"] = id;
@@ -157,6 +211,44 @@ namespace Restaurantes.Controllers
             var Id = _productoService.Agregar(producto);
             return Ok();
 
+        }
+
+        [HttpPost]
+        public IActionResult EditarProducto(ProductoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var producto = _productoService.Obtener(model.Id);
+            producto.Nombre = model.Nombre;
+            producto.Ingredientes = model.Ingredientes;
+            producto.Precio = model.Precio;
+            producto.Cantidad = model.Cantidad;
+            _productoService.Editar(producto);
+
+            return RedirectToAction("ProductosRes");
+        }
+
+
+        [HttpGet]
+        public IActionResult EditarProducto(int id)
+        {
+            ViewData["Accion"] = "EditarProducto";
+            var producto = _productoService.Obtener(id);
+
+            var viewModel = new ProductoViewModel
+            {
+                Id = producto.Id,
+                Cantidad = producto.Cantidad,
+                Ingredientes = producto.Ingredientes,
+                Nombre = producto.Nombre,
+                Precio = producto.Precio,
+                RestauranteId = producto.RestauranteId,
+            };
+            return View("EditarProducto", viewModel);
         }
 
         public IActionResult Mesas(int id)
@@ -193,6 +285,7 @@ namespace Restaurantes.Controllers
             
         }
 
+
         [HttpGet]
         public IActionResult EditarMesa(int id)
         {
@@ -203,27 +296,46 @@ namespace Restaurantes.Controllers
             {
                 Id = mesa.Id,
                 Identificador = mesa.Identificador,
-                Capacidad = mesa.Capacidad
+                Capacidad = mesa.Capacidad,
+                RestauranteId = mesa.RestauranteId,
             };
             return View("EditarMesa", viewModel);
         }
 
-        [HttpGet]
-        public IActionResult EditarProducto(int id)
-        {
-            ViewData["Accion"] = "EditarProducto";
-            var producto = _productoService.Obtener(id);
 
-            var viewModel = new ProductoViewModel
+        [HttpPost]
+        public IActionResult EditarMesa(MesaViewModel model)
+        {
+            if (!ModelState.IsValid)
             {
-                Id = producto.Id,
-                Nombre = producto.Nombre,
-                Precio = producto.Precio,
-                Ingredientes = producto.Ingredientes,
-                Cantidad = producto.Cantidad,
-            };
-            return View("EditarProducto", viewModel);
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+
+            var mesa = _mesaService.Obtener(model.Id);
+            mesa.Identificador = model.Identificador;
+            mesa.Capacidad = model.Capacidad;
+            _mesaService.Editar(mesa);
+
+            return RedirectToAction("Mesas", "Home", new { @id = model.RestauranteId });
         }
+
+        //[HttpGet]
+        //public IActionResult EditarProducto(int id)
+        //{
+        //    ViewData["Accion"] = "EditarProducto";
+        //    var producto = _productoService.Obtener(id);
+
+        //    var viewModel = new ProductoViewModel
+        //    {
+        //        Id = producto.Id,
+        //        Nombre = producto.Nombre,
+        //        Precio = producto.Precio,
+        //        Ingredientes = producto.Ingredientes,
+        //        Cantidad = producto.Cantidad,
+        //    };
+        //    return View("EditarProducto", viewModel);
+        //}
 
         public IActionResult Privacy()
         {

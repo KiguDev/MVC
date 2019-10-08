@@ -9,6 +9,7 @@ namespace Restaurantes.Core.Interfaces
     {
         List<Restaurante> ObtenerRestaurantes();
         Restaurante Obtener(int id);
+        Restaurante ObtenerProductos(int id);
         int Agregar(Restaurante restaurante);
         void Editar(Restaurante restaurante);
 

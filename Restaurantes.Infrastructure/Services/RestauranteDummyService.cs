@@ -33,6 +33,11 @@ namespace Restaurantes.Infrastructure.Services
             throw new NotImplementedException();
         }
 
+        public Restaurante ObtenerProductos(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Restaurante> ObtenerRestaurantes()
         {
             return new List<Restaurante> {

@@ -41,6 +41,7 @@ namespace Restaurantes.Infrastructure.Services
         public int Agregar(Empleado empleado)
         {
             _context.Empleados.Add(empleado);
+            _context.SaveChanges();
             return empleado.Id;
         }
 
