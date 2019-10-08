@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Core.Entities;
-using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
 
 namespace Restaurantes.Controllers

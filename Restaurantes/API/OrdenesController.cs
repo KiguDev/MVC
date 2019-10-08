@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Restaurante.Infrastructure.Services;
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces; 
 using Restaurantes.Infrastructure.Services;
+using Restaurantes.Models;
 
 namespace Restaurantes.API
 {
@@ -16,14 +17,23 @@ namespace Restaurantes.API
     public class OrdenesController : ControllerBase
     {
         private readonly IOrdenService _ordenService;
-        public OrdenesController(IOrdenService ordenService)
+        private readonly IMapper _mapper;
+        public OrdenesController(IOrdenService ordenService, IMapper mapper)
         {
             _ordenService = ordenService;
+            _mapper = mapper;
+
+
         }
         [HttpGet]
-        public ActionResult<List<Orden>> getOrdenes()
+        public ActionResult<List<OrdenDTO>> getOrdenes()
         {
-            return _ordenService.ObtenerTodo();
+            var orden = _ordenService.ObtenerTodo();
+
+            var model = new List<OrdenDTO>();
+            _mapper.Map(orden, model);
+
+            return model;
         }
 
         [HttpPut("{id}")]

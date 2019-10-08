@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Restaurantes.Controllers
 { 
-    [Authorize]
+   // [Authorize]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;

@@ -20,6 +20,7 @@ using Restaurantes.Infrastructure.Identity;
 using Restaurantes.Infrastructure.Services;
 using Restaurante.Infrastructure.Services;
 
+
 namespace Restaurantes
 {
     public class Startup
@@ -41,10 +42,7 @@ namespace Restaurantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddScoped<IRestauranteService, RestauranteService>();
-            services.AddScoped<IMesaService, MesaService>();
-            services.AddScoped<IEmpleadoService, EmpleadoService>();
-            services.AddScoped<IOrdenService, OrdenService>();
+           
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")));
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
@@ -73,11 +71,14 @@ namespace Restaurantes
             //        IsEssential = true
             //    };
             //});
+            services.AddScoped<IRestauranteService, RestauranteService>();
+            services.AddScoped<IMesaService, MesaService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IProductoService, ProductoService>();
+            services.AddScoped<IOrdenService, OrdenService>();
 
-     
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
@@ -102,13 +103,18 @@ namespace Restaurantes
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
-          //  app.UseEfRepository();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+
+
         }
     }
 }

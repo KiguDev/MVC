@@ -38,9 +38,7 @@ namespace Restaurantes.Infrastructure.Data
         public DbSet<Restaurantes.Core.Entities.Restaurante> Restaurantes { get; set; }
         public DbSet<Restaurantes.Core.Entities.Mesa> Mesas { get; set; }
         public DbSet<Restaurantes.Core.Entities.Empleado> Empleados { get; set; }
-
         public DbSet<Restaurantes.Core.Entities.Orden> Ordenes { get; set; }
-
         public DbSet<Restaurantes.Core.Entities.Producto> Productos { get; set; }
     }
 }
