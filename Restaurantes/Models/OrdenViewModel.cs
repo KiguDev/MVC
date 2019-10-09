@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Restaurante.Core.Entities
+namespace Restaurantes.Models
 {
-    public class Orden
+    public class OrdenViewModel
     {
         public int Id { get; set; }
-        public ICollection<OrdenProducto> Productos { get; set; }
         public int RestauranteId { get; set; }
         public DateTime FechaAlta { get; set; }
         public int Estatus { get; set; }
         public decimal Total { get; set; }
-
     }
-
-  
 }

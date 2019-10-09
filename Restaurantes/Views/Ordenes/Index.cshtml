@@ -3,5 +3,58 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Ordenes</h1>
+<a class="btn btn-outline-primary" id="GuardarOrden">Guardar</a>
+<a class="btn btn-outline-secondary" id="VerOrdenes">Ver Ordenes</a>
+<div class="row">
+    <div class="col-sm-6" id="Productos">
+        <table class="table">
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+            <tbody></tbody>
+        </table>
+
+    </div>
+    <div class="col-sm-6" id="Totales">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6"></div>
+    <div class="col-sm-6">
+        <h3>TOTAL <b id="total-label">0</b> </h3>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    var total = 0;
+    var template;
+    $(document).ready(function () {
+
+        //Obtiene el template del div de producto en TEXTO
+
+        $.get("@Url.Action("_ProductoView","Ordenes")", function (res) {
+            template = res;
+        })
+
+        $.getJSON("api/restaurantes", { id: '@Model' }), function (res) {
+            $.map(res, function (r, val) {
+                var element = $(template);
+                element.find('.product-name').text(r.nombre);
+                element.find('.id-producto').val(r.id);
+                element.find('.precio-producto').val("100");
+
+                $("#Productos").append(element);
+            })
+        }
+
+    })
+
+
+</script>
 

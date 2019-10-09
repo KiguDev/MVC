@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Restaurante.Core.Entities;
 using Restaurante.Core.Interfaces;
 using Restaurante.Infrastructure.Data;
@@ -18,9 +19,34 @@ namespace Restaurante.Infrastructure.Services
             _context = context;
         }
 
-        public List<Orden> ObtenerTodo()
+        public int Agregar(Orden orden)
         {
-            return _context.Ordenes.ToList();
+            _context.Ordenes.Add(orden);
+            _context.SaveChanges();
+            return orden.Id;
+        }
+
+        public void Editar(Orden orden)
+        {
+            _context.Update(orden);
+            _context.SaveChanges();
+        }
+
+        public void Eliminar(Orden orden)
+        {
+            _context.Remove(orden);
+            _context.SaveChanges();
+        }
+
+        public Orden Obtener(int id)
+        {
+            return _context.Ordenes.FirstOrDefault(c => c.Id == id);
+        }
+
+        public List<Orden> ObtenerOrdenes(int id)
+        {
+            var ordenes = _context.Ordenes.Where(p => p.RestauranteId == id).ToList();
+            return ordenes;
         }
     }
 }

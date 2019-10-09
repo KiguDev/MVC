@@ -21,8 +21,8 @@ namespace Restaurante.Infrastructure.Data
         private void ConfigureOrdenProducto(EntityTypeBuilder<Core.Entities.OrdenProducto> builder)
         {
             builder.HasKey(c => new { c.OrdenId, c.ProductoId });
-            builder.HasOne(c => c.Producto).WithMany(c => c.Ordenes).HasForeignKey(c => c.ProductoId);
-            builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId);
+            builder.HasOne(c => c.Producto).WithMany(c => c.Ordenes).HasForeignKey(c => c.ProductoId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId).OnDelete(DeleteBehavior.Restrict);
         }
 
         private void ConfigureRestaurante(EntityTypeBuilder<Core.Entities.Restaurante> builder)
@@ -35,6 +35,7 @@ namespace Restaurante.Infrastructure.Data
         public DbSet<Core.Entities.Empleado> Empleados { get; set; }
         public DbSet<Core.Entities.Orden> Ordenes { get; set; }
         public DbSet<Core.Entities.Producto> Productos { get; set; }
+        public DbSet<Core.Entities.OrdenProducto> OrdenProductos { get; set; }
 
     }
 }

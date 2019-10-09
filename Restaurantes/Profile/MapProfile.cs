@@ -16,6 +16,7 @@ namespace Restaurantes.Profile
             CreateMap<Restaurante.Core.Entities.Empleado, EmpleadoDTO>();
             CreateMap<Restaurante.Core.Entities.Producto, ProductoViewModel>().ReverseMap();
             CreateMap<Restaurante.Core.Entities.Producto, ProductoDTO>().ReverseMap();
+            CreateMap<Restaurante.Core.Entities.Orden, OrdenViewModel>().ReverseMap();
         }
     }
 }

@@ -18,6 +18,7 @@
             <th>Empleados</th>
             <th></th>
             <th>Productos</th>
+            <th>Ordenes</th>
         
         </tr>
     </thead>
@@ -291,6 +292,11 @@
                             return '<a class="btn btn-outline-dark" href="@Url.Action("Productos","Producto")/' + row.id + '">Productos</a>'
                         }
                     },
+                    {
+                        render: (data, type, row) => {
+                            return '<a class="btn btn-outline-dark" href="@Url.Action("Index","Ordenes")/' + row.id + '">Ordenes</a>'
+                        }
+                    }
                     
                     
                 ],               
