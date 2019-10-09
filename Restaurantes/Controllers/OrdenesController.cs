@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Interfaces;
+using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
@@ -16,10 +17,14 @@ namespace Restaurantes.Controllers
             _restauranteService = restauranteService;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(int id, int ordenId)
         {
-            ViewData["RestauranteId"] = id;
-            return View();
+            var nuevaOrden = new OrdenNuevaViewModel()
+            {
+                RestauranteId = id,
+                OrdenId = ordenId
+            };
+            return View(nuevaOrden);
         }
 
         public IActionResult Ordenes(int id)
@@ -27,6 +32,11 @@ namespace Restaurantes.Controllers
             ViewData["RestauranteId"] = id;
             var restaurante = _restauranteService.Obtener(id);
             return View(restaurante.Ordenes);
+        }
+
+        public IActionResult ProductoCard()
+        {
+            return PartialView("_ProductoCardView");
         }
     }
 }

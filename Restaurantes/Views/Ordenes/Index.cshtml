@@ -1,8 +1,122 @@
-﻿
+﻿@model OrdenNuevaViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<a class="btn btn-outline-primary" href="@Url.Action("Ordenes","Ordenes")/@ViewData["RestauranteId"]">Órdenes</a>
-<h1>Index</h1>
+<a class="btn btn-outline-primary" href="@Url.Action("Ordenes","Ordenes")/@Model.RestauranteId">Órdenes</a>
+<a class="btn btn-outline-primary" href="#">Nueva</a>
+<p></p>
 
+<div class="row">
+    <div class="col-sm-6">
+        <div class="row" id="Productos">
+            
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+        <h4>Resumen</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Producto</td>
+                    <td>Cantidad</td>
+                    <td>Precio</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <label>TOTAL <b id="lbl-total">0</b></label>
+    </div>
+</div>
+
+<div class="modal fade" id="cantidadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCuerpo">
+        <label>Cantidad</label>
+          <input type="number" id="txt-cantidad"/>
+          <input type="hidden" id="txt-id" value=""/>
+          <input type="hidden" id="txt-nombre" />
+          <input type="hidden" id="txt-precio" />
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btn-agregar-producto">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="/lib/jquery/dist/jquery.js"></script>
+<script>
+    var ordenId = 0;
+    @if (Model.OrdenId > 0)
+    {
+        <text>ordenId = @Model.OrdenId</text>
+    }
+
+    $(document).on('click', '.prod-card', function(){
+        var id = $(this).find('.card-id').val();
+        var nombre = $(this).find('.card-nombre').val();
+        var precio = $(this).find('.card-precio').val();
+        $('#txt-id').val(id);
+        $('#txt-nombre').val(nombre);
+        $('#txt-precio').val(precio);
+        $("#cantidadModal").modal("show");
+    });
+
+    var tr = "<tr> <td class='td-producto'>Producto</td><td class='td-cantidad'>Cantidad</td><td class='td-precio'>Precio</td> </tr>";
+    $('#btn-agregar-producto').click(function () {
+        var id = $('#txt-id').val();
+        var nombre = $('#txt-nombre').val();
+        var precio = $('#txt-precio').val();
+        var cantidad = $('#txt-cantidad').val();
+
+        if (ordenId == 0) {
+            $.post('/api/ordenes/',{id: '@Model.RestauranteId'}, function(res){
+                var id = parseInt(res);
+                ordenId = id;
+            });
+        }
+
+        //funciona en postman pero aqui marca error 500
+        $.post('/api/ordenes/PostOrdenTieneProducto/',{OrdenId: ordenId, ProductoId: id, Cantidad: cantidad}, function(){
+            var trNew = $(tr);
+            trNew.find('.td-producto').text(nombre);
+            trNew.find('.td-cantidad').text(cantidad);
+            trNew.find('.td-precio').text(precio);
+            $('tbody').append(trNew);
+        });
+
+    })
+
+    $(document).ready(function () {
+        var template;
+        $.get("@Url.Action("ProductoCard","Ordenes")", function (res) {
+            template = res;
+        })
+
+        $.getJSON("/api/productos/@Model.RestauranteId", function (prod) {
+            $.map(prod, function (p, val) {
+                var element = $(template);
+                element.find('.card-title').text(p.nombre);
+                element.find('.card-text').text(p.precio);
+                element.find('.card-id').val(p.id);
+                element.find('.card-nombre').val(p.nombre);
+                element.find('.card-precio').val(p.precio);
+                $("#Productos").append(element);
+            })
+        })
+
+    })
+</script>

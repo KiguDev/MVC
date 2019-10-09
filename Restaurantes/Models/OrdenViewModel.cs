@@ -7,7 +7,6 @@ namespace Restaurantes.Models
         public int Estatus { get; set; }
         public decimal Total { get; set; }
         public DateTime FechaAlta { get; set; }
-        public int EmpleadoId { get; set; }
         public int RestauranteId { get; set; }
     }
 }

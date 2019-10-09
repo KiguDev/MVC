@@ -38,40 +38,24 @@ namespace Restaurantes.API
 
         //ADD
         [HttpPost]
-        public ActionResult Post([FromBody] OrdenViewModel model)
+        public ActionResult Post([FromForm]int id)
         {
 
             var orden = new Orden
             {
                 FechaAlta = DateTime.Now,
                 Estatus = 1,
-                EmpleadoId = model.EmpleadoId,
-                RestauranteId = model.RestauranteId   
+                RestauranteId = id
             };
 
             _ordenService.Agregar(orden);
-            return Ok();
-        }
-
-        //EDIT
-        [HttpPut]
-        public ActionResult Put(OrdenViewModel model)
-        {
-            var orden = _ordenService.Obtener(model.Id);
-            if (orden == null)
-            {
-                return BadRequest();
-            }
-            orden.EmpleadoId = model.EmpleadoId;
-
-            _ordenService.Editar(orden);
-            return Ok();
+            return Ok(orden.Id);
         }
 
         //ADD ORDEN TIENE PRODUCTO
         [HttpPost]
         [Route("PostOrdenTieneProducto")]
-        public ActionResult PostOrdenTieneProducto(OrdenTieneProductoViewModel model)
+        public ActionResult PostOrdenTieneProducto([FromForm] OrdenTieneProductoViewModel model)
         {
             var ordenTieneProducto = new OrdenTieneProducto
             {

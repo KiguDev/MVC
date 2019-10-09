@@ -48,6 +48,8 @@ namespace Restaurantes
             services.AddScoped<IOrdenService, OrdenService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
             services.AddScoped<IProductoService, ProductoService>();
+            services.AddScoped<IOrdenTieneProductoService, OrdenTieneProductoService>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAsyncRepository, EfRepository>();
             //services.AddIdentity<IdentityUser, IdentityRole>(options =>

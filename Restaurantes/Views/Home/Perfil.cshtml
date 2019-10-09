@@ -1,5 +1,5 @@
 ﻿@model Restaurante
-<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/@Model.Id">Orden</a>
+<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/?id=@Model.Id&ordenId=">Orden</a>
 <h1>Restaurante @Model.Nombre</h1> 
 <h6>@Model.Domicilio</h6>
 
