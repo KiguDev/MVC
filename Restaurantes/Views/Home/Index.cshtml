@@ -23,6 +23,7 @@
                         <th>Mesas</th>
                         <th>Productos</th>
                         <th>Empleados</th>
+                        <th>Ordenes</th>
                         <th>Perfil</th>
                         <th></th>
                     </tr>
@@ -164,6 +165,12 @@
                     data: 'empleados',
                     render: function (data, type, row) {
                         return '<a href="@Url.Action("Empleados")/?Id=' + row.id + '">' + "Ver" + '</a>'
+                    },                  
+                },
+                 {
+                    data: 'ordenes',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Ordenes")/?Id=' + row.id + '">' + "Ver" + '</a>'
                     },                  
                 },
                 {

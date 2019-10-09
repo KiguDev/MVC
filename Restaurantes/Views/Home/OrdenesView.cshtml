@@ -1,6 +1,5 @@
 ﻿@model int
 
-
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -8,6 +7,12 @@
 
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 
+
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
     * {
         box-sizing: border-box;
@@ -56,50 +61,11 @@
         background-color: #f1f1f1;
     }
 </style>
+<div class="card">
+    <h3 class="Id">Id</h3>
+    <p class="FechaAlta">FechaAlta</p>
+    <p class="Status">Status</p>
+ </div>
 
 
-<h1>
-    Ordenes
-</h1>
 
-<h2>Ordenes de Restaurante </h2>
-<p>Seleccione para editar</p>
-
-<div class="row">
-    <div class="column">
-        <div class="card" id="card">
-
-        </div>
-    </div>
-</div>
-
-
-@section Scripts{
-    <script>
-    //TEXTO
-    var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
-
-    $(document).ready(function () {
-
-        ///Obtiene el template del div de Orden en TEXTO
-        var template;
-        $.get("@Url.Action("OrdenesView","Home")", function (res) {
-            template = res;
-        })
-
-
-       $.getJSON("/api/ordenes/@Model" , function (res) {
-            $.map(res,function (r,val) {
-                var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
-                element.find('.Id').text(r.id);  //REEMPLAZA EL VALOR
-                element.find('.FechaAlta').text(r.fechaAlta);  //REEMPLAZA EL VALOR
-                element.find('.Estatus').text(r.estatus);  //REEMPLAZA EL VALOR
-                $("#card").append(element); //LO AGREGA AL DIV
-
-            })
-       })
-
- })
-
-    </script>
-}

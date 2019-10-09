@@ -4,27 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Restaurantes.Infrastructure.Migrations
 {
-    public partial class migracion1 : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Ordenes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmpleadoId = table.Column<int>(nullable: false),
-                    RestauranteId = table.Column<int>(nullable: false),
-                    FechaAlta = table.Column<DateTime>(nullable: false),
-                    Estatus = table.Column<int>(nullable: false),
-                    Total = table.Column<decimal>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ordenes", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Restaurantes",
                 columns: table => new
@@ -87,6 +70,28 @@ namespace Restaurantes.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ordenes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RestauranteId = table.Column<int>(nullable: false),
+                    FechaAlta = table.Column<DateTime>(nullable: false),
+                    Estatus = table.Column<int>(nullable: false),
+                    Total = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ordenes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ordenes_Restaurantes_RestauranteId",
+                        column: x => x.RestauranteId,
+                        principalTable: "Restaurantes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
                 {
@@ -110,28 +115,29 @@ namespace Restaurantes.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrdenTieneProducto",
+                name: "OrdenTieneProductos",
                 columns: table => new
                 {
                     OrdenId = table.Column<int>(nullable: false),
                     ProductoId = table.Column<int>(nullable: false),
-                    Cantidad = table.Column<int>(nullable: false)
+                    Cantidad = table.Column<int>(nullable: false),
+                    Precio = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrdenTieneProducto", x => new { x.OrdenId, x.ProductoId });
+                    table.PrimaryKey("PK_OrdenTieneProductos", x => new { x.OrdenId, x.ProductoId });
                     table.ForeignKey(
-                        name: "FK_OrdenTieneProducto_Ordenes_OrdenId",
+                        name: "FK_OrdenTieneProductos_Ordenes_OrdenId",
                         column: x => x.OrdenId,
                         principalTable: "Ordenes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_OrdenTieneProducto_Productos_ProductoId",
+                        name: "FK_OrdenTieneProductos_Productos_ProductoId",
                         column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -145,8 +151,13 @@ namespace Restaurantes.Infrastructure.Migrations
                 column: "RestauranteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrdenTieneProducto_ProductoId",
-                table: "OrdenTieneProducto",
+                name: "IX_Ordenes_RestauranteId",
+                table: "Ordenes",
+                column: "RestauranteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdenTieneProductos_ProductoId",
+                table: "OrdenTieneProductos",
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
@@ -164,7 +175,7 @@ namespace Restaurantes.Infrastructure.Migrations
                 name: "Mesas");
 
             migrationBuilder.DropTable(
-                name: "OrdenTieneProducto");
+                name: "OrdenTieneProductos");
 
             migrationBuilder.DropTable(
                 name: "Ordenes");

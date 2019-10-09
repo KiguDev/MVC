@@ -10,8 +10,8 @@ using Restaurantes.Infrastructure.Data;
 namespace Restaurantes.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191007205826_migracion1")]
-    partial class migracion1
+    [Migration("20191008193203_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,8 +65,6 @@ namespace Restaurantes.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmpleadoId");
-
                     b.Property<int>("Estatus");
 
                     b.Property<DateTime>("FechaAlta");
@@ -76,6 +74,8 @@ namespace Restaurantes.Infrastructure.Migrations
                     b.Property<decimal>("Total");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Ordenes");
                 });
@@ -88,11 +88,13 @@ namespace Restaurantes.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<double>("Precio");
+
                     b.HasKey("OrdenId", "ProductoId");
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("OrdenTieneProducto");
+                    b.ToTable("OrdenTieneProductos");
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>
@@ -147,7 +149,7 @@ namespace Restaurantes.Infrastructure.Migrations
             modelBuilder.Entity("Restaurantes.Core.Entities.Empleado", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Restaurante", "Restaurante")
-                        .WithMany()
+                        .WithMany("Empleados")
                         .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -160,17 +162,25 @@ namespace Restaurantes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Restaurantes.Core.Entities.Orden", b =>
+                {
+                    b.HasOne("Restaurantes.Core.Entities.Restaurante", "restaurante")
+                        .WithMany("Ordenes")
+                        .HasForeignKey("RestauranteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Restaurantes.Core.Entities.OrdenTieneProducto", b =>
                 {
                     b.HasOne("Restaurantes.Core.Entities.Orden", "Orden")
                         .WithMany("Productos")
                         .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Restaurantes.Core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Restaurantes.Core.Entities.Producto", b =>

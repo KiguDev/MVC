@@ -66,7 +66,7 @@ namespace Restaurantes
             //);
 
             services.AddScoped<IRestauranteService, RestauranteService>();
-            services.AddScoped<IordenService, OrdenService>();
+            services.AddScoped<IOrdenService, OrdenService>();
             services.AddScoped<IAsyncRepository, EfRepository>();
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IProductoService, ProductoService>();

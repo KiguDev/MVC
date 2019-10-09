@@ -17,14 +17,16 @@ namespace Restaurantes.Controllers
         private IAsyncRepository _repository;
         private IMesaService _mesaService;
         private IEmpleadoService _empleadoService;
+        private IOrdenService _ordenService;
 
-        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService, IEmpleadoService empleadoService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService, IEmpleadoService empleadoService, IOrdenService ordenService)
         {
             _restauranteService = restauranteService;
             _repository = repository;
             _mesaService = mesaService;
             _productoService = productoService;
-            _empleadoService = empleadoService;            
+            _empleadoService = empleadoService;
+            _ordenService = ordenService;
         }
 
         public IActionResult Index()
@@ -354,5 +356,49 @@ namespace Restaurantes.Controllers
             var restaurantes = _restauranteService.ObtenerRestaurantes();
             return View(restaurantes);
         }
+
+        //Ordenes
+        public IActionResult Ordenes(int id)
+        {
+            ViewData["restauranteId"] = id;
+            return View("Ordenes", id);
+        }
+
+        public IActionResult OrdenesView(int id)
+        {
+            ViewData["restauranteId"] = id;
+            return PartialView("OrdenesView", id);
+        }
+
+        public IActionResult AgregarOrden()
+        {
+            ViewData["Accion"] = "AgregarOrden";
+            return PartialView("_AgregarEditarOrden", new OrdenViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AgregarOrden(OrdenViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            var orden = new Restaurantes.Core.Entities.Orden()
+            {
+                Total = model.Total,
+                Estatus = model.Estatus,
+                FechaAlta = model.FechaAlta,
+                RestauranteId = id
+            };
+            var Id = _ordenService.Agregar(orden);
+            return Ok();
+
+        }
+
+
+
+
+
     }
 }
