@@ -1,71 +1,8 @@
 ﻿@model int
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-
-
-
-
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    /* Float four columns side by side */
-    .column {
-        float: left;
-        width: 25%;
-        padding: 0 10px;
-    }
-
-    /* Remove extra left and right margins, due to padding */
-    .row {
-        margin: 0 -5px;
-    }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-    /* Responsive columns */
-    media screen and (max-width: 600px) {
-        .column
-
-    {
-        width: 100%;
-        display: block;
-        margin-bottom: 20px;
-    }
-
-    }
-
-    /* Style the counter cards */
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        text-align: center;
-        background-color: #f1f1f1;
-    }
-</style>
-<div class="card">
-    <h3 class="Id">Id</h3>
-    <p class="FechaAlta">FechaAlta</p>
-    <p class="Status">Status</p>
- </div>
-
-
-
+<tr>
+    <td class="orden-id"></td>
+    <td class="orden-fechaAlta"> </td>
+    <td class="orden-estatus"></td>
+    <td class="orden-total"></td>
+    <td><a class="orden-id2"> Ver </a></td>
+</tr>

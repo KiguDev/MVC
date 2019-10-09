@@ -1,75 +1,25 @@
 ﻿@model int
-
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    /* Float four columns side by side */
-    .column {
-        float: left;
-        width: 25%;
-        padding: 0 10px;
-    }
-
-    /* Remove extra left and right margins, due to padding */
-    .row {
-        margin: 0 -5px;
-    }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-    /* Responsive columns */
-    media screen and (max-width: 600px) {
-        .column
-
-    {
-        width: 100%;
-        display: block;
-        margin-bottom: 20px;
-    }
-
-    }
-
-    /* Style the counter cards */
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        text-align: center;
-        background-color: #f1f1f1;
-    }
-</style>
-
-
-<h1>
-    Ordenes
-</h1>
-
-<h2>Ordenes de Restaurante </h2>
-<p>Seleccione para editar</p>
+    <h1>
+        Ordenes de Restaurante
+    </h1>
 
 <div class="row">
-    <div class="column">
-        <div class="card" id="card">
+    <div class="col-sm-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Orden</th>
+                    <th>Fecha de orden</th>
+                    <th>Estatus</th>
+                    <th>Total</th>
+                    <th>Cuenta</th>
+                </tr>
+            </thead>
+            <tbody id="Ordenes">
 
-        </div>
+            </tbody>
+        </table>
+
     </div>
 </div>
 
@@ -77,7 +27,7 @@
 @section Scripts{
     <script>
     //TEXTO
-    var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
+    //var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
 
     $(document).ready(function () {
 
@@ -91,13 +41,25 @@
        $.getJSON("/api/ordenes/@Model" , function (res) {
             $.map(res,function (r,val) {
                 var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
-                element.find('.Id').text(r.id);  //REEMPLAZA EL VALOR
-                element.find('.FechaAlta').text(r.fechaAlta);  //REEMPLAZA EL VALOR
-                element.find('.Estatus').text(r.estatus);  //REEMPLAZA EL VALOR
-                $("#card").append(element); //LO AGREGA AL DIV
+                var date = r.fechaAlta;
+                var newdate = date.substring(0,10) + '   ' + date.substring(11,16);;
+                element.find('.orden-id').text(r.id);  //REEMPLAZA EL VALOR
+                element.find('.orden-fechaAlta').text(newdate);  //REEMPLAZA EL VALOR
+                if (r.estatus == '0') {
+                    element.find('.orden-estatus').text('Abierta');  //REEMPLAZA EL VALOR
+                }
+                else {
+                     element.find('.orden-estatus').text('Cerrada');  //REEMPLAZA EL VALOR
 
+                }
+                element.find('.orden-total').text('$' + r.total);  //REEMPLAZA EL VALOR
+                element.find('.orden-id2').prop('href', "@Url.Action("OrdenTieneProducto")/?Id=" + r.id);
+
+                $("#Ordenes").append(element); //LO AGREGA AL DIV
             })
        })
+
+
 
  })
 
