@@ -24,9 +24,4 @@
     <ProjectReference Include="..\Restaurantes.Infrastructure\Restaurantes.Infrastructure.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Views\Productos\" />
-  </ItemGroup>
-
 </Project>

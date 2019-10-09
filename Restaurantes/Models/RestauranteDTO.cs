@@ -11,6 +11,8 @@ namespace Restaurantes.Models
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Domicilio { get; set; }
+        public string Logo { get; set; }
+        public string PaginaWeb { get; set; }
         public string Telefono { get; set; }
         public int Mesas { get; set; }
     }

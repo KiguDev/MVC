@@ -4,14 +4,16 @@
     Restaurantes
 </h1>
 
-<a class="btn btn-primary" asp-action="Agregar">Agregar restaurante</a>
-<table class="table table-bordered tabla-completa-restaurantes">
-    <thead>
-        <tr>
+<a class="btn btn-primary" asp-action="Agregar" > Agregar restaurante</a>
+<table class="table table-bordered tabla-completa-restaurantes" border="1" style="background-color:darkcyan">
+    <thead   >
+        <tr class="table table-bordered d-inline-block alert-dark" style="color:blueviolet"  >
             <th>ID</th>
             <th>Nombre</th>
             <th>Domicilio</th>
             <th>Teléfono</th>
+            <th>Logo</th>
+            <th>Pagina Web</th>
             <th>Mesas</th>
             <th></th>
         </tr>
@@ -19,20 +21,22 @@
     <tbody id="tabla-restaurantes">
         @foreach (var restaurante in Model)
         {
-            <tr class="row-@restaurante.Id">
-                <td>@restaurante.Id</td>
-                <td>
-                    <input type="hidden" class="id-restaurante" value="@restaurante.Id" />
-                    @restaurante.Nombre
-                </td>
-                <td>@restaurante.Domicilio</td>
-                <td>@restaurante.Telefono</td>
-                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                <td>
-                    <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                    <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
-                </td>
-            </tr>
+        <tr class="row-@restaurante.Id">
+            <td>@restaurante.Id</td>
+            <td>
+                <input type="hidden" class="id-restaurante" value="@restaurante.Id" />
+                @restaurante.Nombre
+            </td>
+            <td>@restaurante.Domicilio</td>
+            <td>@restaurante.Telefono</td>
+            <td>@restaurante.Logo</td>
+            <td>@restaurante.PaginaWeb</td>
+            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
+                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminar</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -54,6 +54,8 @@ namespace Restaurantes.Controllers
             {
                 Nombre = model.Nombre,
                 Domicilio = model.Direccion,
+                PaginaWeb = model.PaginaWeb,
+                Logo = model.Logo,
                 HoraCierre = model.HoraCierre,
                 FechaAlta = DateTime.Now,
                 Telefono =  model.Telefono
@@ -75,6 +77,7 @@ namespace Restaurantes.Controllers
                 Direccion = restaurante.Domicilio,
                 HoraCierre = restaurante.HoraCierre.GetValueOrDefault(),
                 PaginaWeb = restaurante.PaginaWeb,
+                Logo = restaurante.Logo,
                 Telefono = restaurante.Telefono,
             };
             return View("Agregar", viewModel);
@@ -122,10 +125,10 @@ namespace Restaurantes.Controllers
         //Mesas
         public IActionResult Mesas(int id)
         {
-            ViewData["restauranteId"] = id;
-            var restaurante = _restauranteService.Obtener(id);
+            //ViewData["restauranteId"] = id;
+            //var restaurante = _restauranteService.Obtener(id);
 
-            return View(restaurante.Mesas);
+            return View();
         }
 
         public IActionResult AgregarMesa(int restaurante, int id)

@@ -10,7 +10,7 @@ using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+   // [Authorize(Roles = "Administrator")]
     public class EmpleadosController : Controller
     {
         private IEmpleadoService _empleadoServices;

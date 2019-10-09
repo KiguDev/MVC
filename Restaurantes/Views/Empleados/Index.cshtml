@@ -1,14 +1,14 @@
 ﻿@model List<Empleado>
 
 
-<h1>Empleados de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
+<h1>Empleados de @*@Model.FirstOrDefault().Empleado.Nombre*@</h1>
 <a asp-action="Agregar" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Empleado +</a>
 
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th> Identificador </th>
-            <th> Capacidad </th>
+            <th> Nombre </th>
+            <th> Puesto </th>
             <th></th>
             <th></th>
 
