@@ -10,8 +10,8 @@ using Restaurante.infrastructure.Data;
 namespace Restaurante.infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191007172041_prodRes")]
-    partial class prodRes
+    [Migration("20191009005118_all")]
+    partial class all
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,8 @@ namespace Restaurante.infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RestauranteId");
+
                     b.ToTable("Ordenes");
                 });
 
@@ -87,6 +89,10 @@ namespace Restaurante.infrastructure.Migrations
                     b.Property<int>("ProductoId");
 
                     b.Property<int>("Cantidad");
+
+                    b.Property<int>("Id");
+
+                    b.Property<double>("SubTotal");
 
                     b.HasKey("OrdenId", "ProductoId");
 
@@ -101,11 +107,11 @@ namespace Restaurante.infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Cantidad");
-
                     b.Property<string>("Ingredientes");
 
                     b.Property<string>("Nombre");
+
+                    b.Property<double>("Precio");
 
                     b.Property<int>("RestauranteId");
 
@@ -158,17 +164,25 @@ namespace Restaurante.infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Restaurante.core.Entities.Orden", b =>
+                {
+                    b.HasOne("Restaurante.core.Entities.Restaurante", "Restaurante")
+                        .WithMany("ordenes")
+                        .HasForeignKey("RestauranteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Restaurante.core.Entities.OrdenProducto", b =>
                 {
                     b.HasOne("Restaurante.core.Entities.Orden", "Orden")
                         .WithMany("Productos")
                         .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Restaurante.core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Restaurante.core.Entities.Producto", b =>

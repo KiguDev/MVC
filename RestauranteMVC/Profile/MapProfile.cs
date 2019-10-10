@@ -19,6 +19,8 @@ namespace RestauranteMVC.Profile
             CreateMap<Restaurante.core.Entities.Mesa, MesaDTO>();
             CreateMap<Restaurante.core.Entities.Empleado, EmpleadoDTO>();
             CreateMap<Restaurante.core.Entities.Producto, ProductoDTO>();
+            CreateMap<Restaurante.core.Entities.Orden, OrdenViewModel>().ReverseMap();
+            CreateMap<Restaurante.core.Entities.OrdenProducto, OrdenProductoViewModel>().ReverseMap();
         }
     }
 }

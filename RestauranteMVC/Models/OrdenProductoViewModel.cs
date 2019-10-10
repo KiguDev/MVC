@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Restaurante.core.Entities
+namespace RestauranteMVC.Models
 {
-    public class OrdenProducto
+    public class OrdenProductoViewModel
     {
         public int Id { get; set; }
         public int OrdenId { get; set; }
-        public Orden Orden { get; set; }
         public int ProductoId { get; set; }
-        public Producto Producto { get; set; }
         public int Cantidad { get; set; }
         public double SubTotal { get; set; }
     }

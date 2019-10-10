@@ -11,7 +11,7 @@
             <th>Dirección</th>
             <th>Teléfono</th>
             <th>Página Web</th>
-            <th>Fecha Alta</th>
+            <!--<th>Fecha Alta</th>-->
             <th>Hora Cierre</th>
             <th>Empleados</th>
             <th>Mesas</th>
@@ -284,8 +284,19 @@
                 {data:'domicilio'},
                 {data:'telefono'},
                 {data:'paginaWeb' },
-                {data:'fechaDeAlta' },
-                {data: 'horaDeCierre'},
+                /*{
+                    data: 'fechaDeAlta',
+                    render: function (data, type, row) {
+                        return thi
+                    }
+                },*/
+                {
+                    data: 'horaDeCierre',
+                    render: function (data, type, row) {
+
+                        return data + ":00";
+                    }
+                },
                 {
                     data: 'cantidadEmpleados',
                     render: function (data, type, row) {

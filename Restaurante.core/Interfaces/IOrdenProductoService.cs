@@ -5,13 +5,12 @@ using System.Text;
 
 namespace Restaurante.core.Interfaces
 {
-    public interface IOrdenesService
+    public interface IOrdenProductoService
     {
-        List<Orden> ObtenerTodas(int id);
-        Entities.Orden Obtener(int id);
-        int InsertaOrden(Entities.Orden orden);
-        int EditarOrden(Entities.Orden orden);
-        bool CerrarOrden(int id);
+        List<OrdenProducto> ObtenerTodas(int id);
+        Entities.OrdenProducto Obtener(int id);
+        int InsertaOrdenProducto(Entities.OrdenProducto orden);
+        int EditarOrdenProducto(Entities.OrdenProducto orden);
         bool AgregarProductoOrden(OrdenProducto orden);
         bool EliminarProductoOrden(OrdenProducto orden);
     }

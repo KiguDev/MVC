@@ -1,37 +1,363 @@
-﻿@model List<Orden>
-@{
-    ViewData["Title"] = "Ordenes";
+﻿<h1>Ordenes</h1>
+
+<!--SECCION PARA VER TODAS LAS ORDENES-->
+<div class="row ordenes">
+    <div class="col-sm-12" id="ordenesTodas">
+        <a href="#" id="Ordenes">Todas las ordenes </a>
+        <button class="btn btn-primary" id="NuevaOrden" style="display: none;">Nueva orden </button>
+    </div>
+    <div class="ordenes-todas" style="display: none;">
+        <table class="table">
+            <tr>
+                <th class="col-sm-1">OrdenId</th>
+                <th class="col-sm-4">Estatus</th>
+                <th class="col-sm-3">Total</th>
+                <th class="col-sm-3">Fecha</th>
+                <th class="col-sm-1">Editar</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--SECCION PARA EDITAR UNA ORDEN-->
+<div class="row editar-orden">
+
+    <div class="ordenes-editar" style="display: none;">
+
+        <div class="col-sm-6" id="ProductosEdit">
+            <table class="table">
+                <thead><h3>PRODUCTOS</h3></thead>
+                <tr>
+                   
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-sm-6" id="CuentaEdit">
+
+            <table class="table">
+                <thead><h3>CUENTA</h3></thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio unitario</th>
+                    <th>Subtotal</th>
+                    <th>Eliminar</th>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!--SECCION PARA EL TOTAL DE EDITAR LA CUENTA-->
+<div class="row editar-orden">
+    <div class="col-sm-6"></div>
+    <div class="col-sm-6" id="totalEditarOrden" style="display: none;">
+        <h3>TOTAL: $<b id="TotalEditar">0</b> </h3>
+        <button class="btn btn-primary" id="ConfirmarEditarOrden">Confirmar</button>
+        <button class="btn btn-primary" id="EditarOrden" style="display: none;">Guardar</button>
+    </div>
+</div>
+
+<!--ALERTAS PARA AGREGAR ORDEN-->
+<div class="alert alert-success" id="success-alert" hidden>
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Hecho! </strong> Orden agregada con exito.
+</div>
+<div class="alert alert-danger" id="error-alert" hidden>
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Error! </strong> La orden no pudo ser agregada.
+</div>
+
+<!--SECCION DE PRODUCTOS Y CUENTA-->
+<div class="row nueva-orden">
+    <div class="col-sm-6" id="Productos">
+        <table class="table">
+            <thead><h3>PRODUCTOS</h3></thead>
+            <tr>
+                <th class="col-sm-5">Nombre</th>
+                <th class="col-sm-7">Precio</th>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-6" id="Cuenta">
+
+        <table class="table">
+            <thead><h3>CUENTA</h3></thead>
+            <tr>
+                <th class="col-sm-3">Producto</th>
+                <th class="col-sm-2">Cantidad</th>
+                <th class="col-sm-3">Precio unitario</th>
+                <th class="col-sm-3">Subtotal</th>
+                <th class="col-sm-1">Eliminar</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!--SECCION PARA EL TOTAL DE LA CUENTA-->
+<div class="row nueva-orden">
+    <div class="col-sm-6"></div>
+    <div class="col-sm-6">
+        <h3>TOTAL: $<b id="Total" id="totalOrden">0</b> </h3>
+        <button class="btn btn-primary" id="ConfirmarOrden">Confirmar</button>
+        <button class="btn btn-primary" id="GuardarOrden" style="display: none;">Guardar</button>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        //$("#success-alert").hide();
+        var total = 0;
+        var subtotal = 0;
+        var template;
+        var templateCuenta;
+
+        //Se obtiene el id del restaurante de la URL
+        var actual = window.location+'';
+        var split = actual.split("/");
+        var resId = split[split.length - 1];
+
+        $(document).ready(function () {
+
+            //Obtiene template de la parte de productos
+            $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
+                template = res;
+            })
+            //Obtiene template de la parte del carrito
+            $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
+                templateCuenta = res;
+            })
+            //Muestra los productos existentes en el restaurante
+            $.getJSON("/api/ordenes/GetProductos/" + resId, function (res) {
+                $.map(res, function (r) {
+                    var element = $(template);
+                    element.find('.id-producto').val(r.id);
+                    element.find('.product-name').text(r.nombre);
+                    element.find('.product-precio').text(r.precio);
+                    $("#Productos").append(element);
+                })
+            })
+        })
+
+        //Agregar producto al carrito
+        $(document).on('click', '.producto', function () {
+
+            var precio = $(this).find('.product-precio').text();
+            var nombre = $(this).find('.product-name').text();
+            var idProd = $(this).find('.id-producto').val();
+            var element = $(templateCuenta);
+            element.find('.id-producto').val(idProd);
+            element.find('.precioProducto').text(precio);
+            element.find('.nombreProducto').text(nombre);
+            element.find('.subtotalProducto').text(precio);
+            //Modifica subtotal de acuerdo a la cantidad
+            element.find('.cantidadProducto').change(function () {
+                cantidad = $(this).val();
+                subtotal = cantidad * parseInt(precio);
+                element.find('.subtotalProducto').text(subtotal);
+            })
+            //Eliminar producto del carro
+            element.find('.eliminarProducto').on('click', function () {
+                element.remove();
+            })
+            
+            $("#Cuenta").append(element);
+        })
+
+        //Confirma la orden y deja lista la orden para ser creada
+        $('#ConfirmarOrden').on('click', function () {
+            var carrito = $('.row-producto');
+            var total = 0;
+            $.map(carrito, function (r) {
+                elemento = $(r);
+                total = total + parseInt(elemento.find('.subtotalProducto').text());
+            })
+            $("#Total").text(total);
+            if (total > 0) {
+                $(this).hide();
+                $('#GuardarOrden').show()
+            }
+        })
+
+        //Genera la orden
+        $('#GuardarOrden').on('click', function () {
+            /*Agregar orden y orden producto */
+            var carrito = $('.row-producto');
+            var ids = [];
+            var subtotales = [];
+            var total = $('#Total').text();
+            var cantidades = [];
+            var ordenId = 0;
+            var contadorProductos = 0;
+            $.map(carrito, function (r) {
+                elemento = $(r);
+                ids.push(elemento.find('.id-producto').val());
+                subtotales.push(elemento.find('.subtotalProducto').text());
+                cantidades.push(elemento.find('.cantidadProducto').val())
+                elemento.remove();
+            })
+
+            var oJSON = {};
+            oJSON["Total"] = total;
+            oJSON["RestauranteId"] = resId;
+
+            $.post("/api/ordenes", oJSON, function (res) {
+                ordenId = res;
+            }).done(function () {
+                if (ordenId > 0) {
+                    for (i = 0; i < ids.length; ++i) {
+                        var opJSON = {};
+                        opJSON["OrdenId"] = ordenId;
+                        opJSON["ProductoId"] = ids[i];
+                        opJSON["Subtotal"] = subtotales[i];
+                        opJSON["Cantidad"] = cantidades[i];
+
+                        $.post("/api/ordenes/PostProductoOrden", opJSON, function (res) {
+                            console.log(res);
+                        }).done(function () {
+                            contadorProductos++;
+                            if (contadorProductos == ids.length) {
+                                $("#Total").text(0);
+                                $('#GuardarOrden').hide();
+                                $('#ConfirmarOrden').show()
+                                $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+                                    $("#success-alert").slideUp(500);
+                                });
+                            }
+                        }).fail(function () {
+                            $("#error-alert").fadeTo(2000, 500).slideUp(500, function() {
+                                $("#error-alert").slideUp(500);
+                            });
+                        })
+                    }
+                }
+            }).fail(function () {
+                $("#error-alert").fadeTo(2000, 500).slideUp(500, function() {
+                    $("#error-alert").slideUp(500);
+                });
+            })
+        })
+
+        //Oculta la pantalla para agregar una nueva orden y muestra la lista de ordenes
+        $('#Ordenes').on('click', function () {
+            $(this).hide()
+            $('#NuevaOrden').show()
+            $('.nueva-orden').hide()
+            var templateOrdenes;
+            $.get("@Url.Action("OrdenesView","Ordenes")", function (res) {
+                templateOrdenes = res;
+            })
+
+
+            $.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
+                $.map(res, function (r) {
+                    console.log(r);
+                    var element = $(templateOrdenes);
+                    /*element.find('.idOrden').val(r.id);
+                    element.find('.estatusOrden').text(r.estatus);
+                    element.find('.totalOrden').text(r.total);
+                    element.find('.fechaOrden').text(r.fecha);
+                    $('#ordenesTodas').append(element);*/
+                })
+            })
+            $('.ordenes-todas').show()
+        })
+
+        //Oculta la lista de ordenes y muestra la pantalla para agregar una nueva
+        $('#NuevaOrden').on('click', function () {
+            $(this).hide()
+            $('#Orden').show()
+            $('#Ordenes').show()
+            $('.ordenes-todas').hide()
+            $('.nueva-orden').show()
+        })
+
+    </script>
+
 }
 
-<h1>Ordenes</h1>
+@*
+            /*if (ordenId > 0) {
+                for (i = 0; i < ids.length; ++i){
+                    var opJSON = {};
+                    opJSON["OrdenId"] = ordenId;
+                    opJSON["ProductoId"] = ids[i];
+                    opJSON["Subtotal"] = subtotales[i];
 
-<a class="btn btn-primary" onclick="Agregar()">Agregar</a>
+                    $.post("/api/ordenes/PostProductoOrden", opJSON, function (res) {
+                        console.log(res);
+                    })
+                }
+            }*/
 
-<table class="table table-bordered" id="tabla-ordenes-contenido">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Estatus</th>
-            <th>Total</th>
-            <th>Fecha</th>
-            <th>Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var orden in Model)
-        {
-        <tr>
-            <td hidden>@orden.Id</td>
-            <td>@Enum.GetName(typeof(OrdenEstatus), orden.Estatus)</td>
-            <td>@orden.Total.ToString("C2")</td>
-            <td>@orden.FechaDeAlta.ToString("dd/MM/yyyy - H:mm")</td>
 
-            <td>
-                <a title="Editar Orden" class="fa fa-pencil" data-id="@orden.Id"></a>
-                <a href="#" title="Cerrar Orden" class="fa fa-times" data-id="@orden.Id"></a>
-            </td>
-        </tr>
+            /*$("#Total").text(0);
+            $(this).hide();
+            $('#ConfirmarOrden').show()*/
+    
+    
+    fetch('/api/ordenes/GetCantidadProducto/'+resId, {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json'
         }
-    </tbody>
-</table>
+    }).then(function (response) {
+        if (response.ok) {
+            response.text().then(function (text) {
+                dibujaProductos(text)
+            })
+        }
+    });
+
+
+    function dibujaProductos(cantidad) {
+        for (i = 0; i < cantidad; i++) {
+            fetch('@Url.Action("ProductoView","Ordenes")', {
+                method: "GET"
+            }).then(function (response) {
+                if (response.ok) {
+                    response.text().then(function (text) {
+                        var divProd = document.getElementById("Productos");
+                        divProd.innerHTML += text;
+                    }).then(function () {
+                        AddListeners();
+                    })
+                }
+            }) ;
+        }
+    }
+
+    function AddListeners() {
+        var buttons =  document.getElementsByClassName("producto");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function () {
+                fetch(`@Url.Action("ProductoAddView","Ordenes")`, {
+                method: "GET"
+            }).then(function (response) {
+                if (response.ok) {
+                    response.text().then(function (text) {
+                        document.getElementById("Cuenta").innerHTML += text;
+                        total += 100;
+                        document.getElementById("Total").innerHTML = total;
+                        AddEliminarListener();
+                    })
+                }
+            });
+            })
+        }
+    }
+
+    function AddEliminarListener() {
+        var buttons =  document.getElementsByClassName("eliminarProducto");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function () {
+                //total = total - 100;
+                //$('#Total').text(total);
+                //this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode);
+            });
+        }
+    }*@
 

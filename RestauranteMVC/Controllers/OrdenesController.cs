@@ -12,6 +12,7 @@ namespace RestauranteMVC.Controllers
     public class OrdenesController : Controller
     {
         private IOrdenesService _ordenService;
+
         public OrdenesController(IOrdenesService ordenService)
         {
             _ordenService = ordenService;
@@ -19,8 +20,27 @@ namespace RestauranteMVC.Controllers
         public IActionResult Index(int id)
         {
             ViewData["resId"] = id;
-            var productos = _ordenService.ObtenerTodas(id);
-            return View(productos);
+            return View("Index",id);
+        }
+
+        public IActionResult ProductoView()
+        {
+            return PartialView("_ViewProducto");
+        }
+
+        public IActionResult ProductoAddView()
+        {
+            return PartialView("_ViewAddProducto");
+        }
+
+        public IActionResult OrdenesView()
+        {
+            return PartialView("_ViewOrdenes");
+        }
+
+        public IActionResult EditarOrdenView()
+        {
+            return PartialView("_ViewEditOrden");
         }
     }
 }

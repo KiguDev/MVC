@@ -16,9 +16,11 @@ namespace Restaurante.infrastructure.Services
             _context = context;
         }
 
-        public bool AgregarProductoOrden(Orden orden)
+        public bool AgregarProductoOrden(OrdenProducto orden)
         {
-            throw new NotImplementedException();
+            _context.OrdenProducto.Add(orden);
+            _context.SaveChanges();
+            return true;
         }
 
         public bool CerrarOrden(int id)
@@ -38,14 +40,13 @@ namespace Restaurante.infrastructure.Services
             return orden.Id;
         }
 
-        public bool EliminarProductoOrden(Orden orden)
+        public bool EliminarProductoOrden(OrdenProducto orden)
         {
             throw new NotImplementedException();
         }
 
         public int InsertaOrden(Orden orden)
         {
-            orden.Estatus = 0;
             _context.Ordenes.Add(orden);
             _context.SaveChanges();
             return orden.Id;
