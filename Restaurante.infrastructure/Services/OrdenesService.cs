@@ -23,10 +23,18 @@ namespace Restaurante.infrastructure.Services
             return true;
         }
 
-        public bool CerrarOrden(int id)
+        public bool CambiarEstatus(int id)
         {
             var ordenA = _context.Ordenes.FirstOrDefault(c => c.Id == id);
-            ordenA.Estatus = 1;
+            if (ordenA.Estatus == 0)
+            {
+                ordenA.Estatus = 1;
+            }
+            else
+            {
+                ordenA.Estatus = 0;
+            }
+            
             _context.Update(ordenA);
             _context.SaveChanges();
 

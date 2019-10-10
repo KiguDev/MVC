@@ -3,7 +3,7 @@
 <!--SECCION PARA VER TODAS LAS ORDENES-->
 <div class="row ordenes">
     <div class="col-sm-12" id="ordenesTodas">
-        <a  id="Ordenes">Todas las ordenes </a>
+        <a id="Ordenes">Todas las ordenes </a>
         <button class="btn btn-primary" id="NuevaOrden" style="display: none;">Nueva orden </button>
     </div>
     <div class="ordenes-todas col-sm-12" style="display: none;">
@@ -13,13 +13,13 @@
                 <th class="col-sm-3">Estatus</th>
                 <th class="col-sm-2">Total</th>
                 <th class="col-sm-4">Fecha</th>
-                <th class="col-sm-1">Editar</th>
+                <th class="col-sm-1">Opciones</th>
             </tr>
         </table>
     </div>
 </div>
 
-<!--SECCION PARA EDITAR UNA ORDEN-->
+<!--SECCION PARA EDITAR UNA ORDEN
 <div class="row editar-orden">
 
     <div class="ordenes-editar" style="display: none;">
@@ -28,7 +28,6 @@
             <table class="table">
                 <thead><h3>PRODUCTOS</h3></thead>
                 <tr>
-                   
                 </tr>
             </table>
         </div>
@@ -50,7 +49,7 @@
     </div>
 </div>
 
-<!--SECCION PARA EL TOTAL DE EDITAR LA CUENTA-->
+SECCION PARA EL TOTAL DE EDITAR LA CUENTA
 <div class="row editar-orden">
     <div class="col-sm-6"></div>
     <div class="col-sm-6" id="totalEditarOrden" style="display: none;">
@@ -58,9 +57,9 @@
         <button class="btn btn-primary" id="ConfirmarEditarOrden">Confirmar</button>
         <button class="btn btn-primary" id="EditarOrden" style="display: none;">Guardar</button>
     </div>
-</div>
+</div>-->
 
-<!--ALERTAS PARA AGREGAR ORDEN-->
+<!--ALERTAS PARA ORDENES-->
 <div class="alert alert-success" id="success-alert" hidden>
     <button type="button" class="close" data-dismiss="alert">x</button>
     <strong>Hecho! </strong> Orden agregada con exito.
@@ -70,7 +69,7 @@
     <strong>Error! </strong> La orden no pudo ser agregada.
 </div>
 
-<!--SECCION DE PRODUCTOS Y CUENTA-->
+<!--SECCION DE PRODUCTOS Y CUENTA PARA ORDEN NUEVA-->
 <div class="row nueva-orden">
     <div class="col-sm-6" id="Productos">
         <table class="table">
@@ -96,7 +95,7 @@
     </div>
 </div>
 
-<!--SECCION PARA EL TOTAL DE LA CUENTA-->
+<!--SECCION PARA EL TOTAL DE LA CUENTA PARA ORDEN NUEVA-->
 <div class="row nueva-orden">
     <div class="col-sm-6"></div>
     <div class="col-sm-6">
@@ -109,11 +108,11 @@
 @section Scripts{
 
     <script>
-        //$("#success-alert").hide();
         var total = 0;
         var subtotal = 0;
         var template;
         var templateCuenta;
+        var templateOrdenes;
 
         //Se obtiene el id del restaurante de la URL
         var actual = window.location+'';
@@ -141,7 +140,7 @@
                 $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
                     templateCuenta = res;
                 })
-            
+
         })
 
         //Agregar producto al carrito
@@ -165,7 +164,7 @@
             element.find('.eliminarProducto').on('click', function () {
                 element.remove();
             })
-            
+
             $("#Cuenta").append(element);
         })
 
@@ -248,10 +247,23 @@
             $(this).hide()
             $('#NuevaOrden').show()
             $('.nueva-orden').hide()
-            var templateOrdenes;
+            ObtenerOrdenes();
+
+            $('.ordenes-todas').show()
+        })
+
+        //Oculta la lista de ordenes y muestra la pantalla para agregar una nueva
+        $('#NuevaOrden').on('click', function () {
+            $(this).hide()
+            NuevaOrden();
+        })
+
+        function ObtenerOrdenes() {
+            //OBTIENE EL TEMPLATE PARA LA LISTA DE ORDENES
             $.get("@Url.Action("OrdenesView","Ordenes")", function (res) {
                 templateOrdenes = res;
             }).done(function () {
+                //MUESTRA LAS ORDENES
                 $.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
                     $.map(res, function (r) {
                         var element = $(templateOrdenes);
@@ -261,32 +273,33 @@
                         element.find('.estatusOrden').text((r.estatus == 0) ? "Abierta":"Cerrada");
                         element.find('.totalOrden').text(total);
                         element.find('.fechaOrden').text(fecha);
+                        element.find('.cambiarEstatus').on('click', function () {
+                            CambiarEstatus(element.find('.idOrden').text());
+                        })
+                        element.find('.editarOrden').on('click', function () {
+                            EditarOrden(element.find('.idOrden').text())
+                        })
                         $('.ordenes-todas').append(element);
                     })
                 })
             })
+        }
 
+        function CambiarEstatus(ordenId) {
+            var estadoEstatus = false;
+            $.post("/api/ordenes/PostCambiarEstatus", { idOrden: ordenId }, function (res) {
+                estadoEstatus = res;
+            }).done(function () {
+                if (estadoEstatus) {
+                    $('.row-orden').remove()
+                    ObtenerOrdenes()
+                }
+            })
+        }
 
-            /*$.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
-                $.map(res, function (r) {
-                    var element = $(templateOrdenes);
-                    var fecha = r.fechaDeAlta.substring(0, 10) + " " + r.fechaDeAlta.substring(12, 19);
-                    var total = "$" + r.total.toFixed(2);
-                    element.find('.idOrden').text(r.id);
-                    element.find('.estatusOrden').text((r.estatus == 0) ? "Abierta":"Cerrada");
-                    element.find('.totalOrden').text(total);
-                    element.find('.fechaOrden').text(fecha);
-                    $('.ordenes-todas').append(element);
-                })
-            })*/
-            $('.ordenes-todas').show()
-        })
-
-        //Oculta la lista de ordenes y muestra la pantalla para agregar una nueva
-        $('#NuevaOrden').on('click', function () {
-            $(this).hide()
-            NuevaOrden();
-        })
+        function EditarOrden(ordenId) {
+            
+        }
 
         function NuevaOrden() {
             $('.row-orden').remove()
@@ -322,8 +335,8 @@
             /*$("#Total").text(0);
             $(this).hide();
             $('#ConfirmarOrden').show()*/
-    
-    
+
+
     fetch('/api/ordenes/GetCantidadProducto/'+resId, {
         method: 'GET',
         headers:{

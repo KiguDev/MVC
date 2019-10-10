@@ -11,7 +11,7 @@ namespace Restaurante.core.Interfaces
         Entities.Orden Obtener(int id);
         int InsertaOrden(Entities.Orden orden);
         int EditarOrden(Entities.Orden orden);
-        bool CerrarOrden(int id);
+        bool CambiarEstatus(int id);
         bool AgregarProductoOrden(OrdenProducto orden);
         bool EliminarProductoOrden(OrdenProducto orden);
     }

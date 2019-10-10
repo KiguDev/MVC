@@ -68,6 +68,19 @@ namespace RestauranteMVC.API
             return Ok();
         }
 
+        [Route("[action]")]
+        [HttpPost]
+        public bool PostCambiarEstatus([FromForm] int idOrden)
+        {
+            var cambio = false;
+            cambio = _ordenService.CambiarEstatus(idOrden);
+            if (!cambio)
+            {
+                return cambio;
+            }
+            return cambio;
+        }
+
         [HttpPut("{id}")]
         public ActionResult<List<Orden>> Put(int id, Orden model)
         {
