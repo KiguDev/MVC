@@ -38,5 +38,10 @@ namespace Restaurantes.Controllers
         {
             return PartialView("_ProductoCardView");
         }
+
+        public IActionResult OrdenCard()
+        {
+            return PartialView("_OrdenCardView");
+        }
     }
 }

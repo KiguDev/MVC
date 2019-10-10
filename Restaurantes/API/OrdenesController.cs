@@ -36,6 +36,24 @@ namespace Restaurantes.API
             return model;
         }
 
+        //GET ORDEN
+        
+        [Route("GetOrden")]
+        public ActionResult<OrdenDTO> GetOrden(int id)
+        {
+            var orden = _ordenService.Obtener(id);
+            var model = new OrdenDTO();
+            _mapper.Map(orden, model);
+            return model;
+        }
+
+        [Route("CerrarOrden")]
+        public ActionResult CerrarOrden(int id)
+        {
+            _ordenService.CerrarOrden(id);
+            return Ok();
+        }
+
         //ADD
         [HttpPost]
         public ActionResult Post([FromForm]int id)
@@ -51,6 +69,19 @@ namespace Restaurantes.API
             _ordenService.Agregar(orden);
             return Ok(orden.Id);
         }
+
+
+        //GET ORDEN TIENE PRODUCTO
+       
+        [Route("GetOrdenTieneProducto")]
+        public ActionResult<List<OrdenTieneProductoDTO>> GetOrdenTieneProducto(int id)
+        {
+            var productos = _ordenTieneProductoService.ObtenerOrdenTieneProducto(id);
+            var model = new List<OrdenTieneProductoDTO>();
+            _mapper.Map(productos, model);
+            return model;
+        }
+
 
         //ADD ORDEN TIENE PRODUCTO
         [HttpPost]

@@ -4,7 +4,8 @@
 }
 
 <a class="btn btn-outline-primary" href="@Url.Action("Ordenes","Ordenes")/@Model.RestauranteId">Órdenes</a>
-<a class="btn btn-outline-primary" href="#">Nueva</a>
+<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/?id=@Model.RestauranteId&ordenId=">Nueva</a>
+<a class="btn btn-outline-danger" id="btn-cerrar">Cerrar orden</a>
 <p></p>
 
 <div class="row">
@@ -60,44 +61,45 @@
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>
     var ordenId = 0;
-    @if (Model.OrdenId > 0)
-    {
-        <text>ordenId = @Model.OrdenId</text>
+    if(@Model.OrdenId > 0){
+        ordenId = @Model.OrdenId;
     }
 
     $(document).on('click', '.prod-card', function(){
-        var id = $(this).find('.card-id').val();
+        var producto = $(this).find('.card-id').val();
         var nombre = $(this).find('.card-nombre').val();
         var precio = $(this).find('.card-precio').val();
-        $('#txt-id').val(id);
+        $('#txt-id').val(producto);
         $('#txt-nombre').val(nombre);
         $('#txt-precio').val(precio);
         $("#cantidadModal").modal("show");
     });
 
-    var tr = "<tr> <td class='td-producto'>Producto</td><td class='td-cantidad'>Cantidad</td><td class='td-precio'>Precio</td> </tr>";
+   
     $('#btn-agregar-producto').click(function () {
-        var id = $('#txt-id').val();
+        var producto = $('#txt-id').val();
         var nombre = $('#txt-nombre').val();
         var precio = $('#txt-precio').val();
         var cantidad = $('#txt-cantidad').val();
 
         if (ordenId == 0) {
             $.post('/api/ordenes/',{id: '@Model.RestauranteId'}, function(res){
-                var id = parseInt(res);
-                ordenId = id;
+                var resId = parseInt(res,10);
+                ordenId = resId;
+                postOrden(ordenId, producto, cantidad, nombre, precio);
             });
+        }else{
+            postOrden(ordenId, producto, cantidad, nombre, precio);
         }
 
-        //funciona en postman pero aqui marca error 500
-        $.post('/api/ordenes/PostOrdenTieneProducto/',{OrdenId: ordenId, ProductoId: id, Cantidad: cantidad}, function(){
-            var trNew = $(tr);
-            trNew.find('.td-producto').text(nombre);
-            trNew.find('.td-cantidad').text(cantidad);
-            trNew.find('.td-precio').text(precio);
-            $('tbody').append(trNew);
-        });
+    })
 
+    $('#btn-cerrar').click(function(){
+        if(ordenId > 0){
+            $.get('/api/ordenes/cerrarorden',{id: ordenId},function(){
+                $.get('@Url.Action("Ordenes","Ordenes")/@Model.RestauranteId');
+            })
+        }
     })
 
     $(document).ready(function () {
@@ -117,6 +119,45 @@
                 $("#Productos").append(element);
             })
         })
-
+        if(ordenId > 0){
+            getTable(ordenId); 
+        }
     })
+
+    function postOrden(ordenId, producto, cantidad){
+        $.post('/api/ordenes/PostOrdenTieneProducto/',{OrdenId: ordenId, ProductoId: producto, Cantidad: cantidad}, function(){
+            $('tbody').html('');
+            getTable(ordenId);
+            $("#cantidadModal").modal("hide");
+        });
+    }
+
+    var tr = "<tr> <td class='td-producto'>Producto</td><td class='td-cantidad'>Cantidad</td><td class='td-precio'>Precio</td> </tr>";
+    function getTable(ordenId){
+        
+
+        $.getJSON("/api/ordenes/getordentieneproducto",{id: ordenId}, function(ordprod){
+            $.map(ordprod, function (op, val){
+                var trNew = $(tr);
+                var cantidadTable = op.cantidad;
+                trNew.find('.td-cantidad').text(cantidadTable);
+                $.getJSON("/api/productos/getproducto",{id: op.productoId}, function(prod){
+                    var nombreTable = prod.nombre;
+                    var precioTable = prod.precio;
+                    trNew.find('.td-producto').text(nombreTable);
+                    trNew.find('.td-precio').text(precioTable);
+                    $('tbody').append(trNew);
+                        
+                })
+                
+
+            })})
+        $.getJSON("/api/ordenes/getorden",{id: ordenId}, function(ord){
+            var totalTable = ord.total;
+            $('#lbl-total').text(totalTable);
+        })
+        
+    }
+
+
 </script>

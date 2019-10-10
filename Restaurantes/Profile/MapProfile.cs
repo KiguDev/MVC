@@ -16,7 +16,8 @@ namespace Restaurantes.Profile
             CreateMap<Mesa, MesaDTO>();
             CreateMap<Empleado, EmpleadoDTO>();
             CreateMap<Producto, ProductoDTO>();
-            CreateMap<Orden, OrdenDTO>().ForMember(c => c.Productos, opt => opt.MapFrom(src => src.Productos.Count));
+            CreateMap<Orden, OrdenDTO>();
+            CreateMap<OrdenTieneProducto, OrdenTieneProductoDTO>();
         }
         
     }

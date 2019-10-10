@@ -37,6 +37,5 @@
   <ItemGroup>
     <Content Remove="Models\EmpleadoDTO.cshtml" />
     <Content Remove="Views\Ordenes\_NuevaOrdenResumenView.cshtml" />
-    <Content Remove="Views\Ordenes\_OrdenCardView.cshtml" />
   </ItemGroup>
 </Project>

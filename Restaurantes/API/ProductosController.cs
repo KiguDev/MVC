@@ -33,6 +33,16 @@ namespace Restaurantes.API
             return model;
         }
 
+        
+        [Route("GetProducto")]
+        public ActionResult<ProductoDTO> GetProducto(int id)
+        {
+            var producto = _productoService.Obtener(id);
+            var model = new ProductoDTO();
+            _mapper.Map(producto, model);
+            return model;
+        }
+
         //ADD
         [HttpPost]
         public ActionResult Post([FromBody] ProductoViewModel model)
