@@ -1,7 +1,11 @@
 ﻿@model int
-    <h1>
-        Ordenes de Restaurante
-    </h1>
+
+
+<h1>
+    Ordenes de Restaurante
+</h1>
+
+<a class="btn btn-primary mb-3" onclick="NuevaOrden()">Agregar Orden</a>
 
 <div class="row">
     <div class="col-sm-6">
@@ -16,33 +20,40 @@
                 </tr>
             </thead>
             <tbody id="Ordenes">
-
             </tbody>
         </table>
-
     </div>
 </div>
 
 
+
 @section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script>
     //TEXTO
     //var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
-
+    var template;
     $(document).ready(function () {
 
         ///Obtiene el template del div de Orden en TEXTO
-        var template;
+
         $.get("@Url.Action("OrdenesView","Home")", function (res) {
             template = res;
         })
 
+        Recargar();
+    })     
 
-       $.getJSON("/api/ordenes/@Model" , function (res) {
+        function Recargar() {
+             $.getJSON("/api/ordenes/@Model" , function (res) {
             $.map(res,function (r,val) {
                 var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
+
                 var date = r.fechaAlta;
-                var newdate = date.substring(0,10) + '   ' + date.substring(11,16);;
+                var newdate = date.substring(0, 10) + '   ' + date.substring(11, 16);
+
                 element.find('.orden-id').text(r.id);  //REEMPLAZA EL VALOR
                 element.find('.orden-fechaAlta').text(newdate);  //REEMPLAZA EL VALOR
                 if (r.estatus == '0') {
@@ -53,15 +64,34 @@
 
                 }
                 element.find('.orden-total').text('$' + r.total);  //REEMPLAZA EL VALOR
-                element.find('.orden-id2').prop('href', "@Url.Action("OrdenTieneProducto")/?Id=" + r.id);
+                element.find('.orden-id2').prop('href', "@Url.Action("OrdenTieneProductos")/" + r.id);
 
                 $("#Ordenes").append(element); //LO AGREGA AL DIV
             })
        })
+        }
 
+        function NuevaOrden() {
+            var RestauranteId = @ViewData["RestauranteId"];
 
+            var fd = {};
 
- })
+            fd["RestauranteId"] = RestauranteId;
+
+            fetch("/Api/ordenes/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+                if (response.ok) {
+                    $( "#Ordenes" ).empty();
+                    Recargar();
+                }
+            });
+            
+        }
 
     </script>
 }

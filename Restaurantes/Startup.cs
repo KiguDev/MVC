@@ -50,20 +50,6 @@ namespace Restaurantes
                 facebookoptions.AppSecret = "481a13a59a3e0eace7e581ddafa80fa3";
             });
 
-            //services.AddIdentity<IdentityUser, IdentityRole>(options => {
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequiredLength = 5;
-            //}).AddEntityFrameworkStores<AppIdentityContext>();
-
-            //services.ConfigureApplicationCookie(options=>
-            //{
-            //    options.LoginPath = "/cuenta/login";
-            //    options.Cookie = new CookieBuilder
-            //    {
-            //        IsEssential = true
-            //    };
-            //}
-            //);
 
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IOrdenService, OrdenService>();
@@ -71,6 +57,7 @@ namespace Restaurantes
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IProductoService, ProductoService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IOrdenTieneProductoService, OrdenTieneProductoService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

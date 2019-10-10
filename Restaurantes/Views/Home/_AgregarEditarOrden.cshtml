@@ -1,0 +1,9 @@
+﻿@model OrdenViewModel
+    <form id="FormularioProducto">
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <label asp-for="Estatus"> Nombre </label>
+            <input class="form-control" asp-for="Estatus" />
+            <span asp-validation-for="Estatus" class="text-danger"></span>
+        </div>
+    </form>

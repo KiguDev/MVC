@@ -22,20 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @*@foreach (var restaurante in Model)
-                        {
-                            <tr class="row-@restaurante.Id">
-                                <td>@restaurante.Id</td>
-                                <td>@restaurante.Nombre</td>
-                                <td>@restaurante.Domicilio</td>
-                                <td>@restaurante.Telefono</td>
-                                <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-                                <td>
-                                    <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                                    <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminacion</a>
-                                </td>
-                            </tr>
-                        }*@
+
                 </tbody>
             </table>
         </div>

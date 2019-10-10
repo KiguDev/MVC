@@ -396,7 +396,17 @@ namespace Restaurantes.Controllers
 
         }
 
+        public IActionResult OrdenTieneProductos(int id)
+        {
+            ViewData["ordenId"] = id;
+            return View("OrdenTieneProductos", id);
+        }
 
+        public IActionResult OrdenTieneProductosView(int id)
+        {
+            ViewData["ordenId"] = id;
+            return PartialView("OrdenTieneProductosView", id);
+        }
 
 
 

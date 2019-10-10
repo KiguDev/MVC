@@ -43,8 +43,7 @@ namespace Ordenes.API
             }
             var orden = new Restaurantes.Core.Entities.Orden();
             _mapper.Map(model, orden);
-            var respuesta = _ordenService.Agregar(orden);
-            return Ok();
+            return Ok(_ordenService.Agregar(orden));
         }
 
 

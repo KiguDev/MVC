@@ -22,6 +22,8 @@ namespace Restaurantes.Profile
             CreateMap<Empleado, EmpleadoDTO>();
             CreateMap<Orden, OrdenViewModel>().ReverseMap();
             CreateMap<Orden, OrdenDTO>();
+            CreateMap<OrdenTieneProducto, OrdenTieneProductoViewModel>().ReverseMap();
+            CreateMap<OrdenTieneProducto, OrdenTieneProductoDTO>();
         }
     }
 }
