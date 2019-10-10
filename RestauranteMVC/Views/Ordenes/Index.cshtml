@@ -3,16 +3,16 @@
 <!--SECCION PARA VER TODAS LAS ORDENES-->
 <div class="row ordenes">
     <div class="col-sm-12" id="ordenesTodas">
-        <a href="#" id="Ordenes">Todas las ordenes </a>
+        <a  id="Ordenes">Todas las ordenes </a>
         <button class="btn btn-primary" id="NuevaOrden" style="display: none;">Nueva orden </button>
     </div>
-    <div class="ordenes-todas" style="display: none;">
+    <div class="ordenes-todas col-sm-12" style="display: none;">
         <table class="table">
             <tr>
-                <th class="col-sm-1">OrdenId</th>
-                <th class="col-sm-4">Estatus</th>
-                <th class="col-sm-3">Total</th>
-                <th class="col-sm-3">Fecha</th>
+                <th class="col-sm-2">Orden</th>
+                <th class="col-sm-3">Estatus</th>
+                <th class="col-sm-2">Total</th>
+                <th class="col-sm-4">Fecha</th>
                 <th class="col-sm-1">Editar</th>
             </tr>
         </table>
@@ -122,24 +122,26 @@
 
         $(document).ready(function () {
 
-            //Obtiene template de la parte de productos
-            $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
-                template = res;
-            })
-            //Obtiene template de la parte del carrito
-            $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
-                templateCuenta = res;
-            })
-            //Muestra los productos existentes en el restaurante
-            $.getJSON("/api/ordenes/GetProductos/" + resId, function (res) {
-                $.map(res, function (r) {
-                    var element = $(template);
-                    element.find('.id-producto').val(r.id);
-                    element.find('.product-name').text(r.nombre);
-                    element.find('.product-precio').text(r.precio);
-                    $("#Productos").append(element);
+                //Obtiene template de la parte de productos
+                $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
+                    template = res;
+                }).done(function () {
+                    //Muestra los productos existentes en el restaurante
+                    $.getJSON("/api/ordenes/GetProductos/" + resId, function (res) {
+                        $.map(res, function (r) {
+                            var element = $(template);
+                            element.find('.id-producto').val(r.id);
+                            element.find('.product-name').text(r.nombre);
+                            element.find('.product-precio').text(r.precio);
+                            $("#Productos").append(element);
+                        })
+                    })
                 })
-            })
+                //Obtiene template de la parte del carrito
+                $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
+                    templateCuenta = res;
+                })
+            
         })
 
         //Agregar producto al carrito
@@ -249,31 +251,54 @@
             var templateOrdenes;
             $.get("@Url.Action("OrdenesView","Ordenes")", function (res) {
                 templateOrdenes = res;
-            })
-
-
-            $.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
-                $.map(res, function (r) {
-                    console.log(r);
-                    var element = $(templateOrdenes);
-                    /*element.find('.idOrden').val(r.id);
-                    element.find('.estatusOrden').text(r.estatus);
-                    element.find('.totalOrden').text(r.total);
-                    element.find('.fechaOrden').text(r.fecha);
-                    $('#ordenesTodas').append(element);*/
+            }).done(function () {
+                $.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
+                    $.map(res, function (r) {
+                        var element = $(templateOrdenes);
+                        var fecha = r.fechaDeAlta.substring(0, 10) + " " + r.fechaDeAlta.substring(12, 19);
+                        var total = "$" + r.total.toFixed(2);
+                        element.find('.idOrden').text(r.id);
+                        element.find('.estatusOrden').text((r.estatus == 0) ? "Abierta":"Cerrada");
+                        element.find('.totalOrden').text(total);
+                        element.find('.fechaOrden').text(fecha);
+                        $('.ordenes-todas').append(element);
+                    })
                 })
             })
+
+
+            /*$.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
+                $.map(res, function (r) {
+                    var element = $(templateOrdenes);
+                    var fecha = r.fechaDeAlta.substring(0, 10) + " " + r.fechaDeAlta.substring(12, 19);
+                    var total = "$" + r.total.toFixed(2);
+                    element.find('.idOrden').text(r.id);
+                    element.find('.estatusOrden').text((r.estatus == 0) ? "Abierta":"Cerrada");
+                    element.find('.totalOrden').text(total);
+                    element.find('.fechaOrden').text(fecha);
+                    $('.ordenes-todas').append(element);
+                })
+            })*/
             $('.ordenes-todas').show()
         })
 
         //Oculta la lista de ordenes y muestra la pantalla para agregar una nueva
         $('#NuevaOrden').on('click', function () {
             $(this).hide()
-            $('#Orden').show()
+            NuevaOrden();
+        })
+
+        function NuevaOrden() {
+            $('.row-orden').remove()
+            $('.row-producto').remove()
+            $('#GuardarOrden').hide();
+            $('#ConfirmarOrden').show();
+            $('#Total').text(0);
+            //$('#Orden').show()
             $('#Ordenes').show()
             $('.ordenes-todas').hide()
             $('.nueva-orden').show()
-        })
+        }
 
     </script>
 
