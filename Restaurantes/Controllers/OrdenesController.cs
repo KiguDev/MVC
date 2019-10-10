@@ -18,17 +18,38 @@ namespace Restaurantes.Controllers
             _ordenService = ordenService;
 
         }
-        public IActionResult Index(int id)
+        [Route("Ordenes")]
+        public IActionResult Ordenes(int id)
         {
             ViewData["restauranteId"] = id;
             var ordenes = _ordenService.ObtenerOrdenes(id);
             return View(ordenes);
+        }
+
+        public IActionResult ProductoView()
+        {
+            return PartialView("_ProductoView");
+        }
+        public IActionResult ProductoAddView()
+        {
+            return PartialView("_ProductoAddView");
+        }
+        [HttpGet]
+        public IActionResult Index(int id)
+        {
+            var nuevoorden = new OrdenViewModel
+            {
+                RestauranteId = id
+            };
+            return View("Index", nuevoorden);
 
         }
+        [HttpGet]
+        [Route("AgregarOrden")]
         public IActionResult AgregarOrden()
         {
             ViewData["Accion"] = "AgregarOrden";
-            return View(new OrdenViewModel());
+            return PartialView(new OrdenViewModel());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -52,6 +73,7 @@ namespace Restaurantes.Controllers
             return Ok();
         }
         [HttpGet]
+        [Route("EditarOrden")]
         public IActionResult EditarOrden(int id)
         {
             ViewData["Accion"] = "EditarOrden";
