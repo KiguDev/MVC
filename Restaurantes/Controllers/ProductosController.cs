@@ -11,6 +11,7 @@ using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class ProductosController : Controller
     {
         private IRestauranteService _restauranteService;

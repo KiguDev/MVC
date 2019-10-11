@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Models;
 
 namespace Restaurantes.Controllers
 {
+    [Authorize]
     public class OrdenesController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -42,6 +44,11 @@ namespace Restaurantes.Controllers
         public IActionResult OrdenCard()
         {
             return PartialView("_OrdenCardView");
+        }
+
+        public IActionResult OrdenCardCancel()
+        {
+            return PartialView("_OrdenCardCancelView");
         }
     }
 }

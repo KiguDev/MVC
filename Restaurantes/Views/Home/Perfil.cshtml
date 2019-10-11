@@ -1,25 +1,27 @@
 ﻿@model Restaurante
-<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/?id=@Model.Id&ordenId=">Orden</a>
-<h1>Restaurante @Model.Nombre</h1> 
-<h6>@Model.Domicilio</h6>
+<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/?id=@Model.Id&ordenId=">Nueva orden</a>
 
-<hr>
-<label>Hora de cierre: @Model.HoraDeCierre</label>
-<h6><b>CONTACTO</b></h6>
-<label>@Model.PaginaWeb</label>
-<br />
-<label>@Model.Telefono</label>
-<hr>
+<div class="jumbotron" style="background-color:#fafafa">
+  <h1 class="display-3">Restaurante @Model.Nombre</h1>
+  <p class="lead">@Model.Domicilio</p>
+  <hr class="my-4">
+  <label>Hora de cierre: @Model.HoraDeCierre</label>
+    <h6><b>CONTACTO</b></h6>
+    <label>@Model.PaginaWeb</label>
+    <br />
+    <label>@Model.Telefono</label>
+</div>
+
 
 <div class="row">
     <div class="col-sm">
-        <h5>Menú</h5>
+        <h4>Menú</h4>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>Nombre</td>
-                        <td>Descripción</td>
-                        <td>Precio</td>
+                        <td><b>Nombre</b></td>
+                        <td><b>Descripción</b></td>
+                        <td><b>Precio</b></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,12 +41,12 @@
 
 <div class="row">
     <div class="col-sm">
-        <h5>Mesas</h5>
+        <h4>Mesas</h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <td>Identificador</td>
-                    <td>Capacidad</td>
+                    <td><b>Identificador</b></td>
+                    <td><b>Capacidad</b></td>
                 </tr>
             </thead>
             <tbody>
@@ -60,12 +62,12 @@
         </table>
     </div>
     <div class="col-sm">
-        <h5>Empleados</h5>
+        <h4>Empleados</h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <td>Nombre</td>
-                    <td>Puesto</td>
+                    <td><b>Nombre</b></td>
+                    <td><b>Puesto</b></td>
                 </tr>
             </thead>
             <tbody>

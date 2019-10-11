@@ -1,31 +1,78 @@
 ﻿@model List<Orden>
+<a class="btn btn-outline-primary" href="@Url.Action("Index","Ordenes")/Index/?id=@ViewData["RestauranteId"]&ordenId=">Nueva orden</a>
 <h1>Órdenes</h1>
 
 <div class="row" id="Ordenes">
     
 </div>
 
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar orden</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalCuerpo">
+          <p>¿Quieres editar esta orden?</p>
+          <input type="hidden" id="txt-orden-id" value=""/>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btn-editar-modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>
+    $(document).on('click', '.orden-card', function(){
+        var orden = $(this).find('.card-id-val').val();
+        $('#txt-orden-id').val(orden);
+        $("#editarModal").modal("show");
+    });
+
+    $('#btn-editar-modal').click(function(){
+        var orden = $('#txt-orden-id').val();
+        window.location.href = "@Url.Action("Index","Ordenes")/Index/?id=@ViewData["RestauranteId"]&ordenId="+orden;
+    })
+
      $(document).ready(function () {
         var template;
+        var templateCancel;
+
         $.get("@Url.Action("OrdenCard","Ordenes")", function (res) {
             template = res;
         })
+
+         $.get("@Url.Action("OrdenCardCancel","Ordenes")", function (res) {
+            templateCancel = res;
+        })
          $.getJSON('/api/ordenes/@ViewData["RestauranteId"]', function(ordenes){
             $.map(ordenes, function(orden, val){
-                var element = $(template);
                 var fecha = new Date(orden.fechaAlta);
-                element.find('.card-id').text(orden.id);
-                element.find('.card-title').text(fecha);
-                element.find('.card-total').text(orden.total);
                 if(orden.estatus == 1){
+                    var element = $(template);
+                    element.find('.card-id-val').val(orden.id);
+                    element.find('.card-id').text(orden.id);
+                    element.find('.card-title').text(fecha);
+                    element.find('.card-total').text(orden.total);
                     element.find('.card-estatus').text("ABIERTA");
+                    $("#Ordenes").append(element);
                 }else{
-
-                    element.find('.card-estatus').text("CERRADA");
+                    var elementCancel = $(templateCancel);
+                    elementCancel.find('.card-id').text(orden.id);
+                    elementCancel.find('.card-title').text(fecha);
+                    elementCancel.find('.card-total').text(orden.total);
+                    elementCancel.find('.card-estatus').text("CERRADA");
+                    $("#Ordenes").append(elementCancel);
                 }
-                $("#Ordenes").append(element);
+                
             })
          })
     })

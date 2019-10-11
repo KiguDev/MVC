@@ -99,26 +99,37 @@ namespace Restaurantes.API
         }
 
         //EDIT ORDEN TIENE PRODUCTO
-        [HttpPut]
+        
         [Route("PutOrdenTieneProducto")]
-        public ActionResult PutOrdenTieneProducto(OrdenTieneProductoViewModel model)
+        public ActionResult PutOrdenTieneProducto([FromForm] OrdenTieneProductoViewModel model)
         {
             var ordenTieneProducto = _ordenTieneProductoService.Obtener(model.OrdenId, model.ProductoId);
-            ordenTieneProducto.Cantidad = model.Cantidad;
-            _ordenTieneProductoService.Editar(ordenTieneProducto);
+            if (ordenTieneProducto != null)
+            {
+                if(model.Cantidad == 0)
+                {
+                    _ordenTieneProductoService.Eliminar(ordenTieneProducto);
+                }
+                else
+                {
+                    ordenTieneProducto.Cantidad = model.Cantidad;
+                    _ordenTieneProductoService.Editar(ordenTieneProducto);
+                }
+                
+            }
+            else
+            {
+                var otp = new OrdenTieneProducto
+                {
+                    OrdenId = model.OrdenId,
+                    ProductoId = model.ProductoId,
+                    Cantidad = model.Cantidad,
+                };
+                _ordenTieneProductoService.Agregar(otp);
+            }
             return Ok();
         }
 
-        //DELETE ORDEN TIENE PRODUCTO
-        [HttpDelete]
-        public ActionResult Delete(int ordenId, int productoId)
-        {
-            var ordenTieneProducto = _ordenTieneProductoService.Obtener(ordenId, productoId);
-            _ordenTieneProductoService.Eliminar(ordenTieneProducto);
-            return Ok();
-        }
-
-
-
+        
     }
 }
