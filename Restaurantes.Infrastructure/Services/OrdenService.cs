@@ -54,6 +54,7 @@ namespace Restaurantes.Infrastructure.Services
         {
             _context.RemoveRange(_context.Ordenes.Where(c => ids.Contains(c.Id)));
             _context.SaveChanges();
-        }      
+        }
+
     }
 }

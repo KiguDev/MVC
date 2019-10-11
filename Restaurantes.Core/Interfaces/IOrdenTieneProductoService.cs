@@ -10,7 +10,11 @@ namespace Restaurantes.Core.Interfaces
         List<OrdenTieneProducto> ObtenerOrdenTieneProductos(int id);
         OrdenTieneProducto Obtener(int id);
         int Agregar(OrdenTieneProducto ordenTieneProducto);
-        void Eliminar(int id);
+        bool CompruebaOrdenProducto(int ordid, int prodid);
+        bool CompruebaOrdenProductoCantidad(int ordid, int prodid);
+        int ActualizarOrdenProd(OrdenTieneProducto ordenprod);
+        int ActualizarOrdenProdMinus(OrdenTieneProducto ordenprod);
+        void Eliminar(int ordid, int prodid);
         void Eliminar(int[] ids);
     }
 }

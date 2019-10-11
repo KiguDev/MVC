@@ -24,6 +24,7 @@ namespace Restaurantes.Models
         public List<int> Productos { get; set; }
         public List<int> Empleados { get; set; }
         public bool EsEditar { get; set; }
+        public string Logo { get; set; }
         public int Id { get; set; }
     }
 }

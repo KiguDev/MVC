@@ -15,10 +15,12 @@ namespace Ordenes.API
     public class OrdenesController : ControllerBase
     {
         private readonly IOrdenService _ordenService;
+        private readonly IOrdenTieneProductoService _ordenTieneProductoService;
         private readonly IMapper _mapper;
-        public OrdenesController(IOrdenService ordenService, IMapper mapper)
+        public OrdenesController(IOrdenService ordenService, IMapper mapper, IOrdenTieneProductoService ordenTieneProductoService)
         {
             _ordenService = ordenService;
+            _ordenTieneProductoService = ordenTieneProductoService;
             _mapper = mapper;
         }
 
@@ -87,6 +89,8 @@ namespace Ordenes.API
 
             return Ok();
         }
+        
+
 
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)

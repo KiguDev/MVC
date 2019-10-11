@@ -200,7 +200,7 @@ namespace Restaurantes.Controllers
         public IActionResult ProductosOrdenView(int id)
         {
             ViewData["restauranteId"] = id;
-            return PartialView("ProductosView", id);
+            return PartialView("ProductosOrdenView", id);
         }
 
 

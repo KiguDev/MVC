@@ -3,83 +3,153 @@
         Productos de orden
     </h1>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                    </tr>
-                </thead>
-                <tbody id="Productos">
-                </tbody>
-            </table>
 
+        <div class="row">
+            <div class="col-sm-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Productos">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="OrdenTieneProductos">
+                    </tbody>
+                </table>
+
+            </div>
         </div>
-    </div>
 
-<div class="row">
-    <div class="col-sm-6">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                </tr>
-            </thead>
-            <tbody id="OrdenTieneProductos">
 
-            </tbody>
-        </table>
-
-    </div>
-</div>
+            <div>
+                <h2>Costo Total</h2>
+                <h3 id="CostoTotal"></h3>
+            </div>
 
 
 
-@section Scripts{
-    <script>
+            @section Scripts{
+                <script>
     //TEXTO
     //var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
 
         $(document).ready(function () {
-
-            ///Obtiene el template del div de Orden en TEXTO
-            var template;
             var template2;
-            $.get("@Url.Action("OrdenTieneProductosView","Home")", function (res) {
-                template = res;
-            });
-
             $.get("@Url.Action("ProductosOrdenView","Home")", function (res2) {
-                template2 = res2;
-            });
-
-            $.getJSON("/api/ordentieneproductos/@Model.Id", function (res) {
-                $.map(res, function (r, val) {
-                    var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
-                    element.find('.ordentieneproducto-nombre').text(r.productoId);  //REEMPLAZA EL VALOR
-                    element.find('.ordentieneproducto-precio').text('$' + r.precio);  //REEMPLAZA EL VALOR
-                    $("#OrdenTieneProductos").append(element); //LO AGREGA AL DIV
+                    template2 = res2;
                 });
-            });           
+
+                ///Obtiene el template del div de Orden en TEXTO
+                 $.getJSON("/api/productos/" + @Model.RestauranteId, function (res2) {
+                    $.map(res2, function (r2, val) {
+                        var element2 = $(template2);  //Convierte el template en un elemento HTML/JQUERY
+
+                        element2.find('.producto-nombre').text(r2.nombre).data("prodid", r2.id).data("precio", r2.precio);  //REEMPLAZA EL VALOR
+                        element2.find('.producto-precio').text('$' + r2.precio);  //REEMPLAZA EL VALOR
+
+                        $("#Productos").append(element2); //LO AGREGA AL DIV
+                    });
+                 });
 
 
-            $.getJSON("/api/productos/" + @Model.RestauranteId, function (res2) {
-                $.map(res2, function (r2, val) {
-                    var element2 = $(template2);  //Convierte el template en un elemento HTML/JQUERY
-
-                    element2.find('.producto-nombre').text(r2.nombre);  //REEMPLAZA EL VALOR
-                    element2.find('.producto-precio').text(r2.precio);  //REEMPLAZA EL VALOR
-
-                    $("#Productos").append(element2); //LO AGREGA AL DIV
-                });
-            });
-
-
+            Recargar();
 
         });
 
-    </script>
-}
+        function Recargar() {
+            var template;
+
+                $.get("@Url.Action("OrdenTieneProductosView","Home")", function (res) {
+                    template = res;
+                });
+
+
+                $.getJSON("/api/ordentieneproductos/@Model.Id", function (res) {
+                    $.map(res, function (r, val) {
+                        var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
+                        element.find('.ordentieneproducto-nombre').text(r.productoId).data("prodid", r.productoId);  //REEMPLAZA EL VALOR
+                        element.find('.ordentieneproducto-precio').text('$' + r.precio);  //REEMPLAZA EL VALOR
+                        element.find('.ordentieneproducto-cantidad').text(r.cantidad);  //REEMPLAZA EL VALOR
+                        $("#OrdenTieneProductos").append(element); //LO AGREGA AL DIV
+                    });
+                });
+
+            };
+
+        @*function EliminarOrden(link) {
+            var prodid = $(link).data("prodid");
+            var precio = $(link).data("precio");
+
+            var ordenprod = {};
+            ordenprod.OrdenId = @Model.Id;
+            ordenprod.ProductoId = prodid;
+            ordenprod.Precio = precio;
+
+            var req = JSON.stringify(ordenprod);
+
+            $.post("/api/ordentieneproductos/NuevaOrdenProd", { ordprod: req }, function (res) { })
+
+            $("#OrdenTieneProductos").empty().delay(10);
+            Recargar();
+        };*@
+
+        function AgregarOrden(link) {
+            var prodid = $(link).data("prodid");
+            var precio = $(link).data("precio");
+
+            var ordenprod = {};
+            ordenprod.OrdenId = @Model.Id;
+            ordenprod.ProductoId = prodid;
+            ordenprod.Precio = precio;
+
+            var req = JSON.stringify(ordenprod);
+
+            $.post("/api/ordentieneproductos/nuevaordenprod", { ordprod: req }, function (res) { })
+
+            $("#OrdenTieneProductos").empty().delay(10);
+            Recargar();
+        };
+
+
+        function EliminarOrden(link) {
+            var prodid = $(link).data("prodid");
+
+            var ordenprod = {};
+            ordenprod.OrdenId = @Model.Id;
+            ordenprod.ProductoId = prodid;
+
+            var req = JSON.stringify(ordenprod);
+
+            $.post("/api/ordentieneproductos/EliminarOrdenProd", { ordprod: req }, function (res) { })
+
+            $("#OrdenTieneProductos").empty().delay(10);
+            Recargar();
+        };
+
+        @*function ActualizarTotal() {
+
+            var x = document.getElementById("#CostoTotal");
+
+            $.getJSON("/api/ordenes/@Model.Id", function (res) {
+                $.map(res, function (r, val) {
+                    x.innerHTML = r.total;
+                });
+            });
+        };*@
+
+                </script>
+            }

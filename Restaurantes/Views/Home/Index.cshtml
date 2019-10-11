@@ -16,7 +16,7 @@
             <table class="table table-bordered " id="tabla-restaurantes-contenido">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Logo</th>
                         <th>Nombre</th>
                         <th>Domicilio</th>
                         <th>Teléfono</th>
@@ -95,6 +95,7 @@
         var Telefono = document.getElementById("Telefono").value;
         var PaginaWeb = document.getElementById("PaginaWeb").value;
         var HoraDeCierre = document.getElementById("HoraDeCierre").value;
+        var Logo = document.getElementById("Logo").value;
 
         var fd = {};
 
@@ -103,7 +104,7 @@
         fd["Telefono"] = Telefono;
         fd["PaginaWeb"] = PaginaWeb;
         fd["HoraDeCierre"] = HoraDeCierre;
-
+        fd["Logo"] = Logo;
 
         fetch("/Api/restaurantes/", {
             method: "POST",
@@ -144,8 +145,14 @@
                 url: '/api/restaurantes',
                 dataSrc: '',
             },
-            columns: [
-                { data: 'id' },
+                columns: [
+                    {
+
+                    data: 'logo',
+                        render: function (data, type, row) {
+                            return '<img src="' + data + '" class="img-circle" height="45" width="45">'
+                        },
+                    },
                 {data: 'nombre' },
                 {data: 'domicilio' },
                 {data: 'telefono' },

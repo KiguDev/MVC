@@ -16,5 +16,6 @@ namespace Restaurantes.Models
         public int Productos { get; set; }
         public int Empleados { get; set; }
         public int Ordenes { get; set; }
+        public string Logo { get; set; }
     }
 }
