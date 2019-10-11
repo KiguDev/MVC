@@ -119,6 +119,13 @@ namespace Restaurantes.Controllers
             _ordenService.Eliminar(orden);
             return RedirectToAction("Index");
         }
+        
+
+        //[HttpPost]
+        //public IActionResult EnviarOrden(OrdenViewModel model)
+        //{
+
+        //}
 
     }
 }

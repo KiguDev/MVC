@@ -20,6 +20,9 @@ namespace Restaurante.Infrastructure.Services
         {
             var producto = _context.Productos.FirstOrDefault(c => c.Id == ordenProducto.ProductoId);
             var orden = _context.Ordenes.FirstOrDefault(c => c.Id == ordenProducto.OrdenId);
+            ordenProducto.Subtotal = producto.Precio * ordenProducto.Cantidad;
+            orden.Total += ordenProducto.Subtotal;
+
             _context.Add(ordenProducto);
             _context.SaveChanges();
 
@@ -29,6 +32,9 @@ namespace Restaurante.Infrastructure.Services
         {
             var producto = _context.Productos.FirstOrDefault(c => c.Id == ordenProducto.ProductoId);
             var orden = _context.Ordenes.FirstOrDefault(c => c.Id == ordenProducto.OrdenId);
+            orden.Total -= ordenProducto.Subtotal;
+            ordenProducto.Subtotal = producto.Precio * ordenProducto.Cantidad;
+            orden.Total += ordenProducto.Subtotal;
             _context.Update(ordenProducto);
             _context.SaveChanges();
         }
@@ -36,6 +42,7 @@ namespace Restaurante.Infrastructure.Services
         public void Eliminar(OrdenProducto ordenProducto)
         {
             var orden = _context.Ordenes.FirstOrDefault(c => c.Id == ordenProducto.OrdenId);
+            orden.Total -= ordenProducto.Subtotal;
             _context.Remove(orden);
             _context.SaveChanges();
         }

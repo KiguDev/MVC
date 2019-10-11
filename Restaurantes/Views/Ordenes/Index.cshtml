@@ -1,8 +1,22 @@
 ﻿@model OrdenViewModel
 
 <h1>Ordenes</h1>
-<a class="btn btn-outline-primary" id="GuardarOrden">Guardar</a>
+<a class="btn btn-outline-primary" id="btnEnviar">Guardar</a>
 <a class="btn btn-outline-secondary" href="@Url.Action("Ordenes", "Ordenes")/@Model.RestauranteId" id="VerOrdenes">Ver Ordenes</a>
+<style>
+    .column {
+        float: left;
+        width: 33.33%;
+        height: 20px; 
+    }
+
+    
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
 <div class="row">
     <div class="col-sm-6" id="Productos">
         <table class="table">
@@ -43,6 +57,7 @@
                     <input type="hidden" id="precio-modal" />
                     <input type="hidden" id="id-modal" />
                     <input type="hidden" id="nombre-modal" />
+                    <input type="hidden" id="total-modal"/>
                 </div>
             </div>
             <div class="modal-footer">
@@ -56,10 +71,37 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 
 <script>
-    
+
+    $("btnEnviar").click(function () {
+        var orden = {}
+        orden.id = ordenId;
+
+
+        var rows =$(".row-producto-final")
+
+        var productos = $('.producto')
+        var NewP = {}
+        productos.id = $('.id-producto')
+        productos.precio = $('.precio-product')
+        productos.nombre = $('nombre-producto')
+
+        NewP.id = productos.id
+        Newp.precio = productos.precio
+        NewP.nombre = productos.nombre
+
+        orden.productos = productos
+        $.post("/api/ordenes/EnviarOrden", { p: orden }, function (prod) {
+
+        })
+
+
+    })
+
     var total = 0;
     var template;
     var templateRowProducto;
+
+    
     $(document).ready(function () {
 
         //Obtiene el template del div de producto en TEXTO
@@ -73,10 +115,10 @@
 
         $.getJSON("/api/productos", {id:'@Model.RestauranteId'}, function (res) {
             $.map(res, function (r, val) {
-                    var element = $(template);
+                var element = $(template);
                 element.find('.product-name').text(r.nombre);
-                element.find('.id-producto').val(r.id);
-                element.find('.precio-producto').val(r.total);
+                element.find('.id-producto').text(r.id);
+                element.find('.precio-producto').text(r.precio);
                 $("#Productos").append(element);
             })
         })
@@ -85,9 +127,10 @@
 
     $(document).on('click', '.producto', function () {
 
-        var id = $(this).find('.id-producto').val();
-        var precio = $(this).find('.precio-producto').val();
+        var id = $(this).find('.id-producto').text();
+        var precio = $(this).find('.precio-producto').text();
         var nombre = $(this).find('.product-name').text();
+        
         $("#id-modal").val(id);
         $("#precio-modal").val(precio);
         $("#nombre-modal").val(nombre);
@@ -100,27 +143,39 @@
         var precio = $("#precio-modal").val();
         var cantidad = $("#cantidad-modal").val();
 
+        
         var element = $(templateRowProducto);
         element.find('.producto-label').text(nombre);
         element.find('.cantidad-input').val(cantidad);
         element.find('.precio-label').text(precio);
-        element.find('.id-producto-orden').text(id);
+        element.find('.id-producto-orden').val(id);
         $("#Totales").append(element);
+        total += precio * cantidad
+        $("#total-label").text(total);
         $("#modalCantidad").modal("hide");
 
     })
 
     $(document).on('click', '.elim', function () {
+        //$("#total-label").innerHTML = total;
 
         var element = this;
-        
-        
-        
-        
+
+        $(this.parentNode.parentNode).animate({
+            left: '250px',
+            opacity: '0.3',
+            height: '100px',
+            width: '0px',
+
+        });
+
+        setTimeout(function () {
+            element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode);
+        }, 300);
 
     })
 
-    
+
 
 </script>
 
