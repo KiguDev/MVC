@@ -55,19 +55,20 @@
         })
          $.getJSON('/api/ordenes/@ViewData["RestauranteId"]', function(ordenes){
             $.map(ordenes, function(orden, val){
-                var fecha = new Date(orden.fechaAlta);
                 if(orden.estatus == 1){
                     var element = $(template);
                     element.find('.card-id-val').val(orden.id);
                     element.find('.card-id').text(orden.id);
-                    element.find('.card-title').text(fecha);
+                    element.find('.card-title').text(orden.fecha);
+                    element.find('.card-hour').text(orden.hora);
                     element.find('.card-total').text(orden.total);
                     element.find('.card-estatus').text("ABIERTA");
                     $("#Ordenes").append(element);
                 }else{
                     var elementCancel = $(templateCancel);
                     elementCancel.find('.card-id').text(orden.id);
-                    elementCancel.find('.card-title').text(fecha);
+                    elementCancel.find('.card-title').text(orden.fecha);
+                    elementCancel.find('.card-hour').text(orden.hora);
                     elementCancel.find('.card-total').text(orden.total);
                     elementCancel.find('.card-estatus').text("CERRADA");
                     $("#Ordenes").append(elementCancel);

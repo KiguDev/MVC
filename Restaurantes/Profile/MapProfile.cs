@@ -16,7 +16,9 @@ namespace Restaurantes.Profile
             CreateMap<Mesa, MesaDTO>();
             CreateMap<Empleado, EmpleadoDTO>();
             CreateMap<Producto, ProductoDTO>();
-            CreateMap<Orden, OrdenDTO>();
+            CreateMap<Orden, OrdenDTO>()
+                .ForMember(c => c.Fecha, opt => opt.MapFrom(src => src.FechaAlta.ToShortDateString()))
+                .ForMember(c=>c.Hora, opt => opt.MapFrom(src=>src.FechaAlta.ToShortTimeString()));
             CreateMap<OrdenTieneProducto, OrdenTieneProductoDTO>();
         }
         
