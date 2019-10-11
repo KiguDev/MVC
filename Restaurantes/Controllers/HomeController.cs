@@ -9,7 +9,6 @@ using System.Diagnostics;
 //Hacer un mesas controller
 namespace Restaurantes.Controllers
 {
-    [Authorize(Roles = "Administrator")]
     public class HomeController : Controller
     {
         private IRestauranteService _restauranteService;
@@ -18,8 +17,9 @@ namespace Restaurantes.Controllers
         private IMesaService _mesaService;
         private IEmpleadoService _empleadoService;
         private IOrdenService _ordenService;
+        private IOrdenTieneProductoService _ordenTieneProductoService;
 
-        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService, IEmpleadoService empleadoService, IOrdenService ordenService)
+        public HomeController(IRestauranteService restauranteService, IAsyncRepository repository, IMesaService mesaService, IProductoService productoService, IEmpleadoService empleadoService, IOrdenService ordenService, IOrdenTieneProductoService ordenTieneProductoService)
         {
             _restauranteService = restauranteService;
             _repository = repository;
@@ -27,6 +27,7 @@ namespace Restaurantes.Controllers
             _productoService = productoService;
             _empleadoService = empleadoService;
             _ordenService = ordenService;
+            _ordenTieneProductoService = ordenTieneProductoService;
         }
 
         public IActionResult Index()
@@ -63,7 +64,7 @@ namespace Restaurantes.Controllers
                 var respuesta = _restauranteService.Agregar(restaurante);
                 return Ok();
             }
-            catch(Exception err)
+            catch(Exception)
             {
                 return BadRequest();
             }
@@ -120,6 +121,7 @@ namespace Restaurantes.Controllers
             //ViewData["Accion"] = "ProductosRes";
             return View("Empleados", id);
         }
+
 
         public IActionResult AgregarEmpleado()
         {
@@ -186,6 +188,21 @@ namespace Restaurantes.Controllers
             //ViewData["Accion"] = "ProductosRes";
             return View("ProductosRes",id);
         }
+
+        [Route("ProductosView")]
+        public IActionResult ProductosView(int id)
+        {
+            ViewData["restauranteId"] = id;
+            return View("ProductosView", id);
+        }
+
+        [Route("ProductosOrdenView")]
+        public IActionResult ProductosOrdenView(int id)
+        {
+            ViewData["restauranteId"] = id;
+            return PartialView("ProductosView", id);
+        }
+
 
 
         public IActionResult AgregarProducto()
@@ -396,10 +413,12 @@ namespace Restaurantes.Controllers
 
         }
 
-        public IActionResult OrdenTieneProductos(int id)
+        public IActionResult OrdenTieneProductos(string id, string resid)
         {
-            ViewData["ordenId"] = id;
-            return View("OrdenTieneProductos", id);
+            var orden = new Orden();
+            orden.Id = Convert.ToInt32(id);
+            orden.RestauranteId = Convert.ToInt32(resid);
+            return View("OrdenTieneProductos", orden);
         }
 
         public IActionResult OrdenTieneProductosView(int id)

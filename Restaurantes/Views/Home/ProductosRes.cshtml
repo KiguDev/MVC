@@ -18,7 +18,7 @@
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Ingredientes</th>
-                        <th>Cantidad</th>
+                        @*<th>Cantidad</th>*@
                         <th>Editar</th>
                     </tr>
                 </thead>
@@ -74,7 +74,7 @@
             var Nombre = document.getElementById("Nombre").value;
             var Precio = document.getElementById("Precio").value;
             var Ingredientes = document.getElementById("Ingredientes").value;
-            var Cantidad = document.getElementById("Cantidad").value;
+            //var Cantidad = document.getElementById("Cantidad").value;
             var RestauranteId = @ViewData["RestauranteId"];
             
 
@@ -83,7 +83,7 @@
             fd["Nombre"] = Nombre;
             fd["Precio"] = Precio;
             fd["Ingredientes"] = Ingredientes;
-            fd["Cantidad"] = Cantidad;
+            fd["Cantidad"] = 1;
             fd["RestauranteId"] = RestauranteId;
 
 
@@ -105,7 +105,7 @@
     $(document).ready( function () {
             table = $('#tabla-productos-contenido').DataTable({
             ajax: {
-                url: '/api/productos/?id=@Model',
+                url: '/api/productos/?resid=@Model',
                 dataSrc: '',
             },
             columns: [
@@ -113,7 +113,7 @@
                 { data: 'nombre' },
                 { data: 'precio' },
                 {data: 'ingredientes' },
-                {data: 'cantidad' },
+                //{data: 'cantidad' },
                 {
                     render: function (data, type, row) {
                         return '<a class="btn btn-outline-dark" href="@Url.Action("EditarProducto")/' + row.id + '">Editar</a>'

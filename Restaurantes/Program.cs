@@ -33,7 +33,7 @@ namespace Restaurantes
                 AppDbContextSeed.Seed(catalogContext);
             }
 
-           host.Run();
+         host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

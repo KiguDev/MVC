@@ -5,7 +5,7 @@
     Ordenes de Restaurante
 </h1>
 
-<a class="btn btn-primary mb-3" onclick="NuevaOrden()">Agregar Orden</a>
+<a class="btn btn-primary mb-3 btn-enviar" onclick="AgregarOrden()">Agregar Orden</a>
 
 <div class="row">
     <div class="col-sm-6">
@@ -13,10 +13,11 @@
             <thead>
                 <tr>
                     <th>Orden</th>
-                    <th>Fecha de orden</th>
+                    <th>Fecha</th>
                     <th>Estatus</th>
                     <th>Total</th>
                     <th>Cuenta</th>
+                    <th>Abrir/Cerrar</th>
                 </tr>
             </thead>
             <tbody id="Ordenes">
@@ -26,7 +27,6 @@
 </div>
 
 
-
 @section Scripts{
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -34,18 +34,43 @@
     <script>
     //TEXTO
     //var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
-    var template;
-    $(document).ready(function () {
+        var template;
 
-        ///Obtiene el template del div de Orden en TEXTO
+        function AgregarOrden() {
+            var RestauranteId = @ViewData["RestauranteId"];
 
-        $.get("@Url.Action("OrdenesView","Home")", function (res) {
-            template = res;
-        })
+            $.post("/api/ordenes/NuevaOrden", { RestauranteId: RestauranteId }, function (res) { })
+            $("#Ordenes").empty().delay(10);
+            Recargar();
 
-        Recargar();
-    })     
+        };
+               
+        function CambiarEstatus(link) {
+            var id = $(link).data("id");
+            var estatus = $(link).data("estatus");
+            var orden = {};
+            orden.Id = id;
+            orden.Estatus = estatus;
 
+            var req = JSON.stringify(orden);
+
+            $.post("/api/ordenes/CambiarEstatus", { ord: req }, function (res) { })
+            $("#Ordenes").empty().delay(10);
+            Recargar();
+        }               
+
+        $(document).ready(function () {
+
+            ///Obtiene el template del div de Orden en TEXTO
+
+            $.get("@Url.Action("OrdenesView","Home")", function (res) {
+                template = res;
+            })
+            Recargar();
+        });
+                      
+
+        var ResId = @ViewData["RestauranteId"];
         function Recargar() {
              $.getJSON("/api/ordenes/@Model" , function (res) {
             $.map(res,function (r,val) {
@@ -64,34 +89,12 @@
 
                 }
                 element.find('.orden-total').text('$' + r.total);  //REEMPLAZA EL VALOR
-                element.find('.orden-id2').prop('href', "@Url.Action("OrdenTieneProductos")/" + r.id);
-
+                element.find('.orden-id2').prop('href', "@Url.Action("OrdenTieneProductos", "Home")/?id=" + r.id + '&resid=' + ResId);
+                element.find('.orden-cambiarestatus').data("id", r.id).data("estatus", r.estatus);
                 $("#Ordenes").append(element); //LO AGREGA AL DIV
             })
        })
         }
-
-        function NuevaOrden() {
-            var RestauranteId = @ViewData["RestauranteId"];
-
-            var fd = {};
-
-            fd["RestauranteId"] = RestauranteId;
-
-            fetch("/Api/ordenes/", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(fd)
-            }).then(function (response) {
-                if (response.ok) {
-                    $( "#Ordenes" ).empty();
-                    Recargar();
-                }
-            });
-            
-        }
-
+    
     </script>
 }

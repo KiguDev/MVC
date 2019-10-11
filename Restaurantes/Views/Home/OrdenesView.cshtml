@@ -1,8 +1,9 @@
 ﻿@model int
-<tr>
-    <td class="orden-id"></td>
-    <td class="orden-fechaAlta"> </td>
-    <td class="orden-estatus"></td>
-    <td class="orden-total"></td>
-    <td><a class="orden-id2"> Ver </a></td>
-</tr>
+    <tr>
+        <td class="orden-id"></td>
+        <td class="orden-fechaAlta"> </td>
+        <td class="orden-estatus"></td>
+        <td class="orden-total"></td>
+        <td><a class="orden-id2"> Ver </a></td>
+        <td><a class="orden-cambiarestatus" data-id="1" data-estatus="0" onclick="CambiarEstatus(this)"> Cambiar Estatus </a></td>
+    </tr>

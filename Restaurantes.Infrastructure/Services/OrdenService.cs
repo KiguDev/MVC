@@ -28,9 +28,8 @@ namespace Restaurantes.Infrastructure.Services
         }
 
         public int Agregar(Orden orden)
-        {
-            orden.FechaAlta = DateTime.Now;
-            orden.Total = 0;
+        {           
+
             _context.Add(orden);
             _context.SaveChanges();
 

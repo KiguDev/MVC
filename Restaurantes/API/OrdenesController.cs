@@ -43,20 +43,46 @@ namespace Ordenes.API
             }
             var orden = new Restaurantes.Core.Entities.Orden();
             _mapper.Map(model, orden);
-            return Ok(_ordenService.Agregar(orden));
+            var resultado = _ordenService.Agregar(orden);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("NuevaOrden")]
+        public IActionResult Post([FromForm]string RestauranteId)
+        {
+            var orden = new Orden();
+
+            orden.FechaAlta = DateTime.Now;
+            orden.RestauranteId = Int32.Parse(RestauranteId); ;
+            orden.Total = 0;
+            orden.Estatus = 0;
+
+            _ordenService.Agregar(orden);
+            return Ok();
         }
 
 
-        [HttpPut("{id}")]
-        public ActionResult Put(int id, OrdenViewModel model)
+        [HttpPost]
+        [Route("CambiarEstatus")]
+        public ActionResult Put([FromForm]string ord)
         {
+            var o = (dynamic)Newtonsoft.Json.JsonConvert.DeserializeObject(ord);
+            var id = Convert.ToInt32(o.Id.Value);
+            var estatus = Convert.ToInt32(o.Estatus.Value);
+
             var orden = _ordenService.Obtener(id);
 
             if (orden == null)
                 return BadRequest();
-            orden.Estatus = model.Estatus;
-            orden.FechaAlta = model.FechaAlta;
-            orden.Total = model.Total;
+
+            if(estatus == 0)
+            { orden.Estatus = 1; }
+            else if(estatus == 1)
+            {
+                orden.Estatus = 0;
+            }            
+
             _ordenService.Editar(orden);
 
             return Ok();

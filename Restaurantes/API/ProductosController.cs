@@ -23,10 +23,10 @@ namespace Productos.API
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public ActionResult<List<ProductoDTO>> Get(int id)
+        [HttpGet("{resid}")]
+        public ActionResult<List<ProductoDTO>> Get(int resid)
         {
-            var productos = _productoService.ObtenerProductosRestaurante(id);
+            var productos = _productoService.ObtenerProductosRestaurante(resid);
             var model = new List<ProductoDTO>();
 
             _mapper.Map(productos, model);

@@ -1,7 +1,23 @@
-﻿@model int
+﻿@model Orden
     <h1>
         Productos de orden
     </h1>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody id="Productos">
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 
 <div class="row">
     <div class="col-sm-6">
@@ -21,29 +37,49 @@
 </div>
 
 
+
 @section Scripts{
     <script>
     //TEXTO
     //var tr = "<div class='row'> <div class='column'><div class='card' id='card'><h3 class='Id'>Id</h3> <p class='FechaAlta'>FechaAlta</p><p class='Estatus'>Estatus</p></div></div> </div>"
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        ///Obtiene el template del div de Orden en TEXTO
-        var template;
-        $.get("@Url.Action("OrdenTieneProductosView","Home")", function (res) {
-            template = res;
-        })
+            ///Obtiene el template del div de Orden en TEXTO
+            var template;
+            var template2;
+            $.get("@Url.Action("OrdenTieneProductosView","Home")", function (res) {
+                template = res;
+            });
+
+            $.get("@Url.Action("ProductosOrdenView","Home")", function (res2) {
+                template2 = res2;
+            });
+
+            $.getJSON("/api/ordentieneproductos/@Model.Id", function (res) {
+                $.map(res, function (r, val) {
+                    var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
+                    element.find('.ordentieneproducto-nombre').text(r.productoId);  //REEMPLAZA EL VALOR
+                    element.find('.ordentieneproducto-precio').text('$' + r.precio);  //REEMPLAZA EL VALOR
+                    $("#OrdenTieneProductos").append(element); //LO AGREGA AL DIV
+                });
+            });           
 
 
-       $.getJSON("/api/ordentieneproductos/@Model" , function (res) {
-           $.map(res, function (r, val) {
-                var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
-                element.find('.ordentieneproducto-nombre').text(r.productoId);  //REEMPLAZA EL VALOR
-                element.find('.ordentieneproducto-precio').text('$' + r.precio);  //REEMPLAZA EL VALOR
-                $("#OrdenTieneProductos").append(element); //LO AGREGA AL DIV
-            })
-       })
- })
+            $.getJSON("/api/productos/" + @Model.RestauranteId, function (res2) {
+                $.map(res2, function (r2, val) {
+                    var element2 = $(template2);  //Convierte el template en un elemento HTML/JQUERY
+
+                    element2.find('.producto-nombre').text(r2.nombre);  //REEMPLAZA EL VALOR
+                    element2.find('.producto-precio').text(r2.precio);  //REEMPLAZA EL VALOR
+
+                    $("#Productos").append(element2); //LO AGREGA AL DIV
+                });
+            });
+
+
+
+        });
 
     </script>
 }
