@@ -42,6 +42,14 @@ namespace RestauranteMVC.API
             return productos;
         }
 
+        [Route("[action]/{id}")]
+        [HttpGet]
+        public ActionResult<List<OrdenProducto>> GetOrdenProductos(int id)
+        {
+            var ordenProductos = _ordenService.ObtenerProductoOrden(id);
+            return ordenProductos;
+        }
+
         [HttpPost]
         public int Post([FromForm] OrdenViewModel model)
         {
@@ -60,6 +68,7 @@ namespace RestauranteMVC.API
         {
             var ordenProducto = new Restaurante.core.Entities.OrdenProducto();
             _mapper.Map(model, ordenProducto);
+            //var inserto = true;
             var inserto = _ordenService.AgregarProductoOrden(ordenProducto);
             if (!inserto)
             {
@@ -81,7 +90,57 @@ namespace RestauranteMVC.API
             return cambio;
         }
 
-        [HttpPut("{id}")]
+        [Route("[action]")]
+        [HttpPost]
+        public bool PostEditarOrden([FromForm] OrdenViewModel model)
+        {
+            var cambio = false;
+            var orden = new Restaurante.core.Entities.Orden();
+            _mapper.Map(model, orden);
+            cambio = _ordenService.EditarOrden(orden);
+            if (!cambio)
+            {
+                return cambio;
+            }
+            return cambio;
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public bool PostEliminarProductoOrden([FromForm] int[] ids)
+        {
+            var cambio = false;
+            //var ultimo = ids.Length - 1;
+            var idOrden = ids[ids.Length - 1];
+            int[] productos = new int[ids.Length-1];
+            for (var i = 0; i < ids.Length-1; ++i)
+            {
+                productos[i] = ids[i];
+            }
+            cambio = _ordenService.EliminarProductosOrden(productos,idOrden);
+            if (!cambio)
+            {
+                return cambio;
+            }
+            return cambio;
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public bool PostEditarProductoOrden([FromForm] OrdenProductoViewModel model)
+        {
+            var cambio = false;
+            var ordenProducto = new Restaurante.core.Entities.OrdenProducto();
+            _mapper.Map(model, ordenProducto);
+            cambio = _ordenService.EditarProductoOrden(ordenProducto);
+            if (!cambio)
+            {
+                return cambio;
+            }
+            return cambio;
+        }
+
+        /*[HttpPut("{id}")]
         public ActionResult<List<Orden>> Put(int id, Orden model)
         {
             return Ok();
@@ -91,6 +150,6 @@ namespace RestauranteMVC.API
         public ActionResult Delete(int id)
         {
             return Ok();
-        }
+        }*/
     }
 }

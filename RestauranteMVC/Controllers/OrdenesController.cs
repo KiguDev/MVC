@@ -42,5 +42,9 @@ namespace RestauranteMVC.Controllers
         {
             return PartialView("_ViewEditOrden");
         }
+        public IActionResult EditarProductoView()
+        {
+            return PartialView("_ViewEditProducto");
+        }
     }
 }

@@ -10,9 +10,11 @@ namespace Restaurante.core.Interfaces
         List<Orden> ObtenerTodas(int id);
         Entities.Orden Obtener(int id);
         int InsertaOrden(Entities.Orden orden);
-        int EditarOrden(Entities.Orden orden);
+        bool EditarOrden(Entities.Orden orden);
         bool CambiarEstatus(int id);
         bool AgregarProductoOrden(OrdenProducto orden);
-        bool EliminarProductoOrden(OrdenProducto orden);
+        bool EditarProductoOrden(OrdenProducto orden);
+        bool EliminarProductosOrden(int[] ids, int ordenId);
+        List<OrdenProducto> ObtenerProductoOrden(int ordenId);
     }
 }
