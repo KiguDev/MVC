@@ -72,36 +72,35 @@
 
 <script>
 
-    $("btnEnviar").click(function () {
+    @*$("btnEnviar").click(function () {
         var orden = {}
         orden.id = ordenId;
+        orden.RestaurantId = @Model.RestauranteId;
+        var productos = [];
+
+        var rows = $(".row-producto-final")
 
 
-        var rows =$(".row-producto-final")
-
-        var productos = $('.producto')
-        var NewP = {}
-        productos.id = $('.id-producto')
-        productos.precio = $('.precio-product')
-        productos.nombre = $('nombre-producto')
-
-        NewP.id = productos.id
-        Newp.precio = productos.precio
-        NewP.nombre = productos.nombre
-
-        orden.productos = productos
-        $.post("/api/ordenes/EnviarOrden", { p: orden }, function (prod) {
-
+        $.map(rows, function (prod) {
+            var pNuevo = {};
+            pNuevo.cantidad = $(prod).find('.cantidad-input').val()
+            pNuevo.id = $(prod).find('.id-producto').val();
+            productos.push(pNuevo);
         })
 
+    })*@
 
-    })
+        
+        
+
+
+    //})
 
     var total = 0;
     var template;
     var templateRowProducto;
-
     
+
     $(document).ready(function () {
 
         //Obtiene el template del div de producto en TEXTO
@@ -157,11 +156,22 @@
     })
 
     $(document).on('click', '.elim', function () {
-        //$("#total-label").innerHTML = total;
+        var row = this;
+        var cantidad = $("#cantidad-modal").val();  
+        eliminarproductofila(row, cantidad);
+       
+    })
 
-        var element = this;
 
-        $(this.parentNode.parentNode).animate({
+    function eliminarproductofila(row, cantidad) {
+        
+        var sub = $(row.parentNode.parentNode).find(".precio-label").text();
+
+        total -= sub * cantidad;
+        $("#total-label").text(total);
+
+
+        $(row.parentNode.parentNode).animate({
             left: '250px',
             opacity: '0.3',
             height: '100px',
@@ -170,10 +180,10 @@
         });
 
         setTimeout(function () {
-            element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode);
+            row.parentNode.parentNode.parentNode.removeChild(row.parentNode.parentNode);
         }, 300);
-
-    })
+    }
+    
 
 
 
