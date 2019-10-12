@@ -1,34 +1,12 @@
 ﻿<h1>Ordenes</h1>
 
-<!--ALERTA AL QUERER AGREGAR PRODUCTO AL CARRITO SI YA SE ENCUENTRA-->
-<div class="alert alert-danger" id="errorAgregar-alert" hidden>
+<!--ALERTAS-->
+<div class="alert alert-danger" id="errorOrden-alert" hidden>
     <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Error! </strong> El producto ya fue agregado a la cuenta.
-</div>
-<!--ALERTAS PARA EDITAR ORDENES-->
-<div class="alert alert-success" id="successEdit-alert" hidden>
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Hecho! </strong> Orden modificada con exito.
-</div>
-<div class="alert alert-danger" id="errorEditF-alert" hidden>
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Error! </strong> La orden no pudo ser modificada.
 </div>
 
-<!--ALERTA PARA ORDEN CERRADA-->
-<div class="alert alert-danger" id="errorEdit-alert" hidden>
+<div class="alert alert-success" id="successOrden-alert" hidden>
     <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Error! </strong> La orden ya esta cerrada.
-</div>
-
-<!--ALERTAS PARA NUEVAS ORDENES-->
-<div class="alert alert-success" id="success-alert" hidden>
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Hecho! </strong> Orden agregada con exito.
-</div>
-<div class="alert alert-danger" id="error-alert" hidden>
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <strong>Error! </strong> La orden no pudo ser agregada.
 </div>
 
 <!--SECCION PARA VER TODAS LAS ORDENES-->
@@ -59,6 +37,8 @@
         <table class="table">
             <thead><h3>PRODUCTOS</h3></thead>
             <tr>
+                <th class="col-sm-5">Nombre</th>
+                <th class="col-sm-7">Precio</th>
             </tr>
         </table>
     </div>
@@ -90,7 +70,7 @@
     </div>
 </div>
 
-<!--SECCION DE PRODUCTOS Y CUENTA PARA ORDEN NUEVA-->
+<!--SECCION PARA UNA ORDEN NUEVA-->
 <div class="row nueva-orden">
     <div class="col-sm-6" id="Productos">
         <table class="table">
@@ -138,6 +118,8 @@
         var templateProductosEditar;
         var templateCuentaEditar;
         var idOrden;
+        var nuevosProductosEditarOrden = [];
+        var productosEliminar = [];
 
         //Se obtiene el id del restaurante de la URL
         var actual = window.location+'';
@@ -145,44 +127,42 @@
         var resId = split[split.length - 1];
 
         $(document).ready(function () {
-
-                //Obtiene template de la parte de productos
-                $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
-                    template = res;
-                }).done(function () {
-                    //Muestra los productos existentes en el restaurante
-                    $.getJSON("/api/ordenes/GetProductos/" + resId, function (res) {
-                        $.map(res, function (r) {
-                            var element = $(template);
-                            element.find('.id-producto').val(r.id);
-                            element.find('.product-name').text(r.nombre);
-                            element.find('.product-precio').text(r.precio);
-                            $("#Productos").append(element);
-                        })
+            //Obtiene template de la parte de productos
+            $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
+                template = res;
+            }).done(function () {
+            //Muestra los productos existentes en el restaurante
+                $.getJSON("/api/ordenes/GetProductos/" + resId, function (res) {
+                    $.map(res, function (r) {
+                        var element = $(template);
+                        element.find('.id-producto').val(r.id);
+                        element.find('.product-name').text(r.nombre);
+                        element.find('.product-precio').text(r.precio);
+                        $("#Productos").append(element);
                     })
                 })
-                //Obtiene template de la parte del carrito
-                $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
-                    templateCuenta = res;
-                })
+            })
 
-                //Obtiene template de la parte del carrito
-                $.get("@Url.Action("EditarOrdenView","Ordenes")", function (res) {
-                    templateCuentaEditar = res;
-                })
+            //Obtiene template de la parte del carrito
+            $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
+                templateCuenta = res;
+            })
 
-                //Obtiene template de la parte de los productos
-                $.get("@Url.Action("EditarProductoView","Ordenes")", function (res) {
-                    templateProductosEditar = res;
-                })
+            //Obtiene template de la parte del carrito
+            $.get("@Url.Action("EditarOrdenView","Ordenes")", function (res) {
+                templateCuentaEditar = res;
+            })
 
+            //Obtiene template de la parte de los productos
+            $.get("@Url.Action("EditarProductoView","Ordenes")", function (res) {
+                templateProductosEditar = res;
+            })
         })
 
         //Agregar producto al carrito
         $(document).on('click', '.producto', function () {
             var existe = false;
             var prods = $('.row-producto');
-
             var precio = $(this).find('.product-precio').text();
             var nombre = $(this).find('.product-name').text();
             var idProd = $(this).find('.id-producto').val();
@@ -190,9 +170,7 @@
             $.map(prods, function (p) {
                 if ($(p).find('.id-producto').val() == idProd) {
                     existe = true;
-                    $("#errorAgregar-alert").fadeTo(2000, 500).slideUp(500, function() {
-                        $("#errorAgregar-alert").slideUp(500);
-                    });
+                    alertError("El producto ya ha sido agregado a la cuenta.")
                 }
             })
             if (!existe) {
@@ -220,6 +198,7 @@
             }
         })
 
+        //Cancela la orden
         $('#CancelarOrdenInstante').on('click', function () {
             $(this).hide();
             $('#GuardarOrden').hide()
@@ -243,13 +222,11 @@
                 $('#GuardarOrden').show()
                 $('#CancelarOrdenInstante').show()
                 carrito.find('.cantidadProducto').prop('disabled', true);
-                //console.log(carrito.find('.cantidadProducto'));
             }
         })
 
-        //Genera la orden
+        //Genera la orden y agrega los productos a la misma
         $('#GuardarOrden').on('click', function () {
-            /*Agregar orden y orden producto */
             var carrito = $('.row-producto');
             var ids = [];
             var subtotales = [];
@@ -257,6 +234,8 @@
             var cantidades = [];
             var ordenId = 0;
             var contadorProductos = 0;
+            var oJSON = {};
+
             $.map(carrito, function (r) {
                 elemento = $(r);
                 ids.push(elemento.find('.id-producto').val());
@@ -265,7 +244,6 @@
                 elemento.remove();
             })
 
-            var oJSON = {};
             oJSON["Total"] = total;
             oJSON["RestauranteId"] = resId;
 
@@ -289,28 +267,22 @@
                                 $('#GuardarOrden').hide();
                                 $('#CancelarOrdenInstante').hide();
                                 $('#ConfirmarOrden').show()
-                                $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
-                                    $("#success-alert").slideUp(500);
-                                });
+
+                                alertSuccess("La orden fue creada con exito.");
                             }
                         }).fail(function () {
-                            $("#error-alert").fadeTo(2000, 500).slideUp(500, function() {
-                                $("#error-alert").slideUp(500);
-                            });
+                            alertError("No se pudieron agregar productos a la orden.")
                         })
                     }
                 }
             }).fail(function () {
-                $("#error-alert").fadeTo(2000, 500).slideUp(500, function() {
-                    $("#error-alert").slideUp(500);
-                });
+                alertError("La orden no pudo ser creada.")
             })
         })
 
         //Oculta la pantalla para agregar una nueva orden y muestra la lista de ordenes
         $('#Ordenes').on('click', function () {
             $(this).hide()
-
             $('.editar-orden').hide();
             $('#totalEditarOrden').hide();
             $('#TotalEditar').text(0);
@@ -321,7 +293,6 @@
             $('.producto-edit').hide()
             $('#NuevaOrden').show();
             ObtenerOrdenes();
-
             $('.ordenes-todas').show()
             nuevosProductosEditarOrden = [];
             productosEliminar = [];
@@ -333,15 +304,14 @@
             NuevaOrden();
         })
 
+        //Muestra la vista con la lista de ordenes
         function ObtenerOrdenes() {
-            //OBTIENE EL TEMPLATE PARA LA LISTA DE ORDENES
+            //Obtiene template para las ordenes
             $.get("@Url.Action("OrdenesView","Ordenes")", function (res) {
                 templateOrdenes = res;
             }).done(function () {
-                //MUESTRA LAS ORDENES
                 $.getJSON("/api/ordenes/GetOrdenes/" + resId, function (res) {
                     $.map(res, function (r) {
-
                         var element = $(templateOrdenes);
                         var fecha = r.fechaDeAlta.substring(0, 10) + " " + r.fechaDeAlta.substring(12, 19);
                         var total = "$" + r.total.toFixed(2);
@@ -363,6 +333,7 @@
             })
         }
 
+        //Cambia el esatus de la orden
         function CambiarEstatus(ordenId) {
             var estadoEstatus = false;
             $.post("/api/ordenes/PostCambiarEstatus", { idOrden: ordenId }, function (res) {
@@ -374,14 +345,12 @@
                 }
             })
         }
-        var productosEliminar = [];
+        
+        //Abre la vista para la edicion de la orden 
         function EditarOrden(ordenId, estatus) {
-           if (estatus != 0) {
-                $("#errorEdit-alert").fadeTo(2000, 500).slideUp(500, function () {
-                    $("#errorEdit-alert").slideUp(500);
-                });
+            if (estatus != 0) {
+                alertError("La orden ya ha sido cerrada.")
            } else {
-
                $('#Ordenes').show()
                $('.ordenes-todas').hide()
                $('.row-orden').remove()
@@ -404,7 +373,6 @@
 
                     $.getJSON("/api/ordenes/GetOrdenProductos/" + ordenId, function (res) {
                         $.map(res, function (r) {
-                            //var element = $(templateCuenta);
                             var element = $(templateCuentaEditar);
                             var producto = productos[r.productoId];
                             var precio = producto.precio;
@@ -413,48 +381,41 @@
                             element.find('.nombreProducto').text(producto.nombre);
                             element.find('.subtotalProducto').text(r.subTotal);
                             element.find('.cantidadProducto').val(r.cantidad);
-                            //Modifica subtotal de acuerdo a la cantidad
+                            //Modifica subtotal de acuerdo a la cantidad (edicion)
                             element.find('.cantidadProducto').change(function () {
                                 cantidad = $(this).val();
                                 subtotal = cantidad * parseInt(precio);
                                 element.find('.subtotalProducto').text(subtotal);
                             })
-                            //Eliminar producto del carro
+                            //Eliminar producto del carro (edocion)
                             element.find('.eliminarProducto').on('click', function () {
                                 productosEliminar.push(r.productoId);
                                 element.remove();
                             })
-
                             $("#CuentaEdit").append(element);
                         })
                     })
                 })
-
                 $('.editar-orden').show();
                 $('#totalEditarOrden').show();
             }
         }
 
-        var nuevosProductosEditarOrden = [];
-        //Agregar producto al carrito
+        //Agregar producto al carrito (edicion)
         $(document).on('click', '.producto-edit', function () {
             var existe = false;
             var prods = $('.row-edit-producto');
-
             var precio = $(this).find('.product-precio').text();
             var nombre = $(this).find('.product-name').text();
             var idProd = $(this).find('.id-producto').val();
-
+            //Valida si el producto ya esta en la cuenta (edicion)
             $.map(prods, function (p) {
                 if ($(p).find('.id-producto').val() == idProd) {
                     existe = true;
-                    $("#errorAgregar-alert").fadeTo(2000, 500).slideUp(500, function() {
-                        $("#errorAgregar-alert").slideUp(500);
-                    });
+                    alertError("El producto ya ha sido agregado a la cuenta.")
                 }
             })
             if (!existe) {
-
                 var element = $(templateCuentaEditar);
                 element.find('.id-producto').val(idProd);
                 element.find('.precioProducto').text(precio);
@@ -480,15 +441,16 @@
             }
         })
 
+        //Cancela la edicion de la orden
         $('#CancelarOrdenEditarInstante').on('click', function () {
             $(this).hide();
             $('#EditarOrden').hide()
             $('#ConfirmarEditarOrden').show()
             var carritoEditar = $('.row-edit-producto');
             carritoEditar.find('.cantidadProducto').prop('disabled', false);
-
         })
 
+        //Confirma la edicion de la orden
         $('#ConfirmarEditarOrden').on('click', function () {
             var carritoEditar = $('.row-edit-producto');
             var total = 0;
@@ -496,7 +458,6 @@
                 elemento = $(r);
                 total = total + parseInt(elemento.find('.subtotalProducto').text());
             })
-
             $('#TotalEditar').text(total);
             if (total > 0) {
                 $(this).hide();
@@ -506,6 +467,7 @@
             }
         })
 
+        //Acciones para la edicion de la orden
         $('#EditarOrden').on('click', function () {
             var carrito = $('.row-edit-producto');
             var total = $('#TotalEditar').text();
@@ -579,29 +541,21 @@
                         $('#EditarOrden').hide();
                         $('#CancelarOrdenEditarInstante').hide();
                         $('#ConfirmarEditarOrden').show()
-                        $("#successEdit-alert").fadeTo(2000, 500).slideUp(500, function() {
-                            $("#successEdit-alert").slideUp(500);
-                        })
-
+                       alertSuccess("La orden ha sido editada.")
                     }).fail(function () {
-                        $("#errorEditF-alert").fadeTo(2000, 500).slideUp(500, function() {
-                            $("#errorEditF-alert").slideUp(500);
-                        });
+                        alertError("La orden no se ha podido editar.")
                    })
                 }
             }).fail(function () {
-                $("#errorEditF-alert").fadeTo(2000, 500).slideUp(500, function() {
-                    $("#errorEditF-alert").slideUp(500);
-                });
+                alertError("La orden no se ha podido editar.")
             }).always(function () {
                 $('#editar-orden').hide();
                 $('.row-orden').remove();
                 $('#Ordenes').trigger('click');
-
             })
-
         })
 
+        //Acciones necesarias para mostrar la pantalla de nueva orden
         function NuevaOrden() {
             $('.producto').show()
             $('.row-orden').remove()
@@ -609,12 +563,26 @@
             $('#GuardarOrden').hide();
             $('#ConfirmarOrden').show();
             $('#Total').text(0);
-            //$('#Orden').show()
             $('#Ordenes').show()
             $('.ordenes-todas').hide()
             $('.nueva-orden').show()
             $('.editar-orden').hide();
             $('#totalEditarOrden').hide();
+        }
+        
+        //Alerta generica para hechos
+        function alertSuccess(message) {
+            $("#successOrden-alert").html('<strong>HECHO! </strong>'+message);
+            $("#successOrden-alert").fadeTo(2000, 500).slideUp(500, function () {
+                $("#successOrden-alert").slideUp(500);
+            });
+        }
+        //Alerta generica para errores
+        function alertError(message) {
+            $("#errorOrden-alert").html('<strong>ERROR! </strong>'+message);
+            $("#errorOrden-alert").fadeTo(2000, 500).slideUp(500, function () {
+                $("#errorOrden-alert").slideUp(500);
+            });
         }
 
     </script>
@@ -622,7 +590,9 @@
 }
 
 @*
-            /*if (ordenId > 0) {
+            /*CODIGO ANTERIOR PARA LA PRIMER PANTALLA
+    
+    if (ordenId > 0) {
                 for (i = 0; i < ids.length; ++i){
                     var opJSON = {};
                     opJSON["OrdenId"] = ordenId;
