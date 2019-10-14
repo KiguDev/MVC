@@ -33,6 +33,7 @@ namespace Restaurantes.API
         [HttpGet]
         public ActionResult<List<MesaDTO>> getMesas()
         {
+
             var mesas = _mesaService.Obtener();
             var model = new List<MesaDTO>();
             _mapper.Map(mesas, model);
@@ -69,8 +70,8 @@ namespace Restaurantes.API
         }
 
 
-        [HttpPost("{id}")]
-        public ActionResult postMesa([FromBody] MesaViewModel model, int id)
+        [HttpPost]
+        public ActionResult postMesa([FromBody] MesaViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -81,10 +82,11 @@ namespace Restaurantes.API
             var mesa = new Restaurantes.Core.Entities.Mesa
             {
                 Identificador = model.Identificador,
-                Capacidad = model.Capacidad
+                Capacidad = model.Capacidad,
+                RestauranteId = model.RestauranteId
 
             };
-            mesa.RestauranteId = id;
+             
             var respuesta = _mesaService.insertar(mesa);
             return Ok();
         }

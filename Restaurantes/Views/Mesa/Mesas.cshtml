@@ -27,6 +27,7 @@
             </div>
             <div class="modal-body" id="modalcuerpo"></div>
             <div class="modal-footer">
+                <button type="submit" class="btn btn-primary " id="btnGuardarModal">Guardar</button>
 
             </div>
         </div>
@@ -107,8 +108,8 @@
         function Editar() {
             const data = {};
 
-            data["Identificador"] = document.querySelector("#Identificador").value;
-            data["Capacidad"] = document.querySelector("#Capacidad").value;
+            data["Identificador"] = $("#Identificador").value;
+            data["Capacidad"] = $("#Capacidad").value;
             data["Id"] = @ViewData["Id"];
 
             fetch("/api/mesa", {
@@ -128,12 +129,12 @@
             const data = {};
             data["Identificador"] = document.querySelector("#Identificador").value;
             data["Capacidad"] = document.querySelector("#Capacidad").value;
-            data["RestauranteId"] = @ViewData["Id"];
-
+            data["RestauranteId"] = '@ViewData["Id"]';
+            var js =JSON.stringify(data)
             fetch("/api/mesa", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data) 
+                body:  js
             }).then(function (response) {
                 if (response.ok) {
                     table.ajax.reload(Callback);

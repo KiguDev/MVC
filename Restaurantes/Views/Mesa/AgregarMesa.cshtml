@@ -8,8 +8,7 @@
         @ViewData["Accion"] Mesa
     </div>
     <div class="card-body">
-        <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
-            @Html.ValidationSummary(true)
+             @Html.ValidationSummary(true)
             <div class="form-group">
                 <label asp-for="Identificador"></label>
                 <input class="form-control" asp-for="Identificador" />
@@ -22,9 +21,7 @@
                 <span asp-validation-for="Capacidad" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-    </div>
+     </div>
 </div>
 
 @section Scripts{

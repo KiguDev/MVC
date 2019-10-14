@@ -31,22 +31,18 @@ namespace Restaurantes.Controllers
         public IActionResult AgregarMesa()
         {
             ViewData["Accion"] = "AgregarMesa";
-            return View(new MesaViewModel());
+            return PartialView("AgregarMesa",new MesaViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AgregarMesa(MesaViewModel model, int id)
+        public IActionResult AgregarMesa(MesaViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Te hacen falta campos");
                 return View(model);
-            }
-
-
-            model.RestauranteId = id;
-
+            } 
             var mesa = new Restaurantes.Core.Entities.Mesa
             {
                 Identificador = model.Identificador,

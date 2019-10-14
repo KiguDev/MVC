@@ -20,6 +20,8 @@ namespace Restaurantes.Infrastructure.Services
 
         public int insertar(Core.Entities.Mesa mesa)
         {
+
+         
             _context.Mesas.Add(mesa);
             _context.SaveChanges();
             return mesa.Id;
