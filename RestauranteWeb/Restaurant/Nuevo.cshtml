@@ -1,0 +1,74 @@
+﻿@{
+    Page.Title = "Nuevo restaurante";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var res = new RestauranteEntity.Restaurante();
+    var id = Request.QueryString["id"].AsInt();
+     Validation.RequireField("Nombre", "El nombre es requerido");
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+        var logo = Request.Form["Logo"];
+        var nombre = Request.Form["Nombre"];
+        var domicilio = Request.Form["Domicilio"];
+        var telefono = Request.Form["Telefono"];
+        var paginaweb = Request.Form["PaginaWeb"];
+
+
+        res.Logo = logo;
+        res.Nombre = nombre;
+        res.Domicilio = domicilio;
+        res.Telefono = telefono;
+        res.PaginaWeb = paginaweb;
+        res.Id = id;
+        if (id > 0)
+        {
+
+            RestauranteBLL.RestauranteBL.Edit(res);
+
+        }
+        else
+        {
+            if (RestauranteBLL.RestauranteBL.InsertarRestaurante(res) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Restaurant");
+    }
+    else
+    {
+        if (id > 0)
+        {
+            res = RestauranteBLL.RestauranteBL.ConsultarRestaurante(id);
+        }
+    }
+
+} 
+    <form method="post">
+        @Html.ValidationSummary()
+        <p>
+            <label>Logo</label>
+            <input type="text" required name="Logo" maxlength="100" alt="Hola" title="Logo del restaurant" placeholder="Favor de copiar links válidos" value="@res.Logo" />
+        </p>
+        <p>
+            <label>Nombre</label>
+            <input type="text" name="Nombre" value="@res.Nombre  " />
+            <br />
+            @Html.ValidationMessage("Nombre")
+        </p>
+        <p>
+            <label>Domicilio</label>
+            <input type="text" name="Domicilio" value="@res.Domicilio" />
+        </p>
+        <p>
+            <label>Teléfono</label>
+            <input type="text" name="Telefono" value="@res.Telefono" />
+        </p>
+        <p>
+            <label>Página Web</label>
+            <input type="text" name="PaginaWeb" value="@res.PaginaWeb" />
+        </p>
+        <button type="submit">GUARDAR</button>
+    </form>

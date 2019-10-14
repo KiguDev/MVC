@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurante.Core.Entities;
-using Restaurante.infrastructure.Services;
+using Restaurante.Core.Interfaces;
 
 namespace Restaurantes.API
 {
@@ -12,30 +13,32 @@ namespace Restaurantes.API
     [ApiController]
     public class OrdenesController : ControllerBase
     {
-        public readonly IOrdenService _ordenService;
+        private readonly IOrdenService _ordenService;
         public OrdenesController(IOrdenService ordenService)
         {
             _ordenService = ordenService;
         }
         [HttpGet]
-        public ActionResult<List<Ordenes>> Get()
+        public ActionResult<List<Orden>> getOrdenes()
         {
-            return _ordenService.ObtenerTodo();
-        }
-        [HttpPost]
-        public ActionResult Post([FromBody] Ordenes model)
-        {
-            return Ok();
+            return _ordenService.ObtenerTodas();
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, Ordenes model)
+        public ActionResult putOrden(int id, Orden model)
         {
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult deleteOrden(int id, Orden model)
+        {
+            return Ok();
+        }
+
+
+        [HttpPost("{id}")]
+        public ActionResult postOrden([FromBody] Orden model)
         {
             return Ok();
         }

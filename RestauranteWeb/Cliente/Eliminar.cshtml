@@ -1,0 +1,5 @@
+﻿@{ 
+    var id = Request.QueryString["id"].AsInt(); 
+    var res = RestauranteBLL.ClienteBL.Eliminar(id); 
+    Response.Redirect("~/Cliente");  
+}

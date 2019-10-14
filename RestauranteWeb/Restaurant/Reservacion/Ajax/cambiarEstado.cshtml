@@ -1,0 +1,15 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@{
+    try
+    {
+        var estado = (EstadoReservacion)Request.Form["Estado"].AsInt();
+        var id = Request.Form["Id"].AsInt();
+        ReservacionBL.EditarEstado(id, estado);
+        Response.Write("ok");
+    }
+    catch(Exception err){
+        Response.Write("error");
+    }
+}
+ 

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Restaurante.Core.Entities;
 namespace Restaurante.Core.Interfaces
 {
     public interface IRestauranteService
@@ -7,10 +9,12 @@ namespace Restaurante.Core.Interfaces
         List<Entities.Restaurante> ObtenerRestaurantes();
         Entities.Restaurante Obtener(int id);
 
-        int Insertar(Core.Entities.Restaurante restaurante);
-        void Editar(Core.Entities.Restaurante restaurante);
-        void Eliminar(Core.Entities.Restaurante restaurante);
-        void Eliminar(int[] ids);
-    }
+        int insertar(Restaurante.Core.Entities.Restaurante restaurante);
 
+        void Editar(Restaurante.Core.Entities.Restaurante restaurante);
+
+        void Eliminar(int id);
+
+        void EliminarVarios(int[] ids);
+    }
 }

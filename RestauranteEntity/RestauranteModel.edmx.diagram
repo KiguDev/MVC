@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="78e08af4c8b04db3a0c582a59034b9dc" Name="Diagram1">
+        <EntityTypeShape EntityType="cursoModel.Categoria" Width="1.5" PointX="3" PointY="8.25" />
+        <EntityTypeShape EntityType="cursoModel.Cliente" Width="1.5" PointX="3" PointY="11.875" />
+        <EntityTypeShape EntityType="cursoModel.Empleado" Width="1.5" PointX="3" PointY="2.25" />
+        <EntityTypeShape EntityType="cursoModel.Mesa" Width="1.5" PointX="3" PointY="5.125" />
+        <EntityTypeShape EntityType="cursoModel.Producto" Width="1.5" PointX="5.25" PointY="8" />
+        <EntityTypeShape EntityType="cursoModel.Reservacion" Width="1.5" PointX="8.25" PointY="4.875" />
+        <EntityTypeShape EntityType="cursoModel.Restaurante" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="cursoModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="8.75" />
+        <EntityTypeShape EntityType="cursoModel.UserProfile" Width="1.5" PointX="10" PointY="0.875" />
+        <EntityTypeShape EntityType="cursoModel.Venta" Width="1.5" PointX="5.25" PointY="1.625" />
+        <EntityTypeShape EntityType="cursoModel.VentaProducto" Width="1.5" PointX="10.5" PointY="4.875" />
+        <EntityTypeShape EntityType="cursoModel.webpages_Membership" Width="1.5" PointX="9.75" PointY="8.75" />
+        <EntityTypeShape EntityType="cursoModel.webpages_OAuthMembership" Width="1.5" PointX="5.75" PointY="11.75" />
+        <EntityTypeShape EntityType="cursoModel.webpages_Roles" Width="1.5" PointX="7.75" PointY="0.875" />
+        <AssociationConnector Association="cursoModel.FK_Categoria_Restaurante" />
+        <AssociationConnector Association="cursoModel.FK_Producto_Categoria" />
+        <AssociationConnector Association="cursoModel.FK_Reservacion_Cliente" />
+        <AssociationConnector Association="cursoModel.FK_Empleado_Restaurante" />
+        <AssociationConnector Association="cursoModel.FK_Venta_Empleado" />
+        <AssociationConnector Association="cursoModel.FK_Mesa_Restaurante" />
+        <AssociationConnector Association="cursoModel.FK_Reservacion_Mesa" />
+        <AssociationConnector Association="cursoModel.FK_VentaProducto_Producto" />
+        <AssociationConnector Association="cursoModel.FK_VentaProducto_Venta" />
+        <AssociationConnector Association="cursoModel.VentaCliente" />
+        <AssociationConnector Association="cursoModel.VentaReservacion" />
+        <AssociationConnector Association="cursoModel.webpages_UsersInRoles" />
+        <EntityTypeShape EntityType="cursoModel.VentaFechasFER" Width="1.5" PointX="12.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

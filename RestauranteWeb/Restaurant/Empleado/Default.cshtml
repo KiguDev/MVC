@@ -1,0 +1,66 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@using Humanizer
+@{
+    var empleados = new List<Empleado>();
+    var message = "";
+    var filtro = "";
+    var resid = Request.QueryString["resid"].AsInt();
+    try
+    {
+        Page.Title = "Listado de empleados";
+        Layout = "~/_SiteLayout.cshtml";
+        empleados = EmpleadoBL.ObtenerPorRestaurant(resid).ToList();
+        if (IsPost)
+        {
+            filtro = Request.Form["filtro"];
+            empleados = empleados.Where(c => c.Nombre.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+    }
+    catch (Exception err)
+    {
+        message = err.Message;
+    }
+} 
+<a href="~/Restaurant/empleado/Nuevo?resid=@resid">AGREGAR +</a>
+<div>
+    <form method="post">
+        <input type="text" name="filtro" value="@filtro"/>
+        <button type="submit">BUSCAR</button>
+    </form>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color:red" >@message</label>
+    }
+    else
+    {
+        <label >Mostrando @empleados.Count empleados</label>
+    <table>
+        <thead>
+            <tr>
+               
+                <td>Nombre</td>  
+                <td>Puesto</td> 
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var r in empleados)
+            {
+                var puesto = ((Puesto)r.Puesto).Humanize();
+            <tr> 
+                <td>@r.Nombre</td>
+                <td>@puesto</td> 
+                <td> 
+                    <a href="~/Restaurant/empleado/Nuevo?id=@r.Id&resid=@resid">Editar</a>
+                    <a href="~/Restaurant/empleado/eliminar?id=@r.Id&resid=@resid">Eliminar</a>
+                </td>
+
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    }
+</div>

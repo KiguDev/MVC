@@ -1,0 +1,43 @@
+﻿@using RestauranteBLL
+@using Humanizer
+@{
+    Page.Title = "Resumen de ventas";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var resId = Request.QueryString["resId"].AsInt();
+    if (resId == 0)
+    {
+        Response.Redirect("~/");
+    }
+    var ventas = VentaBL.ObtenerPorRestaurant(resId);
+}
+<p>
+    <a class="btn btn-primary text-white" href="~/Restaurant/Ventas/Nueva/?ResId=@resId">Nueva venta <i class="fa fa-plus"></i></a>   
+</p>
+
+<label>Mostrando @ventas.Count() ventas</label>
+<table>
+    <thead>
+        <tr>
+            <td>Tipo de venta</td>
+            <td>Folio</td>
+            <td>Total</td>
+            <td>Estado</td>
+            <td>Opciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in ventas)
+        {
+            var estado = ((EstadoVenta)v.EstadoVenta).Humanize();
+            var tipo = ((TipoVenta)v.TipoVenta).Humanize();
+            <tr>
+                <td>@tipo</td>
+                <td>@v.Id</td>
+                <td>@v.Total.ToString("C2")</td>
+                <td>@estado</td>
+                <td><a class="btn btn-light" href="~/Restaurant/Ventas/Nueva?ResId=@v.RestauranteId&VentaId=@v.Id"><i class="fa fa-search"></i></a></td>
+            </tr>
+        }
+    </tbody>
+</table>

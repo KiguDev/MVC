@@ -1,0 +1,87 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@{
+    var restaurantes = new List<Restaurante>();
+    var clientes = RestauranteBLL.ClienteBL.ObtenerTodos();
+    var message = "";
+    var filtro = "";
+    var id = Request.QueryString["resid"].AsInt();
+    try
+    {
+        Page.Title = "Listado de restaurantes";
+        Layout = "~/_SiteLayout.cshtml";
+        restaurantes = RestauranteBL.ObtenerTodos().ToList();
+        if (IsPost)
+        {
+            filtro = Request.Form["filtro"];
+            restaurantes = restaurantes.Where(c => c.Nombre.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+    }
+    catch (Exception err)
+    {
+        message = err.Message;
+    }
+} 
+@section Scripts{
+       
+
+}
+<a href="~/Restaurant/Nuevo/?resid=@id">AGREGAR +</a>
+<div>
+    <form method="post">
+        <input type="text" name="filtro" value="@filtro"/>
+        <button type="submit">BUSCAR</button>
+    </form>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color:red" >@message</label>
+    }
+    else
+    {
+        <label >Mostrando @restaurantes.Count restaurantes</label>
+    <table>
+        <thead>
+            <tr>
+                <td>Logo</td>
+                <td>Nombre del restaurante</td>
+                <td>Domicilio</td>
+                <td>Teléfono</td>
+                <td>Web</td>
+                <td>Reservaciones</td>
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var r in restaurantes)
+            {
+            <tr>
+                <td><img src="@r.Logo" style="max-height:50px;max-width:50px" /></td>
+                <td>@r.Nombre</td>
+                <td>@r.Domicilio</td>
+                <td>@r.Telefono</td>
+                <td>@r.PaginaWeb</td>
+                <td><a class="btn btn-light" href="~/Restaurant/Reservacion/?resid=@r.Id" ><i class="fa fa-calendar" ></i></a></td>
+                
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fa fa-arrow-right"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="~/Restaurant/Ventas/Nueva?resid=@r.Id"><i title="Categorías" class="fa fa-money"></i> Ventas</a>
+                            <a class="dropdown-item" href="~/Restaurant/Categorias/?resid=@r.Id"><i title="Categorías" class="fa fa-object-group"></i> Categorías</a>
+                            <a class="dropdown-item" href="~/Restaurant/Mesa/?resid=@r.Id"><i title="Mesas" class="fa fa-pie-chart"></i> Mesas</a>
+                            <a class="dropdown-item" href="~/Restaurant/Empleado/?resid=@r.Id"><i title="Empleados" class="fa fa-users"></i> Empleados</a>
+                            <a class="dropdown-item" href="~/Restaurant/Nuevo?id=@r.Id"><i title="Editar" class="fa fa-edit"></i> Editar</a>
+                            <a class="dropdown-item" href="~/Restaurant/eliminar?id=@r.Id"><i title="Eliminar" class="fa fa-trash"></i> Eliminar</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    }
+</div> 

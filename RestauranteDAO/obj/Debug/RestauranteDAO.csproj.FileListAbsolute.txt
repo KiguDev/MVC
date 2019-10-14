@@ -1,0 +1,11 @@
+C:\Users\Fernando\Documents\Curso\RestauranteDAO\RestauranteDAO\bin\Debug\RestauranteDAO.dll
+C:\Users\Fernando\Documents\Curso\RestauranteDAO\RestauranteDAO\bin\Debug\RestauranteDAO.pdb
+C:\Users\Fernando\Documents\Curso\RestauranteDAO\RestauranteDAO\obj\Debug\RestauranteDAO.csproj.CoreCompileInputs.cache
+C:\Users\Fernando\Documents\Curso\RestauranteDAO\RestauranteDAO\obj\Debug\RestauranteDAO.dll
+C:\Users\Fernando\Documents\Curso\RestauranteDAO\RestauranteDAO\obj\Debug\RestauranteDAO.pdb
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\bin\Debug\RestauranteDAO.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\bin\Debug\RestauranteDAO.pdb
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\obj\Debug\RestauranteDAO.csprojAssemblyReference.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\obj\Debug\RestauranteDAO.csproj.CoreCompileInputs.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\obj\Debug\RestauranteDAO.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteDAO\obj\Debug\RestauranteDAO.pdb

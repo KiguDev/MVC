@@ -1,0 +1,65 @@
+﻿@using RestauranteBLL
+@using Humanizer
+@{
+    Page.Title = "Nueva empleado";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var empleado = new RestauranteEntity.Empleado();
+    var id = Request.QueryString["id"].AsInt();
+    var resid = Request.QueryString["resid"].AsInt();
+    Validation.RequireField("Nombre", "El nombre es requerido");
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+        var puesto = Request.Form["Puesto"].AsInt();
+        var nombre = Request.Form["Nombre"];
+
+        empleado.Nombre = nombre;
+        empleado.Puesto = puesto;
+        empleado.RestauranteId = resid;
+        empleado.Id = id;
+        if (id > 0)
+        {
+            RestauranteBLL.EmpleadoBL.Editar(empleado);
+        }
+        else
+        {
+            if (RestauranteBLL.EmpleadoBL.Insertar(empleado) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Restaurant/Empleado/?resid=" + resid);
+    }
+    else
+    {
+        if (id > 0)
+        {
+            empleado = RestauranteBLL.EmpleadoBL.Obtener(id);
+        }
+    }
+
+}
+
+<form method="post">
+    @Html.ValidationSummary()
+
+    <p>
+        <label>Nombre</label>
+        <input type="text" required name="Nombre" value="@empleado.Nombre" />
+        <br />
+        @Html.ValidationMessage("Nombre")
+    </p>
+    <p>
+        <label>Puesto</label>  
+        <select name="Puesto">
+            @foreach(var en in Enum.GetValues(typeof(Puesto))){
+                var puesto = ((Puesto)en).Humanize();
+            <option @if ((int)en == empleado.Puesto) { <text> selected</text> } value="@((int)en)">@puesto</option>
+            }  
+        </select> 
+    </p>
+
+    <button type="submit">GUARDAR</button>
+</form>

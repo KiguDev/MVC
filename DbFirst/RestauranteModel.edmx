@@ -77,6 +77,13 @@
           <Property Name="Logo" Type="varchar" MaxLength="100" />
           <Property Name="PaginaWeb" Type="varchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="56" Nullable="false" />
+        </EntityType>
         <EntityType Name="Venta">
           <Key>
             <PropertyRef Name="Id" />
@@ -287,6 +294,7 @@
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reservacion" EntityType="Self.Reservacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Restaurante" EntityType="Self.Restaurante" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VentaCliente" EntityType="Self.VentaCliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VentaProducto" EntityType="Self.VentaProducto" Schema="dbo" store:Type="Tables" />
@@ -436,6 +444,13 @@
           <NavigationProperty Name="Categoria" Relationship="Self.FK_Categoria_Restaurante" FromRole="Restaurante" ToRole="Categoria" />
           <NavigationProperty Name="Empleado" Relationship="Self.FK_Empleado_Restaurante" FromRole="Restaurante" ToRole="Empleado" />
           <NavigationProperty Name="Mesa" Relationship="Self.FK_Mesa_Restaurante" FromRole="Restaurante" ToRole="Mesa" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="56" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="Venta">
           <Key>
@@ -597,6 +612,7 @@
           <EntitySet Name="Producto" EntityType="Self.Producto" />
           <EntitySet Name="Reservacion" EntityType="Self.Reservacion" />
           <EntitySet Name="Restaurante" EntityType="Self.Restaurante" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" />
           <EntitySet Name="Venta" EntityType="Self.Venta" />
           <EntitySet Name="VentaProducto" EntityType="Self.VentaProducto" />
           <AssociationSet Name="FK_Categoria_Restaurante" Association="Self.FK_Categoria_Restaurante">
@@ -729,6 +745,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserProfile">
+            <EntityTypeMapping TypeName="cursoModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Venta">
             <EntityTypeMapping TypeName="cursoModel.Venta">
               <MappingFragment StoreEntitySet="Venta">
@@ -788,7 +812,7 @@
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

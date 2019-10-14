@@ -1,0 +1,32 @@
+﻿@using Controladores.Models
+@model RestauranteViewModel 
+@{
+	ViewData["Title"] = "Index";
+
+}
+
+<h1>Restaurante !</h1>
+<h2>@Model.Nombre</h2>
+<p>Dirección: @Model.Direccion</p>
+<p>No.: @Model.NumeroExterior</p>
+<p>
+	Comida:
+	@if (Model.TipoDeComida.Equals("Japonesa"))
+	{
+		<b style="color: pink"> Japonesa</b>
+	}
+	else
+	{
+		<b style="color: red"> No Shushi :(</b>
+	}
+	
+</p>
+<p>Alta Fecha: @Model.FechaDeAlta.ToShortDateString()</p>
+<p>Alta Hora: @Model.FechaDeAlta.ToShortTimeString()</p>
+
+@foreach (var o in Model.Ordenes)
+	{
+		 <a href="/ordenes/index/@o">@o</a>
+		 <p><a asp-Controller="Ordenes" asp-Action="Index" asp-route-id="@o">Helper</a></p>
+	}
+

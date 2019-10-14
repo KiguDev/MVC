@@ -1,0 +1,9 @@
+﻿@{ 
+    var id = Request.QueryString["id"].AsInt();
+    var resid = RestauranteBLL.CategoriaBL.Consultar(id).RestauranteId;
+    var res = RestauranteBLL.CategoriaBL.Eliminar(id);
+
+    Response.Redirect("~/Restaurant/Categorias/?id="+resid);
+
+
+}

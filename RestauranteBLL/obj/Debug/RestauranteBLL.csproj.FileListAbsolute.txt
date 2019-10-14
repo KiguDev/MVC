@@ -1,0 +1,15 @@
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\obj\Debug\RestauranteBLL.csprojAssemblyReference.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\obj\Debug\RestauranteBLL.csproj.CoreCompileInputs.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteBLL.dll.config
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteBLL.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteBLL.pdb
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\EntityFramework.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteEntity.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteEntity.pdb
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\RestauranteEntity.dll.config
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\EntityFramework.xml
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\obj\Debug\RestauranteBLL.csproj.CopyComplete
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\obj\Debug\RestauranteBLL.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteBLL\obj\Debug\RestauranteBLL.pdb

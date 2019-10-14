@@ -1,0 +1,60 @@
+﻿@{
+    Page.Title = "Nueva categoría";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var cat = new RestauranteEntity.Categoria();
+    var id = Request.QueryString["id"].AsInt();
+    var resid = Request.QueryString["resid"].AsInt();
+    Validation.RequireField("Nombre", "El nombre es requerido");
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+        var descripcion = Request.Form["Descripcion"];
+        var nombre = Request.Form["Nombre"];
+   
+
+
+        cat.Descripcion = descripcion;
+        cat.Nombre = nombre;
+        cat.RestauranteId = resid;
+        cat.Id = id;
+        if (id > 0)
+        { 
+            RestauranteBLL.CategoriaBL.Edit(cat); 
+        }
+        else
+        {
+            if (RestauranteBLL.CategoriaBL.Insertar(cat) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Restaurant/Categorias/Default?resid="+resid);
+    }
+    else
+    {
+        if (id > 0)
+        {
+            cat = RestauranteBLL.CategoriaBL.Consultar(id);
+        }
+    }
+
+}
+ 
+    <form method="post">
+        @Html.ValidationSummary()
+        
+        <p>
+            <label>Nombre</label>
+            <input type="text" name="Nombre" value="@cat.Nombre" />
+            <br />
+            @Html.ValidationMessage("Nombre")
+        </p>
+        <p>
+            <label>Descripcion</label>
+            <input type="text" name="Descripcion" value="@cat.Descripcion" />
+        </p>
+       
+        <button type="submit">GUARDAR</button>
+    </form>

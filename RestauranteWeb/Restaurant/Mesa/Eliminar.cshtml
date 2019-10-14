@@ -1,0 +1,6 @@
+﻿@{ 
+    var id = Request.QueryString["id"].AsInt();
+    var resid = RestauranteBLL.MesaBL.Obtener(id).RestauranteId;
+    var res = RestauranteBLL.MesaBL.Eliminar(id); 
+    Response.Redirect("~/Restaurant/Mesa/?resid="+resid);  
+}

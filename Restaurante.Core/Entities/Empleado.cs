@@ -8,8 +8,8 @@ namespace Restaurante.Core.Entities
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
+        public string Foto { get; set; }
         public int RestauranteId { get; set; }
-        public int Puesto { get; set; }
-        public Restaurante Restaurante { get; set; }
+        public string Puesto { get; set; }
     }
 }

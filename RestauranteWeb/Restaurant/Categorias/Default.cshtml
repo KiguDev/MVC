@@ -1,0 +1,68 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@{
+    var categorias = new List<Categoria>();
+    var message = "";
+    var filtro = "";
+    var resid = Request.QueryString["resid"].AsInt();
+    try
+    {
+        Page.Title = "Listado de categorías";
+        Layout = "~/_SiteLayout.cshtml";
+        categorias = CategoriaBL.ObtenerTodos().Where(c=>c.RestauranteId == resid).ToList();
+        if (IsPost)
+        {
+            filtro = Request.Form["filtro"];
+            categorias = categorias.Where(c => c.Nombre.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+    }
+    catch (Exception err)
+    {
+        message = err.Message;
+    }
+} 
+<a href="~/Restaurant/Categorias/Nuevo?resid=@resid">AGREGAR +</a>
+<div>
+    <form method="post">
+        <input type="text" name="filtro" value="@filtro"/>
+        <button type="submit">BUSCAR</button>
+    </form>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color:red" >@message</label>
+    }
+    else
+    {
+        <label >Mostrando @categorias.Count categorías</label>
+    <table>
+        <thead>
+            <tr>
+               
+                <td>Nombre</td>
+                <td>Descripción</td> 
+                <td>Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var r in categorias)
+            {
+            <tr>
+             
+                <td>@r.Nombre</td>
+                <td>@r.Descripcion</td>
+              
+
+                <td> 
+                    <a href="~/Restaurant/Productos/Default?catid=@r.Id">Productos</a>
+                    <a href="~/Restaurant/Categorias/Nuevo?id=@r.Id&catid=@resid">Editar</a>
+                    <a href="~/Restaurant/Categorias/eliminar?id=@r.Id&catid=@resid">Eliminar</a>
+                </td>
+                
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    }
+</div>

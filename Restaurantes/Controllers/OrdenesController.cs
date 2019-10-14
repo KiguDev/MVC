@@ -3,14 +3,122 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Restaurante.Core.Interfaces;
+using Restaurantes.Models;
 
-namespace Restaurantes.Controllers
+namespace Controladores.Controllers
 {
     public class OrdenesController : Controller
     {
-        public IActionResult Index()
+        private IOrdenService _ordenService;
+
+        public OrdenesController(IOrdenService ordenService)
         {
-            return View();
+
+            _ordenService = ordenService;
+
         }
+        [Route("Index")]
+        public IActionResult Ordenes(int id)
+        {
+            ViewData["restauranteId"] = id;
+            var ordenes = _ordenService.ObtenerOrdenes(id);
+            return View(ordenes);
+        }
+
+        public IActionResult ProductoView()
+        {
+            return PartialView("_ProductoView");
+        }
+        public IActionResult ProductoAddView()
+        {
+            return PartialView("_ProductoAddView");
+        }
+        [HttpGet]
+        public IActionResult Index(int id)
+        {
+            var orden = new OrdenesViewModel
+            {
+                RestauranteId = id
+            };
+            return View("Index", orden);
+
+        }
+        [HttpGet]
+        [Route("AgregarOrden")]
+        public IActionResult AgregarOrden()
+        {
+            ViewData["Accion"] = "AgregarOrden";
+            return PartialView(new OrdenesViewModel());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarOrden(OrdenesViewModel model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            var ordenes = new Restaurante.Core.Entities.Orden()
+            {
+                Estatus = model.Estatus,
+                FechaAlta = model.FechaAlta,
+                Total = model.Total,
+                RestauranteId = id,
+
+
+            };
+            var Id = _ordenService.insertar(ordenes);
+            return Ok();
+        }
+        [HttpGet]
+        [Route("EditarOrden")]
+        public IActionResult EditarOrden(int id)
+        {
+            ViewData["Accion"] = "EditarOrden";
+            var ordenes = _ordenService.Obtener(id);
+            var viewModel = new OrdenesViewModel
+            {
+                Estatus = ordenes.Estatus,
+                FechaAlta = ordenes.FechaAlta,
+                Total = ordenes.Total,
+                RestauranteId = id,
+
+
+
+            };
+            return View("AgregarOrden", viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditarOrden(OrdenesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Te hacen falta campos");
+                return View(model);
+            }
+            var orden = _ordenService.Obtener(model.Id);
+            _ordenService.Editar(orden);
+
+
+            orden.Estatus = model.Estatus;
+            orden.FechaAlta = model.FechaAlta;
+            orden.Total = model.Total;
+
+            _ordenService.Editar(orden);
+
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult EliminarOrden(int id)
+        {
+
+            var orden = _ordenService.Obtener(id);
+            _ordenService.Eliminar(id);
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -1,0 +1,16 @@
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.deps.json
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.dll
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.pdb
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.csproj.CoreCompileInputs.cache
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.AssemblyInfoInputs.cache
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.AssemblyInfo.cs
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.dll
+C:\Users\Fernando\source\repos\CURSO\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.pdb
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.deps.json
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.dll
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\bin\Debug\netstandard2.0\Restaurante.Core.pdb
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.csprojAssemblyReference.cache
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.AssemblyInfoInputs.cache
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.AssemblyInfo.cs
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.dll
+C:\Users\Alex\source\repos\MVC\Restaurante.Core\obj\Debug\netstandard2.0\Restaurante.Core.pdb

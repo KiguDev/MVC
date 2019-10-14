@@ -1,0 +1,89 @@
+﻿@using RestauranteBLL
+@using RestauranteEntity
+@{
+    Page.Title = "Agregar producto";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var categoriaId = Request.QueryString["CategoriaId"].AsInt();
+    var categorias = CategoriaBL.Consultar(categoriaId);
+    var ventaId = Request.QueryString["VentaId"].AsInt();
+    var venta = VentaBL.Obtener(ventaId);
+    if (ventaId == 0 || categoriaId == 0)
+    {
+        Response.Redirect("~/");
+    }
+
+    if (IsPost)
+    {
+        foreach(var cnt in categorias.Producto)
+        {
+            var cantidad = Request.Form[cnt.Id.ToString()+"-cantidad"].AsInt();
+            if(cantidad > 0)
+            {
+                var ventaProducto = new VentaProducto();
+                if(venta.VentaProducto.Where(c=>c.ProductoId == cnt.Id).Any())
+                {
+                    ventaProducto = venta.VentaProducto.Where(c => c.ProductoId == cnt.Id).FirstOrDefault();
+
+                    ventaProducto.Cantidad = cantidad;
+                    ventaProducto.Subtotal = cantidad * cnt.Precio;
+                    VentaBL.EditarProductoVenta(ventaProducto);
+                    //Actualizar venta producto
+                }
+                else
+                {
+                    //Llenar info
+                    ventaProducto.ProductoId = cnt.Id;
+                    ventaProducto.VentaId = ventaId;
+                    ventaProducto.Cantidad = cantidad;
+                    ventaProducto.Precio = cnt.Precio;
+                    ventaProducto.Subtotal = cantidad * cnt.Precio;
+
+                    VentaBL.InsertarProductoVenta(ventaProducto);
+                }
+            }else
+            {
+                var ventaProducto = venta.VentaProducto.Where(c => c.ProductoId == cnt.Id).FirstOrDefault();
+                if(ventaProducto != null)
+                {
+                    ventaProducto.Cantidad = 0;
+                    VentaBL.EditarProductoVenta(ventaProducto);
+
+                }
+
+            }
+        }
+        Response.Redirect($"~/Restaurant/Ventas/Nueva/?ResId={venta.RestauranteId}&VentaId={venta.Id}");
+    }
+}
+ 
+    <a class="btn btn-primary text-white" href="~/Restaurant/Ventas/Nueva/?ResId=@venta.RestauranteId&VentaId=@venta.Id">Regresar <i class="fa fa-arrow-circle-left"  ></i></a>
+
+<form method="post">
+    <table>
+        <thead>
+            <tr>
+                <td>Nombre</td>
+                <td>Cantidad</td>
+                <td>Precio</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prod in categorias.Producto)
+            {
+                var ventaProd = venta.VentaProducto.Where(c => c.ProductoId == prod.Id).FirstOrDefault();
+                var cantidad = 0;
+                if (ventaProd != null)
+                {
+                    cantidad = ventaProd.Cantidad;
+                }
+                <tr>
+                    <td>@prod.Nombre</td>
+                    <td><input type="number" name="@prod.Id-cantidad" value="@cantidad" /></td> 
+                    <td>@prod.Precio.ToString("C2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit">Agregar</button>
+</form>

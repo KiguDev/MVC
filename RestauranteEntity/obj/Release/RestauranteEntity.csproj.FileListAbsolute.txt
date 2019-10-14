@@ -1,0 +1,12 @@
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\RestauranteEntity.dll.config
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\RestauranteEntity.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\RestauranteEntity.pdb
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\EntityFramework.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\EntityFramework.xml
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\obj\Release\RestauranteEntity.csprojAssemblyReference.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\obj\Release\RestauranteEntity.csproj.CoreCompileInputs.cache
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\obj\Release\RestauranteEntity.csproj.CopyComplete
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\obj\Release\RestauranteEntity.dll
+C:\Users\Fernando\source\repos\CURSO\RestauranteEntity\obj\Release\RestauranteEntity.pdb

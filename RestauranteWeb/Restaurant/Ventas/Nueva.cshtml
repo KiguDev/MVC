@@ -1,0 +1,165 @@
+﻿@using RestauranteBLL
+@using Humanizer
+@using RestauranteEntity
+@{
+
+
+    Page.Title = "Nueva venta";
+    Layout = "~/_SiteLayout.cshtml";
+    var resId = Request.QueryString["resId"].AsInt();
+    if (resId == 0)
+    {
+        Response.Redirect("~/");
+    }
+    var ventaId = Request.QueryString["ventaId"].AsInt();
+    var venta = new Venta();
+    var clientes = RestauranteBLL.ClienteBL.ObtenerTodos();
+    var restaurante = RestauranteBLL.RestauranteBL.ConsultarRestaurante(resId);
+    var empleados = restaurante.Empleado;
+    var categorias = restaurante.Categoria;
+    var mesas = restaurante.Mesa;
+    if (IsPost)
+    {
+        var tipoVenta = Request.Form["TipoVenta"].AsInt();
+        var empleadoId = Request.Form["EmpleadoId"].AsInt();
+        var clienteId = Request.Form["ClienteId"].AsInt();
+        var mesaId = Request.Form["MesaId"].AsInt();
+        var categoriaId = Request.Form["CategoriaId"].AsInt();
+        venta.TipoVenta = tipoVenta;
+        venta.EmpleadoId = empleadoId;
+        venta.MesaId = mesaId;
+        venta.Id = ventaId;
+        venta.RestauranteId = resId;
+        if (ventaId == 0)
+        {
+            venta.Fecha = DateTime.Now;
+            ventaId = VentaBL.InsertarVenta(venta);
+            if (clienteId > 0)
+            {
+                VentaBL.InsertarCliente(clienteId, ventaId);
+            }
+            Response.Redirect("~/Restaurant/Ventas/AgregarProducto?VentaId=" + ventaId + "&CategoriaId=" + categoriaId);
+        }
+        else
+        {
+
+            VentaBL.EditarVenta(venta);
+        }
+    }
+
+    if (ventaId > 0)
+    {
+        venta = VentaBL.Obtener(ventaId);
+    }
+}
+<p>
+    <a class="btn btn-light" href="~/Restaurant/Ventas/Historial?ResId=@resId">LISTADO DE VENTAS</a>
+    @if (ventaId > 0)
+    { 
+        <a class="btn btn-primary text-white" href="~/Restaurant/Ventas/Nueva/?ResId=@resId">Nueva venta <i class="fa fa-plus"></i></a>
+    }
+</p>
+<div class="row">
+    <div class="col-sm-9">
+        <form method="post">
+            <p>
+                <label>Tipo de venta</label>
+                <select name="TipoVenta" class="form-control">
+                    @foreach (var tv in Enum.GetValues(typeof(TipoVenta)))
+                    {
+                        var tipo = ((TipoVenta)tv).Humanize();
+                        <option @if (venta.TipoVenta == (int)tv) { <text> selected</text> } value="@((int)tv)">@tipo</option>
+                    } 
+                </select>
+            </p>
+            <p>
+                <label>Empleado</label>
+                <select name="EmpleadoId" class="form-control">
+                    @foreach (var emp in empleados)
+                    {
+                        <option @if (venta.EmpleadoId == emp.Id) { <text> selected</text> } value="@emp.Id">@emp.Nombre</option>
+                    }
+                </select>
+            </p>
+            <p>
+                <label>Cliente</label>
+                <select name="ClienteId" class="form-control">
+                    <option value="0">Ninguno</option>
+                    @foreach (var cte in clientes)
+                    {
+                        <option @if (venta.Cliente.Any() && venta.Cliente.FirstOrDefault().Id == cte.Id) { <text> selected</text> } value="@cte.Id">@cte.Nombre</option>
+                    }
+                </select>
+            </p>
+            <p>
+                <label>Mesa</label>
+                <select name="MesaId" class="form-control">
+                    <option value="0">Ninguna</option>
+                    @foreach (var mesa in mesas)
+                    {
+                        <option @if (venta.MesaId != null && venta.MesaId == mesa.Id) { <text> selected</text> } value="@mesa.Id">@mesa.Identificador</option>
+                    }
+                </select>
+            </p>
+
+            <div class="row">
+                @foreach (var cat in categorias)
+                {
+                    <div class="col-3">
+
+                        @if (ventaId == 0)
+                        {
+                            <button class="btn btn-lg btn-light form-control" name="CategoriaId" value="@cat.Id" type="submit"> @cat.Nombre</button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-lg btn-light form-control" href="~/Restaurant/Ventas/AgregarProducto?VentaId=@ventaId&CategoriaId=@cat.Id"> @cat.Nombre</a>
+                        }
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-3">
+
+        <h3>Resumen</h3>
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        Producto
+                    </td>
+                    <td>
+                        Cantidad
+                    </td>
+                    <td>
+                        Precio
+                    </td>
+                    <td>
+                        Subtotal
+                    </td>
+                </tr>
+            </thead>
+            @foreach (var ven in venta.VentaProducto)
+            {
+                <tr>
+                    <td>
+                        @ven.Producto.Nombre
+                    </td>
+                    <td>
+                        @ven.Cantidad
+                    </td>
+                    <td>
+                        @ven.Precio.ToString("C2")
+                    </td>
+                    <td>
+                        @ven.Subtotal.ToString("C2")
+                    </td>
+                </tr>
+            }
+        </table>
+        <br />
+        <h3 class="pull-right">Total <b>@venta.Total.ToString("C2")</b></h3>
+
+    </div>
+</div>

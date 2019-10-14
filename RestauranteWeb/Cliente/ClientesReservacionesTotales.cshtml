@@ -1,0 +1,60 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@using Humanizer
+@{
+    var Clientes = new List<CLIENTESRESERVACIONESVENTASTOTALES>();
+    var message = "";
+    var filtro = ""; 
+    try
+    {
+        Page.Title = "Listado de Clientes";
+        Layout = "~/_SiteLayout.cshtml";
+        Clientes = ViewBLL.ObtenerTodos().ToList();
+        if (IsPost)
+        {
+            filtro = Request.Form["filtro"];
+            Clientes = Clientes.Where(c => c.Nombre.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+    }
+    catch (Exception err)
+    {
+        message = err.Message;
+    }
+} 
+<a href="~/Cliente/Nuevo">AGREGAR +</a>
+<div>
+    <form method="post">
+        <input type="text" name="filtro" value="@filtro"/>
+        <button type="submit">BUSCAR</button>
+    </form>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color:red" >@message</label>
+    }
+    else
+    {
+        <label >Mostrando @Clientes.Count Clientes</label>
+    <table>
+        <thead>
+            <tr>
+                <td>Nombre</td>
+                <td>Total</td>
+                <td>Número de reservaciones</td>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var r in Clientes)
+            { 
+            <tr>
+                <td>@r.Nombre</td>
+                <td>@r.Total.ToString("C2")</td>
+                <td>@r.NumeroReservaciones</td> 
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    }
+</div>

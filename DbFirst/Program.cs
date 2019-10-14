@@ -10,7 +10,6 @@ namespace DbFirst
     {
         static void Main(string[] args)
         {
-            
         }
     }
 }

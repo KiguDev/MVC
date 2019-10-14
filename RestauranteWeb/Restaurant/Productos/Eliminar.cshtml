@@ -1,0 +1,9 @@
+﻿@{ 
+    var id = Request.QueryString["id"].AsInt();
+    var catid = RestauranteBLL.ProductoBL.Consultar(id).Id;
+    var res = RestauranteBLL.ProductoBL.Eliminar(id);
+
+    Response.Redirect("~/Restaurant/Productos/?id="+catid);
+
+
+}

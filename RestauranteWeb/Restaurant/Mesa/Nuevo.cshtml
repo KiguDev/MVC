@@ -1,0 +1,61 @@
+﻿@using RestauranteBLL
+@using Humanizer
+@{
+    Page.Title = "Nueva Mesa";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var Mesa = new RestauranteEntity.Mesa();
+    var id = Request.QueryString["id"].AsInt();
+    var resid = Request.QueryString["resid"].AsInt(); 
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+        var identificador = Request.Form["Identificador"];
+        var capacidad = Request.Form["Capacidad"].AsInt();
+
+        Mesa.Identificador = identificador;
+        Mesa.Capacidad = capacidad;
+        Mesa.RestauranteId = resid;
+        Mesa.Id = id;
+        if (id > 0)
+        {
+            RestauranteBLL.MesaBL.Editar(Mesa);
+        }
+        else
+        {
+            if (RestauranteBLL.MesaBL.Insertar(Mesa) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Restaurant/Mesa/?resid=" + resid);
+    }
+    else
+    {
+        if (id > 0)
+        {
+            Mesa = RestauranteBLL.MesaBL.Obtener(id);
+        }
+    }
+
+}
+
+<form method="post">
+    @Html.ValidationSummary()
+
+    <p>
+        <label>Nombre</label>
+        <input type="text" name="Identificador" value="@Mesa.Identificador" />
+        <br />
+        @Html.ValidationMessage("Nombre")
+    </p>
+    <p>
+        <label>Capacidad</label>
+        <input type="text" name="Capacidad" value="@Mesa.Capacidad" />
+        <br />
+        @Html.ValidationMessage("Capacidad")
+    </p>
+
+    <button type="submit">GUARDAR</button>
+</form>

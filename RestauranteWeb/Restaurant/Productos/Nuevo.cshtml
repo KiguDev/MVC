@@ -1,0 +1,76 @@
+﻿@{
+    Page.Title = "Nueva categoría";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var prod = new RestauranteEntity.Producto();
+    var id = Request.QueryString["id"].AsInt();
+    var catid = Request.QueryString["catid"].AsInt();
+    Validation.RequireField("Nombre", "El nombre es requerido");
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+        var descripcion = Request.Form["Descripcion"];
+        var nombre = Request.Form["Nombre"];
+        var precio = Convert.ToDouble(Request.Form["Precio"]);
+        var categoriaid = Request.Form["CategoriaId"];
+        var imagen = Request.Form["Imagen"];
+   
+   
+   
+
+
+        prod.Descripcion = descripcion;
+        prod.Nombre = nombre;
+        prod.CategoriaId = catid;
+        prod.Id = id;
+        prod.Precio = precio;
+        prod.Imagen = imagen;
+        if (id > 0)
+        { 
+            RestauranteBLL.ProductoBL.Edit(prod); 
+        }
+        else
+        {
+            if (RestauranteBLL.ProductoBL.Insertar(prod) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Restaurant/Productos/Default?catid="+catid);
+    }
+    else
+    {
+        if (id > 0)
+        {
+            prod = RestauranteBLL.ProductoBL.Consultar(id);
+        }
+    }
+
+}
+ 
+    <form method="post">
+        @Html.ValidationSummary()
+        <p>
+            <label>Imagen</label>
+            <input type="text" name="Imagen" value="@prod.Imagen" />
+            <br />
+          
+        </p>
+        <p>
+            <label>Nombre</label>
+            <input type="text" name="Nombre" value="@prod.Nombre" />
+            <br />
+            @Html.ValidationMessage("Nombre")
+        </p>
+        <p>
+            <label>Descripcion</label>
+            <input type="text" name="Descripcion" value="@prod.Descripcion" />
+        </p>
+        <p>
+            <label>Precio</label>
+            <input type="number"  placeholder="1.00" step="0.01" min="0" name="Precio" value="@prod.Precio" />
+        </p>
+
+        <button type="submit">GUARDAR</button>
+    </form>

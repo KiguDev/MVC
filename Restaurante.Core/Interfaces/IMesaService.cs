@@ -6,13 +6,14 @@ namespace Restaurante.Core.Interfaces
 {
     public interface IMesaService
     {
-        List<Entities.Mesa> ObtenerMesas();
+        List<Entities.Mesa> ObtenerMesas(int id);
         Entities.Mesa Obtener(int id);
 
-        int Insertar(Core.Entities.Mesa mesa);
-        void Editar(Core.Entities.Mesa mesa);
-        void Eliminar(Core.Entities.Mesa Mesa);
-        void Eliminar(int[] ids);
+        int insertar(Restaurante.Core.Entities.Mesa mesa);
 
+        void Editar(Restaurante.Core.Entities.Mesa mesa);
+
+        void Eliminar(int id);
+        void EliminarVarios(int[] ids);
     }
 }

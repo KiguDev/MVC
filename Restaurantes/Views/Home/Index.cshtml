@@ -1,89 +1,209 @@
-﻿@model List<Restaurante>
-@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<Restaurante>;
 
-<h1>Restaurante</h1>
-<a class="btn btn-primary btn-block" asp-action="Agregar">Agregar restaurante</a>
-<br />
-<table class="table table-bordered" id="tabla-restaurantes-contenido">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>Teléfono</th>
-            <th>No. de mesas</th>
-            <th>Editar</th>
-            <th>Empleados</th>
-        </tr>
-    </thead>
-    <tbody id="tabla-restaurantes"></tbody>
-</table>
 
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            var table = $('#tabla-restaurantes-contenido').DataTable({
-                ajax:
-                {
-                    url: '/api/restaurantes',
-                    dataSrc: '',
-                },
-                columns: [
-                    { data: 'id' },
-                    { data: 'NombreRestaurante' },
-                    { data: 'domicilio' },
-                    { data: 'telefono' },
-                    {
-                        data: 'mesas',
-                        render: function (data, type, row) {
-                            return '<a href="@Url.Action("Mesas")/' + row.id + '">'+data+'</a>'
-                        }
-                    },
-                    {
-                        data: '',
-                        render: function (data, type, row) {
-                            return '<a class="btn btn-outline-dark" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
-                        }
-                    },
-                    {
-                        data: '',
-                        render: function (data, type, row) {
-                            return '<a class="btn btn-outline-dark" href="@Url.Action("~/Empleado/AgregarEmpleado")/' + row.id + '">Empleado</a>'
-                        }
-                    }
-                ],
-                select: true,
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'excel', 'pdf',
-                    {
-                        text: 'Eliminar',
-                        action: function ()
+<head>
+    <title>Hello, world!</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!-- Material Kit CSS -->
+    <link href="assets/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <!-- Modal agregar-->
+    <div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalCuerpo">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardarRestaurante()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal editar-->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalEditarCuerpo">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardarRestaurante()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper ">
+        <div class="sidebar" data-color="azure" data-background-color="white">
+            <!--
+                Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+                Tip 2: you can also add an image using data-image tag
+            -->
+            <div class="logo">
+
+                <a href="~/" class="simple-text logo-normal">
+                    Catálogo de restaurantes
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li class="nav-item active  ">
+                        <a class="nav-link" href="~/">
+                            <i class="material-icons">restaurant</i>
+                            <p>Restaurantes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Identity/Account/Manage">
+                            <i class="material-icons">account_box</i>
+                            <p>Cuenta</p>
+                        </a>
+                    </li>
+                    <!-- your sidebar here -->
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <div class="content">
+                <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal" onclick="MostrarAgregar()">Agregar restaurante</button>
+
+                <div id="catRestaurantes" class="container-fluid">
+                    <div class="card-columns">
+                        @foreach (var item in Model)
                         {
-                            var rows = table.rows({ selected: true }).data();
-                            var ids = [];
-                            for (var x = 0; x < rows.length; x++)
-                            {
-                                ids.push(rows[x].id);
-                            }
-
-                            $.ajax(
-                                {
-                                    url: '/api/restaurantes/',
-                                    data: '[' + ids.toString() + ']',
-                                    contentType: 'application/json',
-                                    type: 'DELETE',
-                                    success: function () {
-                                        table.ajax.reload();
-                                    }
-                                });
-                            console.log(ids);
+                            <div class="card">
+                                <div class="card-header">
+                                    @item.Nombre
+                                    <a href="#" onclick="EliminarRestaurante(@item.Id)" class="card-link float-right">&times;</a>
+                                    @*<button class="btn btn-outline-danger btn-sm float-right">&times;</button>*@
+                                </div>
+                                <img class="card-img-top" src="@item.Logo" alt="Logo">
+                                <div class="card-body">
+                                    <h4 class="card-title">Información</h4>
+                                    <p class="card-text label label-primary"> Hora de cierre: @item.HoraDeCierre</p>
+                                    <p class="label label-danger"> Teléfono: @item.Telefono</p>
+                                    <p class="label label-warning">Domicilio: @item.Domicilio</p>
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Detalles
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="@Url.Action("Mesas")/@item.Id"> Mesas: @item.Mesas.Count</a>
+                                            <a class="dropdown-item" href="@Url.Action("Index","Productos")?id=@item.Id"> Productos</a>
+                                            <a class="dropdown-item" href="@Url.Action("Index","Ordenes")?id=@item.Id"> Órdenes</a>
+                                            <a class="dropdown-item" href="@Url.Action("Index","Empleados")?id=@item.Id"> Empleados</a>
+                                        </div>
+                                    </div>
+                                    <button data-target="#editarRestaurante" data-toggle="modal" class="btn btn-success btn-block" type="button" onclick="EditarRestaurante(@item.Id)">Editar</button>
+                                </div>
+                            </div>
                         }
-                    }
-                ]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    function MostrarAgregar() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "@Url.Action("Agregar","Home")");
+        req.send();
+
+        req.onreadystatechange = function () {
+            if (req.status == 200) {
+                document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                $("#agregarModal").modal("show");//JQUERY
+            }
+        }
+    }
+
+        function GuardarRestaurante() {
+
+            var Nombre = document.getElementById("Nombre").value;
+            var Domicilio = document.getElementById("Domicilio").value;
+            var Telefono = document.getElementById("Telefono").value;
+            var Logo = document.getElementById("Logo").value;
+            var PaginaWeb = document.getElementById("PaginaWeb").value;
+            var HoraDeCierre = document.getElementById("HoraDeCierre").value;
+
+            var fd = {};
+
+            fd["Nombre"] = Nombre;
+            fd["Domicilio"] = Domicilio;
+            fd["Telefono"] = Telefono;
+            fd["Logo"] = Logo;
+            fd["PaginaWeb"] = PaginaWeb;
+            fd["HoraDeCierre"] = HoraDeCierre;
+
+
+            fetch("/Api/Restaurante/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(fd)
+            }).then(function (response) {
+                if (response.ok) {
+                    $("#agregarModal").modal("hide");//JQUERY
+                    $("#catRestaurantes").load(" #catRestaurantes > *");
+                }
             });
+
+        }
+
+    function EliminarRestaurante(restaurante) {
+
+        $.ajax({
+            contentType: 'application/json',
+            url: '/api/restaurante/',
+
+            data: '[' + restaurante.toString() + ']',
+            type: 'DELETE',
+            success:() => {
+                $("#catRestaurantes").load(" #catRestaurantes > *");
+
+            }
         });
-    </script>
-}
+
+    }
+
+    function EditarRestaurante(restaurante) {
+        fetch(`@Url.Action("Editar","Home")/${restaurante}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    document.getElementById("editarModal").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+                })
+            }
+         });
+    }
+</script>

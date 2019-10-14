@@ -1,0 +1,157 @@
+﻿@model List<Empleado>
+<h1>Empleados</h1>
+
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" onclick="MostrarAgregar()">Agregar empleado</button>
+
+<!-- Modal agregar-->
+<div class="modal fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal editar-->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalEditarCuerpo">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarEmpleado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row content">
+    
+    <!--Despliegue de restaurantes-->
+    <div id="catEmpleados" class="col-sm-9">
+        <br>
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-4">
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                @item.Nombre
+                                <button type="button" id="btnDelete" onclick="EliminarEmpleado(@item.Id)" class="btn btn-outline-danger glyphicon glyphicon-remove-circle" style="float:right; text-align:center"></button>
+                            </div>
+                            <div class="panel-body"><img src="@item.Foto" class="img-responsive" style="width:100%" alt="Image"></div>
+                            <div class="panel-footer">
+                                <h5><span class="label label-primary"> Puesto: @item.Puesto</span></h5>
+                                <button data-target="#editarEmpleados" data-toggle="modal" class="btn btn-success btn-block" type="button" onclick="EditarEmpleado(@item.Id)">Editar</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!--Fin despliegue de restaurante-->
+        <br>
+        <!--Alerta de success-->
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+
+    function MostrarAgregar() {
+        var req = new XMLHttpRequest();
+        req.open("GET", "@Url.Action("AgregarEmpleado","Empleados")/@ViewData["RestauranteId"]", true);
+        req.send();
+
+        req.onreadystatechange = function () {
+            if (req.status == 200) {
+                document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                $("#agregarModal").modal("show");//JQUERY
+                console.log(@ViewData["RestauranteId"]);
+            }
+        }
+    }
+
+    function GuardarEmpleado() {
+
+        var RestauranteId = document.getElementById("RestauranteId").value;
+        var Nombre = document.getElementById("Nombre").value;
+        var Puesto = document.getElementById("Puesto").value;
+        var Foto = document.getElementById("Foto").value;
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Puesto"] = Puesto;
+        fd["RestauranteId"] = RestauranteId;
+        fd["Foto"] = Foto;
+
+        fetch("/Api/Empleado/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#agregarModal").modal("hide");//JQUERY
+                $("#catEmpleados").load(" #catEmpleados > *");
+            }
+        });
+
+    }
+
+        function EliminarEmpleado(empleado) {
+               
+        $.ajax({
+            contentType: 'application/json',
+            url: '/api/empleado/',
+
+            data: '[' + empleado.toString() + ']',
+            type: 'DELETE',
+            success:() => {
+                $("#catEmpleados").load(" #catEmpleados > *");
+                
+            }
+        });
+
+        }
+
+        function EditarEmpleado(empleado) {
+        fetch(`@Url.Action("EditarEmpleado","Empleados")/${empleado}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    document.getElementById("editarModal").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+                })
+            }
+         });
+    }
+    </script>
+    
+
+}

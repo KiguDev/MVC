@@ -1,0 +1,152 @@
+﻿@using RestauranteEntity
+@using RestauranteBLL
+@using Humanizer
+@{
+    var reservaciones = new List<Reservacion>();
+    var message = "";
+    var filtro = "";
+    var resid = Request.QueryString["resid"].AsInt();
+    var estado = Request.Form["Estado"].AsInt(-1);
+    if (resid == 0)
+    {
+        Response.Redirect("~/");
+    }
+    try
+    {
+        Page.Title = "Listado de reservaciones";
+        Layout = "~/_SiteLayout.cshtml";
+        reservaciones = ReservacionBL.ObtenerPorRestaurant(resid).ToList();
+        if (IsPost)
+        {
+            filtro = Request.Form["filtro"];
+
+            if(estado >= 0)
+            {
+                reservaciones = reservaciones.Where(c => c.Estado == estado).ToList();
+            }
+            reservaciones = reservaciones.Where(c => c.Cliente.Nombre.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+    }
+    catch (Exception err)
+    {
+        message = err.Message;
+    }
+}
+@section Scripts{
+<script>
+    function clickModal(Id) {
+        $("#ReservacionId").val(Id);
+        $("#cambiarEstadoModal").modal('show');
+    } 
+    function GuardarNuevoEstado() {
+        var id = $("#ReservacionId").val();
+        var estado = $("#EstadoReservacionEdicion").val();
+
+        $.post("Ajax/cambiarEstado", { Id: id, Estado: estado }, function (res) {
+
+            if ($.trim(res) == "ok") {
+               // window.location.href = window.location.href;
+                $("#cambiarEstadoModal").modal('hide');
+            }
+            else {
+                $("#textError").text("Ocurrió un error");
+            }
+        })
+    } 
+</script>
+}
+<a class="btn btn-primary text-white"  href="~/Restaurant/Reservacion/Nuevo?resid=@resid">AGREGAR +</a>
+<div>
+    <br />
+    <form method="post" >
+       
+            <div class="row">
+                <div class="col-7">
+                
+                    <input type="text" name="filtro" placeholder="Filtrar por cliente" value="@filtro" class="form-control" />
+                </div>
+                <div class="col-5 form-inline">
+                    <label>Estado</label> 
+                    <select name="Estado" class="form-control">
+                        <option value="-1">Todos</option>
+                        @foreach (var er in Enum.GetValues(typeof(EstadoReservacion)))
+                        {
+                            var state = ((EstadoReservacion)er).Humanize();
+                            <option @if ((EstadoReservacion)er == (EstadoReservacion)estado){<text>selected</text> }  value="@((int)er)">@state</option>
+                        }
+                    </select>
+                    <button class="btn btn-light" type="submit">BUSCAR</button>
+                </div>
+              
+            </div>
+        
+    </form>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <label style="color:red">@message</label>
+    }
+    else
+    {
+        <label>Mostrando @reservaciones.Count reservaciones</label>
+        <table>
+            <thead>
+                <tr>
+
+                    <td>Nombre</td>
+                    <td>Mesa</td>
+                    <td>Desde</td>
+                    <td>Hasta</td>
+                    <td>Estado</td>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var r in reservaciones.OrderBy(c=>c.FechaInicio))
+                {
+                <tr> 
+                    <td>@r.Cliente.Nombre</td>
+                    <td>@r.Mesa.Identificador</td>
+                    <td>@r.FechaInicio</td>
+                    <td>@r.FechaFin</td> 
+                    <td><a onclick="clickModal('@r.Id')" @r.Estado data-id="@r.Id">@r.Estado</a></td>
+                    <td> 
+                        <a href="~/Restaurant/Reservacion/Nuevo?id=@r.Id&resid=@resid"><i class="fa fa-edit"></i></a> 
+                    </td> 
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+</div>
+    
+<div class="modal fade" id="cambiarEstadoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar estado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <label>Puesto</label>
+                    <select name="EstadoReservacion" id="EstadoReservacionEdicion" class="form-control">
+                        @foreach (var er in Enum.GetValues(typeof(EstadoReservacion)))
+                        {
+                            var estadoR = ((EstadoReservacion)er).Humanize();
+                            <option  value="@((int)er)">@estadoR</option>
+                        } 
+                    </select>
+                    <input type="hidden" id="ReservacionId" />
+                    <label class="text-danger" id="textError"></label>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarNuevoEstado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

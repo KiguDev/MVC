@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurante.Core.Interfaces;
-using Restaurante.infrastructure.Data;
-using Restaurante.infrastructure.Services;
+using Restaurante.Infrastructure.Data;
+using Restaurante.Infrastructure.Identity;
+using Restaurante.Infrastructure.Services;
 
 namespace Restaurantes
 {
@@ -36,13 +38,37 @@ namespace Restaurantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppDbContext>(c=> c.UseSqlServer (Configuration.GetConnectionString ("CatalogConnection")));
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
             services.AddScoped<IOrdenService, OrdenService>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<IProductoService, ProductoService>();
+
+            services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")) );
+            services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")) );
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "1556258431177720";
+                facebookOptions.AppSecret = "92339a76c56c1999d8d6ae2ad321b3f4";
+
+            });
+            //services.AddIdentity<IdentityUser, IdentityRole>(options => {
+
+                //}).AddEntityFrameworkStores<AppIdentityContext>();
+
+                //services.ConfigureApplicationCookie(options =>
+                //{
+                //    options.LoginPath = "/Cuenta/Login";
+                //    options.Cookie = new CookieBuilder
+                //    {
+                //        IsEssential = true
+                //    };
+                //});
+
+                services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,13 +81,14 @@ namespace Restaurantes
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

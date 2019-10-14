@@ -1,0 +1,100 @@
+﻿@using RestauranteBLL
+@using Humanizer
+@{
+    Page.Title = "Nueva Cliente";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var cliente = new RestauranteEntity.Cliente();
+    var id = Request.QueryString["id"].AsInt();
+
+    Validation.RequireField("Nombre", "El nombre es requerido");
+
+    if (IsPost && Validation.IsValid())
+    {
+        //Solo entra cuando es post
+
+
+        <td>Email</td>
+        <td>Dirección fiscal</td>
+        <td>Razón social</td>
+        <td>RFC</td>
+        <td>Teléfono</td>
+
+        var nombre = Request.Form["Nombre"];
+        var email = Request.Form["Email"];
+        var direccionFiscal = Request.Form["DireccionFiscal"];
+        var razonSocial = Request.Form["razonSocial"];
+        var rfc = Request.Form["RFC"];
+        var telefono = Request.Form["Telefono"];
+
+        cliente.Nombre = nombre;
+        cliente.DireccionFiscal = direccionFiscal;
+        cliente.RazonSocial = razonSocial;
+        cliente.Rfc = rfc;
+        cliente.Telefono = telefono;
+        cliente.Email = email;
+        cliente.Id = id;
+        if (id > 0)
+        {
+            RestauranteBLL.ClienteBL.Editar(cliente);
+        }
+        else
+        {
+            if (RestauranteBLL.ClienteBL.Insertar(cliente) < 0)
+            {
+                //Manejo de excepciones
+            }
+        }
+        Response.Redirect("~/Cliente/");
+    }
+    else
+    {
+        if (id > 0)
+        {
+            cliente = RestauranteBLL.ClienteBL.Obtener(id);
+        }
+    }
+
+}
+
+        <form method="post">
+            @Html.ValidationSummary()
+
+            <p>
+                <label>Nombre</label>
+                <input type="text" name="Nombre" value="@cliente.Nombre" />
+                <br />
+                @Html.ValidationMessage("Nombre")
+            </p>
+            <p>
+                <label>Email</label>
+                <input type="text" name="Email" value="@cliente.Email" />
+                <br />
+
+            </p>
+            <p>
+                <label>Dirección fiscal</label>
+                <input type="text" name="DireccionFiscal" value="@cliente.DireccionFiscal" />
+                <br />
+
+            </p>
+            <p>
+                <label>Razón social</label>
+                <input type="text" name="RazonSocial" value="@cliente.RazonSocial" />
+                <br />
+
+            </p>
+            <p>
+                <label>RFC</label>
+                <input type="text" name="RFC" value="@cliente.Rfc" />
+                <br />
+
+            </p>
+            <p>
+                <label>Teléfono</label>
+                <input type="text" name="Telefono" value="@cliente.Telefono" />
+                <br />
+
+            </p>
+            <button type="submit">GUARDAR</button>
+        </form>
