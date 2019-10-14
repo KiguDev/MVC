@@ -1,66 +1,60 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Restaurante.Core.Entities;
-using Restaurante.Core.Interfaces;
-using Restaurante.infrastructure.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Restaurante.Core.Entities;
+using Restaurante.Core.Interfaces;
+using Restaurante.Infrastructure.Data;
 
-namespace Restaurante.infrastructure.Services
+namespace Restaurante.Infrastructure.Services
 {
     public class RestauranteService : IRestauranteService
     {
         public AppDbContext _context;
-
         public RestauranteService(AppDbContext context)
         {
             _context = context;
         }
         public Core.Entities.Restaurante Obtener(int id)
         {
-            return _context.Restaurantes.FirstOrDefault(c => c.Id == id);
-
+            return _context.Restaurantes.Include(r => r.Mesas).FirstOrDefault(r => r.Id == id);
         }
 
         public List<Core.Entities.Restaurante> ObtenerRestaurantes()
         {
-            return _context.Restaurantes.Include(c => c.Mesas).ToList();
+            return _context.Restaurantes.Include(r => r.Mesas).ToList();
         }
 
-        public int Insertar(Core.Entities.Restaurante restaurante)
+        public int insertar (Core.Entities.Restaurante restaurante)
         {
             _context.Restaurantes.Add(restaurante);
             _context.SaveChanges();
             return restaurante.Id;
         }
 
-        public int Editar(Core.Entities.Restaurante restaurante)
+        public void Editar(Core.Entities.Restaurante restaurante)
         {
-            _context.Restaurantes.Add(restaurante);
-            _context.SaveChanges();
-            return restaurante.Id;
-        }
-
-     
-
-        void IRestauranteService.Editar(Core.Entities.Restaurante restaurante)
-        {
-            _context.Update(restaurante);
+            _context.Restaurantes.Update(restaurante);
             _context.SaveChanges();
         }
 
-        public void Eliminar(Core.Entities.Restaurante restaurante)
+        public void Eliminar(int id)
         {
-            _context.Restaurantes.Remove(restaurante);
+            var restaurante = _context.Restaurantes.FirstOrDefault(r => r.Id == id);
+            _context.Remove(restaurante);
             _context.SaveChanges();
-            
         }
 
-        public void Eliminar(int[] ids)
+        public void EliminarVarios(int[] ids)
         {
-            _context.RemoveRange(_context.Restaurantes.Where(c => ids.Contains(c.Id)));
+            var restaurantes = _context.Restaurantes;
+
+            //var restaurantesEliminar = restaurantes.Where(r => r.Id == ids.Where(id => id == r.Id).FirstOrDefault());
+            var restaurantesEliminar = restaurantes.Where(r => ids.Contains(r.Id));
+            _context.RemoveRange(restaurantesEliminar);
             _context.SaveChanges();
+           
         }
     }
 }

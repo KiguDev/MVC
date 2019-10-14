@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using Restaurante.Core.Entities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using Restaurante.Core.Entities;
 
-namespace Restaurante.infrastructure.Data
+namespace Restaurante.Infrastructure.Data
 {
     public class AppDbContextSeed
     {
@@ -14,13 +14,13 @@ namespace Restaurante.infrastructure.Data
             {
                 catalogContext.Add(new Restaurante.Core.Entities.Restaurante
                 {
-                    Nombre = "Restaurante Maestro",
-                    Domicilio = "Ave. Prueba 123",
-                    Telefono = 4424392,
-                    PaginaWeb = "https://www.haosua.com",
-                    Logo = "Logo.jpg",
-                    FechaDeAlta = DateTime.Now,
-                    HoraDeCierre = 10
+                    Nombre="Restaurante Maestro",
+                    Domicilio="Ave. Prueba 123",
+                    Telefono = 664,
+                    Logo = "https://i.imgur.com/0AviX1l.png",
+                    PaginaWeb = "https://www.restaurantemaster.com",
+                    HoraDeCierre = 22
+
 
                 });
 
@@ -29,17 +29,13 @@ namespace Restaurante.infrastructure.Data
 
             if (!catalogContext.Ordenes.Any())
             {
-                catalogContext.Add(new Restaurante.Core.Entities.Ordenes
+                catalogContext.Add(new Restaurante.Core.Entities.Orden
                 {
                     Estatus = (int)OrdenEstatus.Pendiente,
                     RestauranteId = 1,
-                    FechaAlta = DateTime.Now,
-                    Total = 0
+                    FechaAlta = DateTime.Now
                 });
-
-                catalogContext.SaveChanges();
             }
-
         }
     }
 }
