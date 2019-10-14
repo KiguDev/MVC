@@ -18,5 +18,6 @@ namespace Restaurante.Infrastructure.Services
         public void Update(Empleado empleado) => DbContext.Update(empleado); 
         public void Delete(Empleado empleado) => DbContext.Remove(empleado);
         public void SaveChanges() => DbContext.SaveChanges();
+        public void DeleteRange(int[] id) => DbContext.Empleados.RemoveRange(DbContext.Empleados.Where(e => id.Contains(e.Id)));
     }
 }

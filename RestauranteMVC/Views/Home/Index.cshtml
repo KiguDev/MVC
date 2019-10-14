@@ -1,31 +1,110 @@
 ﻿@model List<Restaurante>
 
-<h1>Restaurante</h1>
-
-<div align="right">
-    <a class="btn btn-primary" asp-action="Agregar">Agregar</a>
+<div class="card" style="margin-top:40px">
+    <div class="card-content">
+        <span class="card-title center flow-text" style="margin-bottom:10px">Restaurante</span>
+        <table id="tabla-completa" class="responsive-table  striped tabla-completa-restaurantes">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Nombre</td>
+                    <td>Domicilio</td>
+                    <td>Telefono</td>
+                    <td>Mesa</td>
+                    <td>Ordenes</td>
+                    <td>Empleados</td>
+                    <td>Options</td>
+                </tr>
+            </thead>
+            <tbody id="tabla-restaurantes">
+            </tbody>
+        </table>
+    </div>
 </div>
-<table id="tabla-completa" class="table table-bordered tabla-completa-restaurantes">
-    <thead>
-        <tr>
-            <td>Id</td>
-            <td>Nombre</td>
-            <td>Domicilio</td>
-            <td>Telefono</td>
-            <td>Mesa</td>
-            <td>Options</td>
-        </tr>
-    </thead>
-    <tbody id="tabla-restaurantes">
-    </tbody>
-</table>
+<div id="modal1" class="modal">
+    <div class="modal-footer">
+        <h2 class="center">Restaurante</h2>
+        <div class="modal-body" id="modalCuerpo">
+            
+        </div>
+        <button class="btn red accent-3 center" onclick="GuardarRestaurante()">Submit</button>
+    </div>
+</div>
 
 @section Scripts
 {
     <script>
-        $(document).ready( function () {
+        function Mostrar(id) {
+            var req = new XMLHttpRequest();
+            req.open("GET", `/Home/Agregar?id=${id}`, true);
+            req.send();
+            req.onreadystatechange = function () {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+                    $("#modal1").modal("open");
+                }
+                else {
+                    console.log("failed");
+                }
+            };
+        }
+        function GuardarRestaurante() {
+
+            var Nombre = document.getElementById("Nombre").value;
+            var Domicilio = document.getElementById("Direccion").value;
+            var Telefono = document.getElementById("Telefono").value;
+            var Logo = document.getElementById("Logo").value;
+            var PaginaWeb = document.getElementById("PaginaWeb").value
+            var RestauranteId = $('#identificador').val();
+
+            var data = {
+                Nombre: Nombre,
+                Domicilio: Domicilio,
+                Telefono, Telefono,
+                Logo: Logo,
+                PaginaWeb: PaginaWeb,
+                Id: RestauranteId
+            }
+
+            var idRestaurante = $('#identificador').val();
+            var method = idRestaurante > 0 ? 'PUT':'POST';
+
+            fetch('https://localhost:44389/api/restaurantes', {
+                method: method,
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => response.text()).then(function () {
+                $("#modal1").modal("close");
+                 $('#tabla-completa').DataTable().ajax.reload();
+
+            });
+        }
+    </script>
+
+    <script>
+
+
+    function AddListener() {
+        var button = document.getElementsByClassName("btn-edit");
+        for (i = 0; i < button.length; i++) {
+            button[i].addEventListener("click", function () {
+                MostrarEditar(this.dataset.id)
+                console.log(this.dataset.id)
+            })
+        }
+    }
+
+    function MostrarEditar(id) {
+        Mostrar(id);
+    }
+
+        $(document).ready(function () {
+            $('#modal1').modal();
             var table = $('#tabla-completa').DataTable(
                 {
+                    "initComplete": function () {
+                        AddListener();
+                    },
                     ajax: {
                         url: '/api/restaurantes',
                         dataSrc: '',
@@ -39,24 +118,38 @@
                         {
                             data: 'mesas',
                             render: function (data, type, row) {
-                                return '<a href="@Url.Action("Mesas")?id=' + row.id + '">' + data + '</a>'
+                                return `<a class="btn-edit" href=@Url.Action("Mesas")?id=${row.id}>${data}</a>`
+
+                            }
+                        },
+                                                {
+                            data: 'ordenes',
+                            render: function (data, type, row) {
+                                return `<a class="btn-edit" href=/ordenes?id=${row.id}><i class="material-icons">shopping_cart</i></a>`
+
+                            }
+                        },
+                                                                        {
+                            data: 'empleado',
+                            render: function (data, type, row) {
+                                return `<a class="btn-edit" href=/Empleado?id=${row.id}><i class="material-icons">person</i></a>`
+
                             }
                         },
                         {
-                            render: function (data,type,row) {
-                                return '<a href="Home/Update?id=' + row.id + '">Editar</a>'
+                            render: function (data, type, row) {
+                                return `<button class = "btn btn-primary btn-edit red accent-3" data-id="${row.id}">Editar</button>`
                             }
                         }
                     ],
                     select: true,
                     dom: 'Bfrtip',
                     buttons:[
-                        'copy', 'excel', 'pdf',
+                        'excel', 'pdf',
                         {
                         text: 'Eliminar',
                             action: function () {
-                                bootbox.confirm("Seguro que quieres borrar", function () {
-                                    if (IsConfirmed) {
+
                                  var rows = table.rows({ selected: true }).data();
                                  ids = [];
                                 for (var x = 0; x < rows.length; x++) {
@@ -72,14 +165,12 @@
                                         $('#tabla-completa').DataTable().ajax.reload();
                                     }
                                     });
-                                    }
-                                });
                             }
                         },
                         {
                             text: 'Agregar',
                             action: function () {
-                                
+                                Mostrar(0)
                             }
                         }
                     ],

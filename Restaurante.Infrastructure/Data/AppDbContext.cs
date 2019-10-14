@@ -19,7 +19,7 @@ namespace Restaurante.Infrastructure.Data
         {
             builder.HasKey(c => new
             {
-                c.OrdenId,
+      
                 c.ProductoId
             });
             builder.HasOne(c => c.Producto)
@@ -36,8 +36,8 @@ namespace Restaurante.Infrastructure.Data
         }
 
         public DbSet<Core.Entities.Restaurante> Restaurantes { get; set; }
-        public DbSet<Core.Entities.Empleado> Empleados { get; set; }
-        public DbSet<Core.Entities.Mesa> Mesa { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
+        public DbSet<Mesa> Mesa { get; set; }
         public DbSet<Orden> Ordenes{ get; set; }
         public DbSet<Producto> Productos { get; set; }
     }

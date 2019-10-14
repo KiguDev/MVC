@@ -1,65 +1,92 @@
-﻿<h1>Mesas</h1>
-@*<div align="right" style="padding:10px">
-    <a asp-action="GuardarMesa" asp-route-id="@Model.First().RestauranteId" class="btn btn-primary">Agregar +</a>
-</div>*@
-<table id="tabla" class=" table table-bordered">
-    <thead>
-        <tr>
-            <td>Id</td>
-            <td>Identificador</td>
-            <td>Capacidad</td>
-            <td>Acciones</td>
+﻿
+<div class="card" style="margin-top:40px">
+    <div class="card-content">
+        <span class="card-title center flow-text">Mesas</span>
+        <table id="tabla" class="responsive-table  striped tabla-completa-restaurantes">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Identificador</td>
+                    <td>Capacidad</td>
+                    <td>Acciones</td>
 
-        </tr>
-    </thead>
-    <tbody id="tabla-restaurante">
-    </tbody>
-</table>
+                </tr>
+            </thead>
+            <tbody id="tabla-restaurante">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="modal1" class="modal">
+    <div class="modal-footer">
+        <h2 class="center">Mesas</h2>
+        <div class="modal-body" id="modalCuerpo">
 
+        </div>
+        <button class="btn red accent-3 center" onclick="GuardarMesa()">Submit</button>
+    </div>
+</div>
 @section Scripts
 {
     <script>
+        function GuardarMesa() {
+            const urlparams = new URLSearchParams(window.location.search);
+            var restauranteId = urlparams.get("id");
+            var data = {
+                Identificador: document.getElementById("Identificador").value,
+                Capacidad: document.getElementById("Capacidad").value,
+                RestauranteId: restauranteId
+            };
+
+            fetch("https://localhost:44389/api/mesas", {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => response.text()).then(function () {
+                $('#modal1').modal("close")
+                $('#tabla').DataTable().ajax.reload();
+            });
+        }
+    </script>
+    <script>
         $(document).ready(function () {
+            $('#modal1').modal();
             var table = $('#tabla').DataTable({
                 ajax: {
                     url: '/api/mesas?id=' + window.location.search.substring(4),
                     dataSrc: ''
                 },
                 columns: [
-                    { data: 'Id' },
-                    { data: 'Identificador' },
-                    { data: 'Capacidad' },
+                    { data: 'id' },
+                    { data: 'identificador' },
+                    { data: 'capacidad' },
                     {
                         data: '',
                         render: function (data, type, row) {
-                            return "<a>Editar</a>"
+                            return '<a class="btn btn-primary red accent-3">Editar</a>'
                         }
                     }
                 ],
                 select: true,
                 dom: 'Bftrip',
                 buttons: [
-                    'copy', 'excel', 'pdf',
+                    'excel', 'pdf',
                     {
                         text: 'Eliminar',
                         action: function () {
-                            bootbox("Seguro que quieres borrar la mesa?", function () {
-                                if (IsConfirmed) {
-                                    var rows = table.rows({ selected: true }).data();
-                                    ids = [];
-                                    for (var x = 0; x < rows.length; x++) {
-                                        ids.push(rows[x].ids);
-                                        Console.log(rows[x].ids);
-                                    }
-                                    $.ajax({
-                                        url: 'api/mesas/',
-                                        data: '[' + ids.toString() + ']',
-                                        contextType: 'application/json',
-                                        type: 'DELETE',
-                                        success: function () {
-                                            $('#tabla').DataTable.ajax.reload();
-                                        }
-                                    });
+                            var rows = table.rows({ selected: true }).data();
+                            ids = [];
+                            for (var x = 0; x < rows.length; x++) {
+                                ids.push(rows[x]['id']);
+                                console.log(rows[x]['id']);
+                            }
+                            $.ajax({
+                                url: 'api/mesas/',
+                                data: '[' + ids.toString() + ']',
+                                
+                                type: 'DELETE',
+                                success: function () {
+                                    $('#tabla').DataTable.ajax.reload();
                                 }
                             });
                         }
@@ -67,11 +94,25 @@
                     {
                         text: 'Agregar',
                         action: function () {
+                            var request = new XMLHttpRequest();
+                            const urlsParams = new URLSearchParams(window.location.search);
+                            const id = urlsParams.get("id");
+                            request.open("GET", `/Home/GuardarMesa?id=0`);
+                            request.send();
+                            request.onreadystatechange = function () {
+                                if (request.status == 200) {
+                                    document.getElementById("modalCuerpo").innerHTML = request.responseText;
+                                    $('#modal1').modal("open");
+                                }
+                                else {
+                                    console.log(request.status);
+                                }
+                            }
 
                         }
                     }
                 ]
             });
-        });
+        })
     </script>
 }

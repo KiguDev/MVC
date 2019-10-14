@@ -1,7 +1,4 @@
 ﻿@model MesaViewModel
-
-<h2>MesaEditar</h2>
-
 <form asp-action="@ViewData["Accion"]" asp-antiforgery="true">
     <div class="form-group">
         <label asp-for="Identificador"></label>
@@ -23,13 +20,12 @@
 <div class="form-group">
     @if (Model.Restaurante != null)
     {
-        <input type="hidden" value="@Model.RestauranteId" asp-for="RestauranteId" />
+        <input id="id" type="hidden" value="@Model.RestauranteId" asp-for="Id" />
     }
     else
     {
-        <input type="hidden" value="@ViewData["RestauranteId"]" asp-for="RestauranteId" />
+        <input id="id" type="hidden" value="0" asp-for="Id" />
     }
 
 </div>
-    <button class="btn btn-primary">Guardar</button>
 </form>

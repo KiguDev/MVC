@@ -34,16 +34,27 @@ namespace RestauranteMVC.Controllers
 
             return View(restaurantes);
         }
-        [Authorize(Roles = "Administrator")]
         public IActionResult Mesas(int id)
         {
             var mesas = _mesaService.GetMesas(id);
             return View(mesas);
         }
-        public IActionResult Agregar()
+        [HttpGet]
+        public IActionResult Agregar(int id)
         {
             ViewData["Accion"] = "Agregar";
-            return View(new RestauranteViewModel());
+            var restaurante = _restauranteService.Obtener(id);
+            var restauranteModel = new RestauranteViewModel();
+            if (restaurante != null)
+            {
+                restauranteModel.Domicilio = restaurante.Domicilio;
+                restauranteModel.Nombre = restaurante.Nombre;
+                restauranteModel.Telefono = restaurante.Telefono;
+                restauranteModel.PaginaWeb = restaurante.PaginaWeb;
+                restauranteModel.Logo = restaurante.Logo;
+                restauranteModel.Id = restaurante.Id;
+            }
+            return PartialView(restauranteModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -131,10 +142,23 @@ namespace RestauranteMVC.Controllers
         [HttpGet]
         public IActionResult GuardarMesa(int id)
         {
-            ViewData["Accion"] = "GuardarMesa";
-            ViewData["RestauranteId"] = id;
-
-            return View(new MesaViewModel());
+            var mesa = _mesaService.GetMesa(id);
+            MesaViewModel mesaNueva;
+            if (mesa == null)
+            {
+                mesaNueva = new MesaViewModel();
+            }
+            else
+            {
+                mesaNueva = new MesaViewModel
+                {
+                    Capacidad = mesa.Capacidad,
+                    Id = mesa.Id,
+                    Identificador = mesa.Identificador,
+                    RestauranteId = mesa.RestauranteId,
+                };
+            }
+            return PartialView(mesaNueva);
         }
 
         [HttpPost]

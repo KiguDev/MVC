@@ -78,15 +78,15 @@ namespace Restaurante.Infrastructure.Migrations
 
             modelBuilder.Entity("Restaurante.Core.Entities.OrdenProducto", b =>
                 {
-                    b.Property<int>("OrdenId");
-
                     b.Property<int>("ProductoId");
 
                     b.Property<int>("Cantidad");
 
-                    b.HasKey("OrdenId", "ProductoId");
+                    b.Property<int>("OrdenId");
 
-                    b.HasIndex("ProductoId");
+                    b.HasKey("ProductoId");
+
+                    b.HasIndex("OrdenId");
 
                     b.ToTable("OrdenProducto");
                 });
@@ -99,9 +99,13 @@ namespace Restaurante.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<string>("Imagen");
+
                     b.Property<string>("Ingredientes");
 
                     b.Property<string>("Nombre");
+
+                    b.Property<double>("Precio");
 
                     b.HasKey("Id");
 

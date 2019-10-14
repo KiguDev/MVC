@@ -19,44 +19,60 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.20/b-1.6.0/r-2.2.3/sl-1.3.1/datatables.min.css" />
-</head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">RestauranteMVC</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    @if (isAuth)
-                    {
-                        <li>
-                            <a>@User.Identity.Name</a>
-                        </li>
-                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <link rel="stylesheet" type="text/css" href="~/css/materialize.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+</head>
+@{ 
+    var bodyPadding = User.Identity.IsAuthenticated ? "300px" : "0px";
+}
+<body style="background:#eeeeee;padding-left:@bodyPadding">
+    
+    <nav class="  navbar-fixed-top red accent-3">
+        <div class="nav-wrapper">
+            <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+            <a class="brand-logo left"><i class="material-icons">restaurant</i>Restaurante</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+            <ul class="right hide-on-med-and-down">
+                <li><a><i class="material-icons">dashboard</i></a></li>
+                <li><a><i class="material-icons">notifications</i></a></li>
+                <li><a href="/Account/Logout"><i class="material-icons">exit_to_app</i></a></li>
+            </ul>
+            }
+        </div>
+
+    </nav>
+    @if (User.Identity.IsAuthenticated)
+    {
+<ul id="slide-out" class="sidenav sidenav-fixed">
+    <li>
+        <div class="user-view" style="margin-top:60px;">
+            <div class="background">
+                <img src="data:image/jpeg;base64,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">
+            </div>
+            <a href="#user"><img class="circle" src="https://lh3.googleusercontent.com/-6H_0ga5Ijr0/T8w4e5ArnJI/AAAAAAAAABg/O16htYl34KUPas8C3djiHaswnHMbOCZcQCEwYBhgL/w140-h140-p/308.JPG"></a>
+            <a href="#name"><span class="white-text name">Admin</span></a>
+            <a href="#email"><span class="white-text email">@User.Identity.Name</span></a>
+        </div>
+    </li>
+    <li><a class="waves-effect"><i class="material-icons">dashboard</i>dashboard</a></li>
+    <li><a href="/Home" class="waves-effect"><i class="material-icons">restaurant_menu</i>Restaurantes</a></li>
+    <li><a href="/Productos" class="waves-effect"><i class="material-icons">shopping_cart</i>Productos</a></li>
+    <li><a class="waves-effect"><i class="material-icons">people</i>Clientes</a></li>
+    <li><a class="waves-effect"><i class="material-icons">people</i>Empleados</a></li>
+    <li><a class="waves-effect"><i class="material-icons">event</i>Reservaciones</a></li>
+
+</ul>
+    }
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2019 - RestauranteMVC</p>
-        </footer>
+
     </div>
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -82,6 +98,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.20/b-1.6.0/b-colvis-1.6.0/b-flash-1.6.0/b-html5-1.6.0/sl-1.3.1/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -9,7 +9,9 @@ namespace Restaurante.Core.Entities
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Ingredientes { get; set; }
+        public double Precio { get; set; }
         public int Cantidad { get; set; }
         public IEnumerable<OrdenProducto> Ordenes { get; set; }
+        public string Imagen { get; set; }
     }
 }

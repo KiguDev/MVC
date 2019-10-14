@@ -974,6 +974,9 @@
         }
       },
       "Restaurante.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.1.11"
+        },
         "runtime": {
           "Restaurante.Core.dll": {}
         }

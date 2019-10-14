@@ -10,10 +10,18 @@ namespace Restaurante.Infrastructure.Services
 {
     public class OrdenService : IOrdenService
     {
-        private readonly AppDbContext DbContext;
+        private readonly AppDbContext _dbContext;
+        public OrdenService(AppDbContext dbContext) => _dbContext = dbContext;
+        public void Delete(Orden orden) => _dbContext.Ordenes.Remove(orden);
 
-        public OrdenService(AppDbContext dbContext) => DbContext = dbContext;
-        public void Delete(Orden orden) => DbContext.Ordenes.Remove(orden);
-        public List<Orden> GetAll() => DbContext.Ordenes.ToList();
+        public Orden Get(int id) => _dbContext.Ordenes.Find(id);
+
+        public List<Orden> GetAll() => _dbContext.Ordenes.ToList();
+
+        public void Insert(Orden orden) => _dbContext.Ordenes.Add(orden);
+
+        public void SaveChanges() => _dbContext.SaveChanges();
+
+        public void Update(Orden orden) => _dbContext.Ordenes.Update(orden);
     }
 }

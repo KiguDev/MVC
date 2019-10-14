@@ -4658,6 +4658,9 @@
       "Restaurante.Core/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.1.11"
+        },
         "compile": {
           "bin/placeholder/Restaurante.Core.dll": {}
         },
@@ -12765,11 +12768,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\RestauranteMVC\\RestauranteMVC.csproj",
+      "projectUniqueName": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\RestauranteMVC\\RestauranteMVC.csproj",
       "projectName": "RestauranteMVC",
-      "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\RestauranteMVC\\RestauranteMVC.csproj",
+      "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\RestauranteMVC\\RestauranteMVC.csproj",
       "packagesPath": "C:\\Users\\SIQUEIROS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\RestauranteMVC\\obj\\",
+      "outputPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\RestauranteMVC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -12790,11 +12793,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj": {
-              "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj"
+            "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj": {
+              "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj"
             },
-            "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj"
+            "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj"
             }
           }
         }

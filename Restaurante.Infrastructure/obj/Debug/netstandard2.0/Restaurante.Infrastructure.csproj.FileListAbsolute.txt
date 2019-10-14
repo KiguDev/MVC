@@ -10,15 +10,3 @@ C:\Users\SIQUEIROS\source\repos\CURSO\Restaurante.Infrastructure\obj\Debug\netst
 C:\Users\SIQUEIROS\source\repos\CURSO\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Core.dll
 C:\Users\SIQUEIROS\source\repos\CURSO\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Core.pdb
 C:\Users\SIQUEIROS\source\repos\CURSO\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.csproj.CopyComplete
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.csprojAssemblyReference.cache
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.AssemblyInfoInputs.cache
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.AssemblyInfo.cs
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.dll
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.pdb
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Infrastructure.deps.json
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Infrastructure.dll
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Infrastructure.pdb
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Core.dll
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\bin\Debug\netstandard2.0\Restaurante.Core.pdb
-C:\Users\SIQUEIROS\Desktop\copy\Restaurante.Infrastructure\obj\Debug\netstandard2.0\Restaurante.Infrastructure.csproj.CopyComplete

@@ -23,38 +23,45 @@ namespace RestauranteMVC.API
             _restauranteService = restauranteService;
             _mapper = mapper;
         }
+
         [HttpGet]
-        public ActionResult<List<RestauranteDTO>> Get()
+        public ActionResult<List<RestauranteDTO>> GetAll()
         {
             var restaurantes = _restauranteService.ObtenerRestaurantes();
             var model = new List<RestauranteDTO>();
             _mapper.Map(restaurantes, model);
             return model;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<Restaurante.Core.Entities.Restaurante> Get(int id) =>  _restauranteService.Obtener(id);
+
         [HttpPost]
         public ActionResult Post([FromBody]Restaurante.Core.Entities.Restaurante model)
         {
-            //var restaurante = new RestauranteDTO();
-            //_mapper.Map(model, restaurante);
-            //_restauranteService.InsertRecord(restaurante);
-            //_restauranteService.SaveChanges();
+            var restaurante = new Restaurante.Core.Entities.Restaurante();
+            restaurante = _mapper.Map<Restaurante.Core.Entities.Restaurante>(model);
+            _restauranteService.InsertRecord(restaurante);
+            _restauranteService.SaveChanges();
             return Ok();
         }
-        [HttpPut("{id}")]
-        public ActionResult Put(int id, Restaurante.Core.Entities.Restaurante model)
+
+        [HttpPut]
+        public ActionResult Put(Restaurante.Core.Entities.Restaurante model)
         {
-            var restaurante = _restauranteService.Obtener(id);
+            var restaurante = _restauranteService.Obtener(model.Id);
             if (restaurante == null) return BadRequest();
 
             restaurante.Domicilio = model.Domicilio;
-            restaurante.HoraDeCierre = model.HoraDeCierre;
             restaurante.Logo = model.Logo;
+            restaurante.PaginaWeb = model.PaginaWeb;
             restaurante.Nombre = model.Nombre;
             restaurante.Telefono = model.Telefono;
             _restauranteService.Edit(restaurante);
             _restauranteService.SaveChanges();
             return Ok();
         }
+
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
@@ -64,6 +71,7 @@ namespace RestauranteMVC.API
             _restauranteService.SaveChanges();
             return Ok();
         }
+
         [HttpDelete]
         public ActionResult Delete([FromBody] int [] ids)
         {

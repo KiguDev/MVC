@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Restaurante.Core.Interfaces
 {
-    public interface IAsyncRepository
+    public interface IAsyncRepository<T> where T: class
     {
         Task<T> GetByIdAsync<T>(int id);
         Task<List<T>> GetAllAsync<T>();

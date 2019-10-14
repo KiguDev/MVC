@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "OrderDetails";
+}
+
+<div class="card " style="margin-bottom:40px;margin-top:40px">
+    <div class="card-content flow-text">
+        <a id="addProduct" class="btn-floating halfway-fab waves-effect waves-light red pulse"><i class="material-icons">add_shopping_cart</i></a>
+        <span class="card-title flow-text ">OrderDetails</span>
+        <div class="row">
+            <p class="flow-text right ">Total</p>
+        </div>
+        <div class="row">
+            <p id="total" class="flow-text right"></p>
+        </div>
+        
+    </div>
+    <div class="card-action">
+        <a id="ordersLink" class="red-text" href="#">Ver Ordenes</a>
+        <a class="red-text" href="#">Finalizar</a>
+    </div>
+</div>
+<div id="content">
+
+</div>
+@section  Scripts
+{
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var orderId = urlParams.get("id");
+
+    $(document).ready(async function () {
+        updatePriceTag();
+        $('#ordersLink').attr("href", `/ordenes?id=${orderId}`);
+        $(`#addProduct`).attr("href", `ordenes/productos?id=${orderId}`)
+        await fetch('/template/card').then(function (response) { return response.text() }).then(function (card) {
+
+            fetch(`/api/orderdetails?id=${orderId}`).then(function (response) { return response.json() }).then(function (jsonResponse) {
+                //Mostrar Productos
+                $.each(jsonResponse, function (index,value) {
+                    let newCard = $(card);
+                    let id = jsonResponse[index]['id'];
+                    let idProducto = jsonResponse[index]['producto']['id'];
+                    newCard.attr("id", `card${idProducto}`);
+
+                    newCard.find('img').attr("id", `img${id}`);
+                    newCard.find('img').attr("src", jsonResponse[index]['producto']['imagen']);
+
+                    newCard.find('#nombre').attr("id", `nombre${id}`);
+                    newCard.find(`#nombre${id}`).text(jsonResponse[index]['producto']['nombre']);
+
+                    newCard.find('#precio').attr("id", `precio${id}`);
+                    let precio = jsonResponse[index]['producto']['precio'];
+                    newCard.find(`#precio${id}`).text(`$${precio}`);
+                    
+                    newCard.find('#cantidad').attr("id", `cantidad${idProducto}`);
+                    newCard.find(`#cantidad${idProducto}`).val(jsonResponse[index]['cantidad']);
+                    newCard.find(`#cantidad${idProducto}`).on("change", function () {
+                        jsonResponse[index]['cantidad'] = parseInt($(`#cantidad${idProducto}`).val(), 10);
+                        updateTotalRequest(jsonResponse[index]);
+                    });
+
+                    newCard.find('#delete').attr("id", `delete${idProducto}`);
+                    newCard.find(`#delete${idProducto}`).on('click', function () { RemoveProduct(jsonResponse[index]) });
+                    $('#content').append(newCard);
+                    
+                });
+            });
+        });
+    });
+
+    function updatePriceTag() {
+        fetch(`/api/ordenes?id=${orderId}`).then(function (response) { return response.json() }).then(function (data) {
+            $.each(data, function (index, value) {
+                if (data[index]['id'] == orderId) {
+                    let precio = data[index]['total'];
+                    $('#total').text(`$${precio}`);
+                }
+            });
+        });
+        
+    }
+
+    async function updateTotalRequest(body) {
+        await fetch('/api/orderdetails', { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }).then(function (response) {
+            updatePriceTag();
+        });
+    }
+
+    async function RemoveProduct(body) {
+        await fetch('/api/orderdetails', { method: 'DELETE', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }).then(function (response) {
+            //Remove product and Update Total
+            updatePriceTag();
+            let id = body['producto']['id'];
+            $(`#card${id}`).remove();
+        });
+    }
+</script>
+}

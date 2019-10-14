@@ -50,14 +50,20 @@ namespace RestauranteMVC
             services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AppIdentityContext>();
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppSecret = "";
-                facebookOptions.AppId = "";
+                facebookOptions.AppSecret = "1add0c96fc602ee7b9a79bc8bd9d5cb8";
+                facebookOptions.AppId = "555227418584340";
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<IRestauranteService,RestauranteService>();
             services.AddScoped<IMesasService, MesaService>();// Crea una instancia cada vez que se hacen un peticion
             services.AddScoped<IOrdenService, OrdenService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IProductoService, ProductoService>();
+            services.AddScoped<IServicio<Producto>, GenericService<Producto>>();
+            services.AddScoped<IServicio<Orden>,GenericService<Orden>>();
+            services.AddScoped<IServicio<OrdenProducto>, GenericService<OrdenProducto>>();
+            services.AddScoped<IOrdenProducto, OrdenProductoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

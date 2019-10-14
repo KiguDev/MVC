@@ -1,7 +1,96 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ordenes";
 }
 
-<h2>Index</h2>
+
+<div style="margin-top:40px">
+    <div class="row">
+        <div class="col s12 content" id="content">
+            <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
+                    <a id="agregar-orden" class="btn-floating halfway-fab waves-effect waves-light pulse red"><i class="material-icons">add</i></a>
+                    <span class="card-title">Ordenes<span class="new badge" id="cantidad"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col s12 content" id="content">
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        var urlParam = new URLSearchParams(window.location.search);
+        var restauranteId = urlParam.get("id");
+        $(document).ready(function () {
+            $('#agregar-orden').on("click", CrearOrden);
+            $.getJSON(`/api/ordenes?id=${restauranteId}`, function (response) {
+                $.each(response, function (index, value) {
+                    $('#cantidad').text(response.length);
+                    var total = response[index]["total"];
+                    var estatus = response[index]['estatus'] == 1 ? "Pendiente" : "Cocinando";
+                    var fecha = new Date(response[index]['fechaAlta']);
+                    var idOrden = response[index]['id'];
+                    var carta = `<div class="card blue-grey darken-4 "  id="carta" style="margin-top:40px">
+                                        <div class="card-content white-text" id="carta-cuerpo">
+                                             <a href="/ordenes/productos?id=${idOrden}"  class="btn-floating halfway-fab waves-effect waves-light pulse red"><i class="material-icons">add_shopping_cart</i></a>
+                                            <span class="card-title">Orden #${idOrden}</span>
+                                            <div class="row">
+                                                <div class="col-sm-4"><p>Estatus</p></div>
+                                                <div class="col-sm-4"><p>Fecha de creacion</p></div>
+                                                <div class="col-sm-4"><p>Total</p></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-4"><p>${estatus}</p></div>
+                                                <div class="col-sm-4"><p>${fecha.toLocaleDateString()}</p></div>
+                                                <div class="col-sm-4"><p>$${total}</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="card-action">
+                                            <a href="/orderdetails?id=${idOrden}">Ver Detalles</a>
+                                        </div>
+                                    </div>`;
+                    $('#content').append(carta);
+                    console.log(response[index]['total']);
+                });
+            });
+        });
+
+        function CrearOrden() {
+            var data = {
+                restauranteId: restauranteId,
+                estatus: 1,
+                total: 0
+            };
+            fetch('/api/ordenes', { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } })
+                .then(function (response) {
+                    console.log(response.statusText)
+                    if (response.ok) {
+                        console.log("success");
+                    }
+                });
+        }
+
+        function mostrar() {
+            
+        }
+
+        function clean() {
+
+        }
+
+        function carta() {
+            
+        }
+
+    </script>
+}
+
 

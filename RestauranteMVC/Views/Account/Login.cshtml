@@ -1,25 +1,33 @@
 ﻿@model LoginViewModel
 
 
-<h2>Login</h2>
+<div class="card" style="margin-top:40px">
+    <div class="card-content ">
+        <span class="card-title center">Login</span>
+        <form method="post">
+            <div class="input-field col-sm-12">
+                <i class="material-icons prefix">email</i>
+                <input asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="input-field col-sm-12">
+                <i class="material-icons prefix">lock</i>
+                <input type="password" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="input-field center">
+                <a asp-action="Registrarse">Crear usuario</a>
+            </div>
+            <div class="center">
+                <button class="btn btn-primary red accent-3">Iniciar Sesion</button>
+            </div>
+            
+        </form>
+    </div>
+    <div class="card-action">
+        
+    </div>
+</div>
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input class="form-control" asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input class="form-control" type="password" asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="RememberMe"></label>
-        <input class="form-control"  asp-for="RememberMe" type="checkbox" />
-        @Html.DisplayNameFor(m => m.RememberMe)
-    </div>
-    <button class="btn btn-primary">Iniciar Sesion</button>
-    <a asp-action="Registrarse">Crear usuario</a>
-</form>
+
 

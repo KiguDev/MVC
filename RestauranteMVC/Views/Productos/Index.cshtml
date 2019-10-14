@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<div class="card" style="margin-top:40px">
+    <div class="card-content">
+        <span class="card-title center">Productos</span>
+        <table id="tabla" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Nombre</td>
+                    <td>Ingredientes</td>
+                    <td>Precio</td>
+                    <td>Cantidad</td>
+                    <td>Ordenes</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div id="modal1" class="modal">
+    <div class="modal-footer">
+        <div class="modal-body" id="modalCuerpo">
+
+        </div>
+        <button id="submitButton" class="btn red accent-3 center">Submit</button>
+    </div>
+</div>
+
+@section Scripts
+{
+<script>
+
+    function OpenModal(id = 0) {
+        fetch(`/Productos/Guardar?id=${id}`).then(function (response) { return response.text() }).then(function (view)
+        {
+            var modal = document.getElementById("modalCuerpo");
+            modal.innerHTML = view;
+            $("#modal1").modal("open");
+        });
+    }
+
+    function GetProducts() {
+        CleanTable();
+        fetch("/api/productos").then(function (response) { return response.json() }).then(function (jsonResponse)
+        {
+            jsonResponse.forEach(function (item, index)
+            {
+                var id = document.createElement("td");
+                id.innerHTML = item["id"];
+                var nombre = document.createElement("td");
+                nombre.innerHTML = item["nombre"];
+                var ingredientes = document.createElement("td");
+                ingredientes.innerHTML = item["ingredientes"];
+                var precio = document.createElement("td");
+                precio.innerHTML = item["precio"];
+                var cantidad = document.createElement("td");
+                cantidad.innerHTML = item["cantidad"];
+                var orderLink = document.createElement("a");
+                orderLink.innerHTML = item["ordenes"] == null ? 0 : item["ordenes"];
+                var ordenes = document.createElement("td")
+                ordenes.appendChild(orderLink);
+                var edit = document.createElement("td");
+                var editButton = document.createElement("button");
+                editButton.innerHTML = "Edit";
+                editButton.addEventListener("click", function () {OpenModal(item["id"]);});  
+                editButton.className = "btn btn-primary red accent-3";
+                edit.appendChild(editButton);
+                var tr = document.createElement("tr");
+                tr.appendChild(id);
+                tr.appendChild(nombre);
+                tr.appendChild(ingredientes);
+                tr.appendChild(precio)
+                tr.appendChild(cantidad);
+                tr.appendChild(ordenes);
+                tr.appendChild(edit);
+                var tbody = document.getElementById("table-body");
+                tbody.appendChild(tr);
+            }
+            );
+        });
+    }
+
+    function Guardar() {
+        var data = {
+            Nombre: document.getElementById("Nombre").value,
+            Ingredientes: document.getElementById("Ingredientes").value,
+            Precio: document.getElementById("Precio").value,
+            Cantidad: document.getElementById("Cantidad").value
+        };
+        var idProducto = document.getElementById("id").value;
+        console.log(idProducto);
+
+        var requestMethod = idProducto > 0 ? "PUT" : "POST";
+        fetch("api/productos", {
+            method: requestMethod,
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+        }).
+        then(function (response) {
+            console.log(response.status);
+             $("#modal1").modal("close");
+            CleanTable();
+            GetProducts();
+        });
+        $("#modal1").modal("close");
+    }
+
+    function CleanTable() {
+        var tableBody = document.getElementById("table-body");
+        while (tableBody.hasChildNodes()) {
+            tableBody.removeChild(tableBody.firstChild);
+        }
+    }
+    
+    $(document).ready(function () {
+        $("#modal1").modal();
+        GetProducts();
+        var submitButton = document.getElementById("submitButton");
+        submitButton.addEventListener('click', function () {
+            Guardar();
+
+        });
+        var tabla = $('#tabla').DataTable(
+            {
+                "language":
+                {
+                    "zeroRecords":" "
+                },
+                select: true,
+                dom: "Bfrtip",
+                buttons: [
+                    'copy', 'excel', 'pdf',
+                    {
+                        text: "Eliminar",
+                        action: function ()
+                        {
+                            OpenModal();
+                        }
+                    },
+                    {
+                        text: "Agregar",
+                        action: function ()
+                        {
+                            OpenModal();
+                        }
+                    }
+                ]
+            }
+        );
+    });
+
+</script>
+ }

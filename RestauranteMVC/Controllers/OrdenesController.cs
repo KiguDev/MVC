@@ -8,7 +8,17 @@ namespace RestauranteMVC.Controllers
 {
     public class OrdenesController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int id)
+        {
+            return View();
+        }
+
+        public IActionResult Guardar(int id)
+        {
+            return PartialView();
+        }
+
+        public IActionResult Productos(int id)
         {
             return View();
         }

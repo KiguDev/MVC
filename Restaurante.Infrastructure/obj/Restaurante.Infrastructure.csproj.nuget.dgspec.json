@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {}
+    "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj": {
+    "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj",
+        "projectUniqueName": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj",
         "projectName": "Restaurante.Core",
-        "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj",
+        "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj",
         "packagesPath": "C:\\Users\\SIQUEIROS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\obj\\",
+        "outputPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -43,6 +43,10 @@
       "frameworks": {
         "netstandard2.0": {
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[2.1.11, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
@@ -58,14 +62,14 @@
         }
       }
     },
-    "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {
+    "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj",
         "projectName": "Restaurante.Infrastructure",
-        "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\Restaurante.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\SIQUEIROS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -86,8 +90,8 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj": {
-                "projectPath": "C:\\Users\\SIQUEIROS\\Desktop\\copy\\Restaurante.Core\\Restaurante.Core.csproj"
+              "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj": {
+                "projectPath": "C:\\Users\\SIQUEIROS\\source\\repos\\CURSO\\Restaurante.Core\\Restaurante.Core.csproj"
               }
             }
           }
