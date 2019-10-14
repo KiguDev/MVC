@@ -72,23 +72,42 @@
 
 <script>
 
-    @*$("btnEnviar").click(function () {
-        var orden = {}
-        orden.id = ordenId;
-        orden.RestaurantId = @Model.RestauranteId;
-        var productos = [];
 
+    var total = 0;
+    var template;
+    var templateRowProducto;
+    var ordenId = 0;
+    $("#btnEnviar").click(function () {
+        if (ordenId == 0) {
+            $.post("/api/ordenes/", { id: "@Model.RestauranteId" }, function (id) {
+                ordenId = id;
+                AgregarProductos();
+            })
+        }
+        //var orden = {}
+        //orden.id = ordenId;
+        //orden.RestaurantId = @Model.RestauranteId;
+        //var productos = [];
+
+       
+
+    })
+    function AgregarProductos() {
+        var productoId = $(templateRowProducto).find('.id-producto-orden').val();
         var rows = $(".row-producto-final")
-
-
         $.map(rows, function (prod) {
             var pNuevo = {};
-            pNuevo.cantidad = $(prod).find('.cantidad-input').val()
+            pNuevo.cantidad = $(prod).find('.cantidad-input').val();
             pNuevo.id = $(prod).find('.id-producto').val();
-            productos.push(pNuevo);
-        })
+            pNuevo.ordenId = ordenId;
+            pNuevo.productoId = productoId;
+            $.post("/api/ordenes/GuardarOrdenProducto", pNuevo, function () {
+                
+            })
+            //productos.push(pNuevo);
 
-    })*@
+        })
+    }
 
         
         
@@ -96,9 +115,7 @@
 
     //})
 
-    var total = 0;
-    var template;
-    var templateRowProducto;
+   
     
 
     $(document).ready(function () {

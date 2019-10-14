@@ -12,5 +12,6 @@ namespace Restaurante.Core.Interfaces
         void Agregar(OrdenProducto ordenProducto);
         void Editar(OrdenProducto ordenProducto);
         void Eliminar(OrdenProducto ordenProducto);
+        
     }
 }
