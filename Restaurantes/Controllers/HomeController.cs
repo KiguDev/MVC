@@ -185,7 +185,7 @@ namespace Restaurantes.Controllers
         public IActionResult Productos(int id)
         {
             ViewData["restauranteId"] = id;
-            //ViewData["Accion"] = "ProductosRes";
+            ViewData["Accion"] = "ProductosRes";
             return View("ProductosRes",id);
         }
 

@@ -74,7 +74,7 @@
             var Nombre = document.getElementById("Nombre").value;
             var Precio = document.getElementById("Precio").value;
             var Ingredientes = document.getElementById("Ingredientes").value;
-            //var Cantidad = document.getElementById("Cantidad").value;
+            var Cantidad = document.getElementById("Cantidad").value;
             var RestauranteId = @ViewData["RestauranteId"];
             
 
@@ -105,7 +105,7 @@
     $(document).ready( function () {
             table = $('#tabla-productos-contenido').DataTable({
             ajax: {
-                url: '/api/productos/?resid=@Model',
+                url: '/api/productos/@Model',
                 dataSrc: '',
             },
             columns: [
