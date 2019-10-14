@@ -9,7 +9,15 @@
         "bootbox.js",
         "bootbox.min.js"
       ]
+    },
 
+    {
+      "library": "font-awesome@5.11.2",
+      "destination": "wwwroot/lib/fontawesome",
+      "files": [
+        "js/all.js",
+        "css/all.min.css"
+      ]
     }
   ]
 }

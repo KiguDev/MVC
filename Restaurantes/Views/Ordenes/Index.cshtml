@@ -1,7 +1,107 @@
-﻿
+﻿@model int
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ordenes";
 }
 
 <h1>Ordenes</h1>
+<a href="/Ordenes/OrdenDashboard/@Model" class="btn btn-outline-dark btn-lg mb-md-5"> + </a>
+<div class="list-group" id="Ordenes">
+    @*<a href="#" class="list-group-item list-group-item-action flex-column align-items-start enlace">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" id="titulo">Orden 1</h5>
+            <small id="fecha">10 de Octubre 2019</small>
+        </div>
+        <p class="mb-1" id="estatus">Estatus: Abierta</p>
+        <p class="mb-1" id="total">Total: $300</p>
+        <small id="productos">3 productos</small>
+    </a>
 
+
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start enlace">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" id="titulo">Orden 2</h5>
+            <small id="fecha">10 de Octubre 2019</small>
+        </div>
+        <p class="mb-1" id="estatus">Estatus: Abierta</p>
+        <p class="mb-1" id="total">Total: $0</p>
+        <small id="productos">0 productos</small>
+    </a>
+
+
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start enlace">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" id="titulo">Orden 3</h5>
+            <small id="fecha">10 de Octubre 2019</small>
+        </div>
+        <p class="mb-1" id="estatus">Estatus: Abierta</p>
+        <p class="mb-1" id="total">Total: $200</p>
+        <small id="productos">2 productos</small>
+    </a>
+
+
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start enlace">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" id="titulo">Orden 4</h5>
+            <small id="fecha">10 de Octubre 2019</small>
+        </div>
+        <p class="mb-1" id="estatus">Estatus: Abierta</p>
+        <p class="mb-1" id="total">Total: $440</p>
+        <small id="productos">4 productos</small>
+    </a>*@
+
+
+
+
+</div>
+
+@section Scripts{
+
+    <script>
+
+
+    var elementTemplate;
+
+    $(document).ready(function () {
+
+        $.get("@Url.Action("OrdenElement","Ordenes")", function (res)  {
+            elementTemplate = res;
+            getOrdenes();
+        });
+    });
+
+    function getOrdenes() {
+        $.getJSON("/api/Ordenes/@Model", function (resJson)  {
+
+            $.map(resJson, function (orden, val) {
+
+           
+
+            var element = $(elementTemplate);
+            element.find('#titulo').text("Orden " + orden.id);
+            element.find('#fecha').text(orden.fechaAlta);
+            if (orden.estatus == 1) {
+                element.find('#estatus').text("Estatus: Abierta");
+            }
+            else {
+                element.find('#estatus').text("Estatus: Cerrada");
+            }
+
+            element.find('#total').text("Total: " + orden.total);
+            
+                element.find('#productos').text(orden.cantidadP + "  producto(s)");
+           
+
+                element.attr("href", "/Ordenes/OrdenDashboard?id=@Model&ordenId=" + orden.id);
+            $(".list-group").append(element);
+
+        });
+    });
+    }
+
+
+
+
+
+    </script>
+
+}

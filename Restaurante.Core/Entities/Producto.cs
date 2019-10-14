@@ -10,7 +10,13 @@ namespace Restaurante.Core.Entities
         public string Nombre { get; set; }
         public string Ingredientes { get; set; }
         public int Cantidad { get; set; }
+        public double Precio { get; set; }
+
+        public string Imagen { get; set; }
         public ICollection<OrdenTieneProducto> Ordenes {get; set;}
+
+        public int RestauranteId { get; set; }
+        public Restaurante Restaurante { get; set; }
 
     }
 }

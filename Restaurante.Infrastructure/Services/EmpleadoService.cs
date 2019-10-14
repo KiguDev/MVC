@@ -47,5 +47,18 @@ namespace Restaurante.Infrastructure.Services
             var empleados = _context.Empleados.Where(e => e.RestauranteId == id).ToList();
             return empleados;
         }
+
+
+        public void EliminarVarios(int[] ids)
+        {
+            var empleados = _context.Empleados;
+
+            //var restaurantesEliminar = restaurantes.Where(r => r.Id == ids.Where(id => id == r.Id).FirstOrDefault());
+            var empleadosEliminar = empleados.Where(e => ids.Contains(e.Id));
+            _context.RemoveRange(empleadosEliminar);
+            _context.SaveChanges();
+
+        }
+
     }
 }

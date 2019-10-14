@@ -1,4 +1,5 @@
-﻿using Restaurante.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurante.Core.Entities;
 using Restaurante.Core.Interfaces;
 using Restaurante.Infrastructure.Data;
 using System;
@@ -31,6 +32,7 @@ namespace Restaurante.Infrastructure.Services
 
         public int insertar(Orden orden)
         {
+           
             _context.Ordenes.Add(orden);
             _context.SaveChanges();
             return orden.Id;
@@ -38,13 +40,13 @@ namespace Restaurante.Infrastructure.Services
 
         public Orden Obtener(int id)
         {
-            return _context.Ordenes.FirstOrDefault(o => o.Id == id);
+            return _context.Ordenes.Include(o => o.Productos).FirstOrDefault(o => o.Id == id);
         }
 
         public List<Orden> ObtenerOrdenes(int id)
         {
 
-            var ordenes = _context.Ordenes.Where(o => o.RestauranteId == id).ToList();
+            var ordenes = _context.Ordenes.Include(o => o.Productos).Where(o => o.RestauranteId == id).ToList();
             return ordenes;
         }
 

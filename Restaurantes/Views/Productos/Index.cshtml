@@ -1,0 +1,280 @@
+﻿@model List<Producto>
+
+
+<h1>Productos @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
+<a onclick="MostrarAgregar()" class="btn btn-outline-primary">Agregar Producto +</a>
+
+<table class="table table-bordered table-hover" id="tabla-productos-contenido">
+    <thead>
+        <tr>
+            <th> ID </th>
+            <th> Nombre </th>
+            <th> Precio </th>
+            <th></th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach (var m in Model)
+            {
+            <tr>
+                <td> @m.Identificador </td>
+                <td> @m.Capacidad</td>
+                <td><a asp-action="EditarMesa" asp-route-id="@m.Id" class="btn btn-warning">Editar</a></td>
+                <td>
+                    <form asp-action="EliminarMesa">
+                        <button name="Id" value="@m.Id" type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            }*@
+    </tbody>
+</table>
+
+
+
+<div class="modal fade" id="AgregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarProducto()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalEditarCuerpo">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnEditarModal">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+
+    <script>
+
+
+         window.onload = function () {
+
+        document.getElementById("btnEditarModal").addEventListener("click", function () {
+            EditarProducto();
+        })
+    }
+
+
+     function EditarProducto() {
+
+        var Nombre = document.getElementById("Nombre").value;
+        var Precio = document.getElementById("Precio").value;
+         var Imagen = document.getElementById("Imagen").value;
+         var Id = document.getElementById("Id").value;
+        
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Precio"] = Precio;
+         fd["Imagen"] = Imagen;
+         fd["Id"] = Id;
+       
+
+
+        fetch("/Api/Producto/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#editarModal").modal("hide");//JQUERY
+                table.ajax.reload(AddListeners);
+
+            }
+        });
+
+    }
+
+    function AddListeners() {
+          //JAVASCRIPT NATIVO PARA AGREGAR EVENTOS
+                   var buttons =  document.getElementsByClassName("editar-producto");
+                    for (i = 0; i < buttons.length; i++) {
+                        buttons[i].addEventListener("click", function () {
+                            MostrarEditar(this.dataset.id)
+                        })
+                    }
+    }
+
+      function MostrarEditar(id) {
+
+       fetch(`@Url.Action("Editar","Productos")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+
+
+    function LimpiarModales() {
+
+        var bodies = document.getElementsByClassName("modal-body");
+
+            for (i = 0; i < bodies.length; i++) {
+                    bodies[i].innerHTML = ""
+                        }
+    }
+
+        function MostrarAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET", "@Url.Action("AgregarM","Productos")", true);
+            req.send();
+
+            req.onreadystatechange = () => {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+
+                    $("#AgregarModal").modal("show");
+                }
+            }
+    }
+
+    function GuardarProducto() {
+        var nombre = document.getElementById("Nombre").value;
+        var precio = document.getElementById("Precio").value;
+        var imagen = document.getElementById("Imagen").value;
+
+        var fd = {};
+        fd["Nombre"] = nombre;
+        fd["Precio"] = precio;
+        fd["Imagen"] = imagen;
+
+
+        fetch("/Api/Producto/" +  @ViewData["resId"], {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+        }).then(function (response) {
+            if (response.ok) {
+                $("#AgregarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+
+        }
+
+    </script>
+
+
+
+
+    <script>
+
+
+        
+
+
+
+
+
+    var table;
+
+    $(document).ready( function () {
+        table = $('#tabla-productos-contenido').DataTable({
+            "initComplete": function () {
+                 AddListeners();
+            },
+            ajax: {
+                url: '/api/producto/' + @ViewData["resId"],
+                dataSrc : ''
+
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'nombre'},
+                {data: 'precio'},
+                {
+                    render: (data, type, row) => {
+                        return `<a class="btn btn-info editar-producto" data-id="${row.id}">Editar</a>`
+                    }
+                }
+            ],
+            select: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf',
+                {
+                    text: 'Eliminar',
+                    action: function () {
+
+                        var rows = table.rows({ selected: true }).data();
+                        var ids = [];
+                        for (var x = 0; x < rows.length; x++) {
+                            ids.push(rows[x].id)
+                        }
+                        //
+                         bootbox.confirm("Deseas eliminar este elemento?", function (IsConfirmed) {
+                             if (IsConfirmed) {
+                                 // eliminar elemento
+                                  $.ajax({
+                                        contentType: 'application/json',
+                                        url: '/api/producto/',
+
+                                        data: '[' + ids.toString() + ']',
+                                     type: 'DELETE',
+                                        success: () => {
+                                            table.ajax.reload();
+                                        }
+                                    });
+
+                            }
+                        });
+                        //
+
+                        console.log(ids);
+                    }
+                }
+            ]
+        });
+
+    } );
+    </script>
+
+}

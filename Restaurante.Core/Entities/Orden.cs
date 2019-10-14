@@ -10,7 +10,8 @@ namespace Restaurante.Core.Entities
 
         public int EmpleadoId { get; set; }
         public int RestauranteId { get; set; }
-        public DateTime FechaAltra { get; set; }
+        public Restaurante Restaurante { get; set; }
+        public DateTime FechaAlta { get; set; }
 
         public int Estatus { get; set; }
         public decimal Total { get; set; }

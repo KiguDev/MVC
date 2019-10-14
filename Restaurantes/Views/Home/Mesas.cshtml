@@ -2,7 +2,7 @@
 
 
 <h1>Mesas de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
-<a asp-action="AgregarMesa" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Mesa +</a>
+<a onclick="MostrarAgregar()" class="btn btn-outline-primary">Agregar Mesa +</a>
 
 <table class="table table-bordered table-hover" id="tabla-mesas-contenido">
     <thead>
@@ -34,15 +34,88 @@
 
 
 
+<div class="modal fade" id="AgregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarMesa()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 @section Scripts{
+
     <script>
+        function MostrarAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET", "@Url.Action("AgregarMesaM","Home")", true);
+            req.send();
+
+            req.onreadystatechange = () => {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+
+                    $("#AgregarModal").modal("show");
+                }
+            }
+    }
+
+    function GuardarMesa() {
+        var identificador = document.getElementById("Identificador").value;
+        var capacidad = document.getElementById("Capacidad").value;
         
 
+        var fd = {};
+        fd["Identificador"] = identificador;
+        fd["Capacidad"] = capacidad;
+        
        
-   
+
+        fetch("/Api/Mesa/" +  @ViewData["resId"], {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+        }).then(function (response) {
+            if (response.ok) {
+                $("#AgregarModal").modal("hide");
+                table.ajax.reload();
+            }
+        });
+
+        }
+
+    </script>
+
+
+
+
+    <script>
+
+
+
+    var table;
 
     $(document).ready( function () {
-        var table = $('#tabla-mesas-contenido').DataTable({
+        table = $('#tabla-mesas-contenido').DataTable({
             ajax: {
                 url: '/api/mesa/' + @ViewData["resId"],
                 dataSrc : ''

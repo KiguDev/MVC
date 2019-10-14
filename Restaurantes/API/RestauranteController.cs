@@ -32,10 +32,10 @@ namespace Restaurantes.API
             return model;
         }
 
-        [HttpPut("{id}")]
-        public ActionResult putRestaurante(int id,[FromBody] RestauranteViewModel model)
+        [HttpPut]
+        public ActionResult putRestaurante([FromBody] RestauranteViewModel model)
         {
-            var restaurante = _RestauranteService.Obtener(id);
+            var restaurante = _RestauranteService.Obtener(model.Id);
             if (restaurante == null)
                 return BadRequest();
             restaurante.Nombre = model.Nombre;
@@ -75,6 +75,7 @@ namespace Restaurantes.API
             var restaurante = new Restaurante.Core.Entities.Restaurante();
             model.FechaAlta = DateTime.Now;
             _mapper.Map(model, restaurante);
+            restaurante.Domicilio = model.Direccion;
             //var restaurante = new Restaurante.Core.Entities.Restaurante
             //{
             //    Nombre = model.Nombre,

@@ -14,5 +14,6 @@ namespace Restaurante.Core.Interfaces
         void Editar(Restaurante.Core.Entities.Empleado empleado);
 
         void Eliminar(int id);
+        void EliminarVarios(int[] ids);
     }
 }

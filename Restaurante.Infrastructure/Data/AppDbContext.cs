@@ -28,12 +28,15 @@ namespace Restaurante.Infrastructure.Data
                 c.ProductoId
             });
 
-            builder.HasOne(c => c.Producto).WithMany(c => c.Ordenes).HasForeignKey(c => c.ProductoId);
-            builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId);
+            builder.HasOne(c => c.Producto).WithMany(c => c.Ordenes).HasForeignKey(c => c.ProductoId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId).OnDelete(DeleteBehavior.Restrict);
+
         }
         private void ConfigureRetaurante(EntityTypeBuilder<Core.Entities.Restaurante> builder)
         {
             builder.Property(r=>r.HoraCierre).IsRequired();
+
+            builder.HasMany(r => r.Ordenes).WithOne(o => o.Restaurante).HasForeignKey(o => o.RestauranteId).OnDelete(DeleteBehavior.Restrict);
         }
         public DbSet<Restaurante.Core.Entities.Restaurante> Restaurantes { get; set; }
         public DbSet<Restaurante.Core.Entities.Mesa> Mesas { get; set; }
@@ -42,5 +45,6 @@ namespace Restaurante.Infrastructure.Data
         public DbSet<Restaurante.Core.Entities.Orden> Ordenes { get; set; }
 
         public DbSet<Restaurante.Core.Entities.Producto> Productos { get; set; }
+        public DbSet<Restaurante.Core.Entities.OrdenTieneProducto> OrdenTieneProductos { get; set; }
     }
 }

@@ -31,7 +31,11 @@ namespace Restaurantes.Controllers
             return View(new EmpleadoViewModel());
         }
 
-
+        public IActionResult AgregarM()
+        {
+            ViewData["Accion"] = "Agregar";
+            return PartialView("_AgregarEditarEmpleado" ,new EmpleadoViewModel());
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

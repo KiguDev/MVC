@@ -21,14 +21,33 @@ namespace Controladores.Controllers
 
         public IActionResult Index(int id)
         {
-           
+
             return View("index", id);
         }
 
-        [Route("peticion")]
-        public IActionResult Detalles()
+        public IActionResult OrdenDashboard(int id, int ordenId)
         {
-            return View();
+
+            var model = new OrdenDashboardViewModel() {
+                RestauranteId = id,
+                OrdenId = ordenId
+            };
+            return View(model);
         }
+        public IActionResult OrdenElement()
+        {
+            return PartialView("_OrdenElementList");
+        }
+
+        public IActionResult ProductCard()
+        {
+            return PartialView("_ProductoCard");
+        }
+
+        public IActionResult ResumenElement()
+        {
+            return PartialView("_ElementoResumen");
+        }
+
     }
 }

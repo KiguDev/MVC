@@ -5,7 +5,7 @@
 
 <h1>Restaurantes</h1>
 
-<a href="/Home/Agregar" class="btn btn-outline-primary">Agregar</a>
+<a @*href="/Home/Agregar"*@ onclick="MostrarAgregar()"  class="btn btn-outline-primary">Agregar</a>
 
 <table class="table table-bordered table-hover" id="tabla-restaurante-contenido">
     <thead>
@@ -15,6 +15,8 @@
             <th> Domicilio </th>
             <th> Telefono </th>
             <th> Mesas </th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
         
@@ -47,8 +49,188 @@
     </tbody>
 </table>
 
+
+
+<div class="modal fade" id="AgregarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarRestaurante()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalEditarCuerpo">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnEditarModal">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
+
     <script>
+
+
+         window.onload = function () {
+
+        document.getElementById("btnEditarModal").addEventListener("click", function () {
+            EditarRestaurant();
+        })
+    }
+
+
+     function EditarRestaurant() {
+
+        var Nombre = document.getElementById("Nombre").value;
+        var Direccion = document.getElementById("Direccion").value;
+        var Telefono = document.getElementById("Telefono").value;
+        var Logo = document.getElementById("Logo").value;
+        var PaginaWeb = document.getElementById("PaginaWeb").value;
+        var HoraCierre = document.getElementById("HoraCierre").value;
+        var Id = document.getElementById("Id").value;
+
+        var fd = {};
+
+        fd["Nombre"] = Nombre;
+        fd["Direccion"] = Direccion;
+        fd["Telefono"] = Telefono;
+        fd["Logo"] = Logo;
+        fd["PaginaWeb"] = PaginaWeb;
+        fd["HoraCierre"] = HoraCierre;
+        fd["Id"] = Id;
+
+
+        fetch("/Api/Restaurante/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+         }).then(function (response) {
+            if (response.ok) {
+                $("#editarModal").modal("hide");//JQUERY
+                table.ajax.reload(AddListeners);
+
+            }
+        });
+
+    }
+
+    function AddListeners() {
+          //JAVASCRIPT NATIVO PARA AGREGAR EVENTOS
+                   var buttons =  document.getElementsByClassName("editar-restaurant");
+                    for (i = 0; i < buttons.length; i++) {
+                        buttons[i].addEventListener("click", function () {
+                            MostrarEditar(this.dataset.id)
+                        })
+                    }
+    }
+
+      function MostrarEditar(id) {
+
+       fetch(`@Url.Action("Editar","Home")/${id}`, {
+            method: "GET"
+         }).then(function (response) {
+            if (response.ok) {
+                response.text().then(function (text) {
+                    LimpiarModales()
+                    document.getElementById("modalEditarCuerpo").innerHTML = text;
+                    $("#editarModal").modal("show");//JQUERY
+
+                })
+            }
+        });
+    }
+
+
+
+    function LimpiarModales() {
+
+        var bodies = document.getElementsByClassName("modal-body");
+
+            for (i = 0; i < bodies.length; i++) {
+                    bodies[i].innerHTML = ""
+                        }
+    }
+
+
+
+
+        function MostrarAgregar() {
+            var req = new XMLHttpRequest();
+            req.open("GET", "@Url.Action("AgregarM","Home")", true);
+            req.send();
+
+            req.onreadystatechange = () => {
+                if (req.status == 200) {
+                    document.getElementById("modalCuerpo").innerHTML = req.responseText;
+
+                    $("#AgregarModal").modal("show");
+                }
+            }
+    }
+
+    function GuardarRestaurante() {
+        var nombre = document.getElementById("Nombre").value;
+        var direcion = document.getElementById("Direccion").value;
+        var telefono = document.getElementById("Telefono").value;
+        var logo = document.getElementById("Logo").value;
+        var paginaWeb = document.getElementById("PaginaWeb").value;
+        var horaCierre = document.getElementById("HoraCierre").value;
+
+        var fd = {};
+        fd["Nombre"] = nombre;
+        fd["Direccion"] = direcion;
+        fd["Telefono"] = telefono;
+        fd["Logo"] = logo;
+        fd["PaginaWeb"] = paginaWeb;
+        fd["HoraCierre"] = horaCierre;
+
+        fetch("/Api/Restaurante/", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(fd)
+        }).then(function (response) {
+            if (response.ok) {
+                $("#AgregarModal").modal("hide");
+                table.ajax.reload(AddListeners);
+            }
+        });
+      
+        }
+
+    </script>
+
+
+<script>
         //$('a.ejecutar-eliminacion').click(function (event) {
         //    event.preventDefault();
         //    var id = $(this).data('id')
@@ -103,8 +285,12 @@
         });
     }*@
 
+    var table;
     $(document).ready( function () {
-        var table = $('#tabla-restaurante-contenido').DataTable({
+        table = $('#tabla-restaurante-contenido').DataTable({
+            "initComplete": function () {
+                 AddListeners();
+            },
             ajax: {
                 url: '/api/restaurante',
                 dataSrc : ''
@@ -112,7 +298,12 @@
             },
             columns: [
                 {data: 'id'},
-                {data: 'nombre'},
+               {
+                    data: 'nombre',
+                    render: function (data, type, row) {
+                        return '<a href="@Url.Action("Inforestaurante")/' + row.id + '">' + data + '</a>'
+                    }
+                },
                 {data: 'domicilio'},
                 {data: 'telefono'},
                 {
@@ -123,7 +314,17 @@
                 },
                 {
                     render: (data, type, row) => {
-                        return '<a class="btn btn-info" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        return `<a class="btn btn-info editar-restaurant" data-id="${row.id}">Editar</a>`
+                    }
+                },
+                {
+                    render: (data, type, row) => {
+                        return '<a class="btn btn-warning" href=" @Url.Action("Index","Empleados")/Index/' + row.id + '">Empleados</a>'
+                    }
+                },
+                {
+                    render: (data, type, row) => {
+                        return '<a class="btn btn-primary" href=" @Url.Action("Index","Productos")/Index/' + row.id + '">Productos</a>'
                     }
                 }
             ],
@@ -171,5 +372,7 @@
 
     } );
     </script>
+
+
 
 }

@@ -31,7 +31,7 @@ namespace Restaurante.Infrastructure.Data
                 {
                     Estatus = (int)OrdenEstatus.Pendiente,
                     RestauranteId = 1,
-                    FechaAltra = DateTime.Now
+                    FechaAlta = DateTime.Now
                 });
             }
         }

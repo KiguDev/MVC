@@ -41,7 +41,9 @@ namespace Restaurantes
             services.AddScoped<IRestauranteService, RestauranteService>();
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<IProductoService, ProductoService>();
             services.AddScoped<IOrdenService, OrdenService>();
+            services.AddScoped<IOrdenTieneProductoService, OrdenTieneProductoService>();
             services.AddDbContext<AppDbContext>(c => c.UseSqlServer(Configuration.GetConnectionString("CatalogConnection")) );
             services.AddDbContext<AppIdentityContext>(c => c.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")) );
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI(Microsoft.AspNetCore.Identity.UI.UIFramework.Bootstrap4).AddEntityFrameworkStores<AppIdentityContext>();

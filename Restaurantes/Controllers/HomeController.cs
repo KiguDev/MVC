@@ -41,6 +41,12 @@ namespace Restaurantes.Controllers
             return View(new MesaViewModel());
         }
 
+        public IActionResult AgregarMesaM()
+        {
+            ViewData["Accion"] = "AgregarMesa";
+            return PartialView("_AgregarEditarMesa",new MesaViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AgregarMesa(MesaViewModel model, int id)
@@ -117,30 +123,47 @@ namespace Restaurantes.Controllers
             return View(new RestauranteViewModel());
         }
 
+        public IActionResult AgregarM()
+        {
+            ViewData["Accion"] = "Agregar";
+            return PartialView("_AgregarEditarRestaurante",new RestauranteViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Agregar(RestauranteViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ModelState.AddModelError("", "Te hacen falta campos");
-                return View(model);
-            }
-            model.FechaAlta = DateTime.Now;
+                if (!ModelState.IsValid)
+                {
+                    //ModelState.AddModelError("", "Te hacen falta campos");
+                    //return View(model);
 
-            var restaurante = new Restaurante.Core.Entities.Restaurante {
-                Nombre = model.Nombre,
-                Domicilio = model.Direccion,
-                Telefono = model.Telefono,
-                Logo = model.Logo,
-                PaginaWeb = model.PaginaWeb,
-                FechaAlta = model.FechaAlta,
-                HoraCierre = model.HoraCierre
-                
-            };
-            var respuesta = _restauranteServices.insertar(restaurante);
+                    return BadRequest("Te hacen falta campos");
+                }
+                model.FechaAlta = DateTime.Now;
+
+                var restaurante = new Restaurante.Core.Entities.Restaurante
+                {
+                    Nombre = model.Nombre,
+                    Domicilio = model.Direccion,
+                    Telefono = model.Telefono,
+                    Logo = model.Logo,
+                    PaginaWeb = model.PaginaWeb,
+                    FechaAlta = model.FechaAlta,
+                    HoraCierre = model.HoraCierre
+
+                };
+                var respuesta = _restauranteServices.insertar(restaurante);
+
+                //return View("Agregar", model);
+                return Ok();
+            } catch (Exception e)
+            {
+                return BadRequest();
+            }
             
-            return View("Agregar", model);
         }
 
 
@@ -159,7 +182,7 @@ namespace Restaurantes.Controllers
                 HoraCierre = restaurante.HoraCierre.GetValueOrDefault()
             };
 
-            return View("Agregar", viewModel);
+            return PartialView("_AgregarEditarRestaurante", viewModel);
 
         }
 

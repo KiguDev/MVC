@@ -3,48 +3,60 @@
     ViewData["Title"] = "InfoRestaurante";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="jumbotron" style="background-color:white">
-                <h1 class="display-3">@Model.Nombre</h1>
-                <p class="lead">@Model.Domicilio </p>
-                <hr class="my-4">
-                <p>CONTACTO</p>
-                <p class="lead">@Model.Telefono </p>
-                <p class="lead">@Model.PaginaWeb </p>
-
-            </div>
-        </div>
-
-        <div class="col-sm-4">
-            <img src="@Model.Logo"  />
-        </div>
-    </div>
-
-    <div class="row">
-
-        @foreach (var mesa in @Model.Mesas)
-        {
-            <div class="col-sm-3">
-                <div class="card mb-3">
-                    <h3 class="card-header">@mesa.Identificador</h3>
-                    <div class="card-body">
-                        <h5 class="card-title">Capacidad</h5>
-                        <h6 class="card-subtitle text-muted">@mesa.Capacidad</h6>
-                    </div>
+    <div class="container-fluid">
 
 
 
-                    <div class="card-footer text-muted">
-                        2 days ago
-                    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="jumbotron" style="background-color:white">
+                    <h1 class="display-3">@Model.Nombre</h1>
+                    <p class="lead">@Model.Domicilio </p>
+                    <hr class="my-4">
+                    <p>CONTACTO</p>
+                    <p class="lead">@Model.Telefono </p>
+                    <p class="lead">@Model.PaginaWeb </p>
+
                 </div>
             </div>
-        }
 
+            <div class="col-sm-4">
+                <img src="@Model.Logo" />
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <a href="@Url.Action("Index","Ordenes")/Index/@Model.Id" class="btn btn-outline-dark btn-lg mb-md-5"> Ordenes </a>
+            </div>
+        </div>
+
+        
+
+        <div class="row">
+
+            @foreach (var mesa in @Model.Mesas)
+            {
+                <div class="col-sm-3">
+                    <div class="card mb-3">
+                        <h3 class="card-header">@mesa.Identificador</h3>
+                        <div class="card-body">
+                            <h5 class="card-title">Capacidad</h5>
+                            <h6 class="card-subtitle text-muted">@mesa.Capacidad</h6>
+                        </div>
+
+
+
+                        <div class="card-footer text-muted">
+                            2 days ago
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
     </div>
-</div>
    
 
 

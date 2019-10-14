@@ -65,13 +65,15 @@ namespace Restaurante.Infrastructure.Migrations
 
                     b.Property<int>("Estatus");
 
-                    b.Property<DateTime>("FechaAltra");
+                    b.Property<DateTime>("FechaAlta");
 
                     b.Property<int>("RestauranteId");
 
                     b.Property<decimal>("Total");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Ordenes");
                 });
@@ -84,13 +86,15 @@ namespace Restaurante.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<int>("Id");
+
                     b.Property<decimal>("SubTotal");
 
                     b.HasKey("OrdenId", "ProductoId");
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("OrdenTieneProducto");
+                    b.ToTable("OrdenTieneProductos");
                 });
 
             modelBuilder.Entity("Restaurante.Core.Entities.Producto", b =>
@@ -101,11 +105,19 @@ namespace Restaurante.Infrastructure.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<string>("Imagen");
+
                     b.Property<string>("Ingredientes");
 
                     b.Property<string>("Nombre");
 
+                    b.Property<double>("Precio");
+
+                    b.Property<int>("RestauranteId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestauranteId");
 
                     b.ToTable("Productos");
                 });
@@ -143,16 +155,32 @@ namespace Restaurante.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Restaurante.Core.Entities.Orden", b =>
+                {
+                    b.HasOne("Restaurante.Core.Entities.Restaurante", "Restaurante")
+                        .WithMany("Ordenes")
+                        .HasForeignKey("RestauranteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Restaurante.Core.Entities.OrdenTieneProducto", b =>
                 {
                     b.HasOne("Restaurante.Core.Entities.Orden", "Orden")
                         .WithMany("Productos")
                         .HasForeignKey("OrdenId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Restaurante.Core.Entities.Producto", "Producto")
                         .WithMany("Ordenes")
                         .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Restaurante.Core.Entities.Producto", b =>
+                {
+                    b.HasOne("Restaurante.Core.Entities.Restaurante", "Restaurante")
+                        .WithMany()
+                        .HasForeignKey("RestauranteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
