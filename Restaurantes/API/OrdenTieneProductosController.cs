@@ -52,33 +52,35 @@ namespace Ordenes.API
             if (ordprod == null)
                 return BadRequest();
 
-            if (_ordenTieneProductoService.CompruebaOrdenProducto(ordenprod.OrdenId, ordenprod.ProductoId) == false)
-            {
-                ordenprod.Cantidad = 1;
-                _ordenTieneProductoService.Agregar(ordenprod);
+            if (_ordenService.EstaAbierta(ordid) == true) {
+                if (_ordenTieneProductoService.CompruebaOrdenProducto(ordenprod.OrdenId, ordenprod.ProductoId) == false)
+                {
+                    ordenprod.Cantidad = 1;
+                    _ordenTieneProductoService.Agregar(ordenprod);
+                }
+                else
+                {
+                    _ordenTieneProductoService.ActualizarOrdenProd(ordenprod);
+                }
+
+                var orden = _ordenService.Obtener(ordid);
+                double total = 0;
+                if (orden == null)
+                    return BadRequest();
+
+                var ordenesproductos = new List<OrdenTieneProducto>();
+
+                ordenesproductos = _ordenTieneProductoService.ObtenerOrdenTieneProductos(ordid);
+
+                foreach (var prod in ordenesproductos)
+                {
+                    total = (prod.Precio * prod.Cantidad) + total;
+                }
+
+                orden.Total = total;
+
+                _ordenService.Editar(orden);
             }
-            else
-            {
-                _ordenTieneProductoService.ActualizarOrdenProd(ordenprod);
-            }
-
-            var orden = _ordenService.Obtener(ordid);
-            double total = 0;
-            if (orden == null)
-                return BadRequest();
-
-            var ordenesproductos = new List<OrdenTieneProducto>();
-
-            ordenesproductos = _ordenTieneProductoService.ObtenerOrdenTieneProductos(ordid);
-
-            foreach (var prod in ordenesproductos)
-            {
-                total = (prod.Precio * prod.Cantidad) + total;
-            }
-
-            orden.Total = total;
-
-            _ordenService.Editar(orden);
 
             return Ok();
         }

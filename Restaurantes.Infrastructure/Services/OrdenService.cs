@@ -56,5 +56,17 @@ namespace Restaurantes.Infrastructure.Services
             _context.SaveChanges();
         }
 
+        public bool EstaAbierta(int ordid)
+        {
+            var orden = _context.Ordenes.FirstOrDefault(c => c.Id == ordid);
+            if (orden.Estatus == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
