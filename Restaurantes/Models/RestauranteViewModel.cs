@@ -17,7 +17,7 @@ namespace Restaurantes.Models
        // [Phone]
         public int Telefono { get; set; }
 
-        [Display(Name = "Página Web")]
+        [Display(Name =  "Logo")]
         [Url]
         public string Logo { get; set; }
 

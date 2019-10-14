@@ -13,6 +13,8 @@ namespace Restaurantes.Core.Entities
         public DateTime FechaAlta { get; set; }
         public int Estatus { get; set; }
         public string Total { get; set; }
+        public int MesaId { get; set; }
+        public int RestaurantId { get; set; }
     }
 
     public enum OrdenEstatus

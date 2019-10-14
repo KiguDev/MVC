@@ -18,5 +18,7 @@ namespace Restaurantes.Core.Entities
 
         public ICollection<Mesa> Mesas { get; set; }
         public ICollection<Empleado> Empleados { get; set; }
+        public ICollection<Producto> Productos { get; set; }
+        public ICollection<Orden> Ordenes { get; set; }
     }
 }

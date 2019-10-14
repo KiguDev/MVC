@@ -14,6 +14,8 @@ namespace Restaurantes.Core.Entities
         public Producto Producto { get; set; }
 
         public int Cantidad { get; set; }
-        public decimal SubTotal { get; set; }
+        public string SubTotal { get; set; }
+         
+
     }
 }

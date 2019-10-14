@@ -15,6 +15,7 @@ namespace Restaurantes.Infrastructure.Identity
             foreach (var role in roles)
             {
                 await roleManager.CreateAsync(new IdentityRole(role));
+
             }
 
             var defaultUser = new IdentityUser
@@ -22,7 +23,7 @@ namespace Restaurantes.Infrastructure.Identity
                 UserName = "jemmyPC",
                 Email = "preciadojemmy@gmail.com",
                 EmailConfirmed = true,
-               
+                
             };
 
             await userManager.CreateAsync(defaultUser, "Paste.l19"); 

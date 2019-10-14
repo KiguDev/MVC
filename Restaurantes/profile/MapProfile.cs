@@ -14,7 +14,17 @@ namespace Restaurantes.profile
 
             CreateMap<Restaurantes.Core.Entities.Restaurante, RestauranteViewModel>().ReverseMap();
 
-            CreateMap<Restaurantes.Core.Entities.Restaurante, RestauranteDTO>().ForMember(r => r.Mesas, opt => opt.MapFrom(src => src.Mesas.Count()));
+            CreateMap<Restaurantes.Core.Entities.Restaurante, RestauranteDTO>()
+            .ForMember(r => r.Mesas, opt => opt.MapFrom(src => src.Mesas.Count()))
+            .ForMember(r => r.Empleados, opt => opt.MapFrom(src => src.Empleados.Count()))
+            .ForMember(r => r.Productos, opt => opt.MapFrom(src => src.Productos.Count()))
+            .ForMember(r => r.Ordenes, opt => opt.MapFrom(src => src.Ordenes.Count()));
+
+
+
+
+
+
 
             CreateMap<Restaurantes.Core.Entities.Mesa, MesaDTO>().ReverseMap();
 

@@ -7,5 +7,14 @@ namespace Restaurantes.Models
 {
     public class OrdenViewModel
     {
+        public int Id { get; set; }
+        public int MesaId { get; set; }
+        public int RestaurantId   { get; set; }
+        public int EmpleadoId { get; set; }
+        public DateTime Fecha { get; set; }
+
+        public virtual ICollection<ProductoDTO> Productos { get; set; }
     }
+
+   
 }

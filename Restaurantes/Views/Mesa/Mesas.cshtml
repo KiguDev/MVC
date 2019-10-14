@@ -1,43 +1,29 @@
-﻿@model List<Empleado>
+﻿@model List<Mesa>
 
 
-<h1> Lista de Empleados</h1>
+<h1>Listado de Mesas </h1>
 
-<table class="table" id="tabla-contenido">
-    <thead>
-        <tr>
-            <th>Nombre </th>
-            <th>Puesto</th>
-            <th></th>
-            <th></th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var e in Model)
-        {
+<div class="table-responsive">
+    <table class="table" id="tabla-contenido">
+        <thead>
             <tr>
-                <td> @e.Nombre </td>
-                <td> @e.Puesto</td>
-
-                <td><a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-warning">Editar</a></td>
-                <td>
-                    <form asp-action="Eliminar">
-                        <button name="Id" value="@e.Id" type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                </td>
+                <th>ID </th>
+                <th>Identificador </th>
+                <th>Capacidad </th>
+                <th></th>
             </tr>
-
-        }
-    </tbody>
-</table>
-
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 <div class="modal modal-primary fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="agregarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <h5 class="modal-title" id="agregarModalLabel">Nuevo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body" id="modalcuerpo"></div>
             <div class="modal-footer">
@@ -46,6 +32,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal modal-success fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -86,7 +73,7 @@
         function MostrarEditar(id) {
 
 
-            fetch("@Url.Action("Editar","Empleados")/" + id, {
+            fetch("@Url.Action("EditarMesa","Mesa")/" + id, {
                 method: "GET"
             }).then(function (response) {
                 if (response.ok) {
@@ -98,11 +85,12 @@
                     })
                 }
             });
+
         }
 
         // Abrir Modal
         function ModalAbrir() {
-            fetch("@Url.Action("Agregar", "Empleados")", {
+            fetch("@Url.Action("AgregarMesa", "Mesa")", {
                 method: "GET"
             }).then(function (response) {
                 if (response.ok) {
@@ -118,11 +106,12 @@
         // Editar Data
         function Editar() {
             const data = {};
-            data["Nombre"] = document.querySelector("#Nombre").value;
-            data["Puesto"] = document.querySelector("#Puesto").value;
 
+            data["Identificador"] = document.querySelector("#Identificador").value;
+            data["Capacidad"] = document.querySelector("#Capacidad").value;
+            data["Id"] = @ViewData["Id"];
 
-            fetch("/api/Empleados", {
+            fetch("/api/mesa", {
                 method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -137,14 +126,14 @@
         // Editar Data
         function Guardar() {
             const data = {};
-            data["Nombre"] = document.querySelector("#Nombre").value;
-            data["Puesto"] = document.querySelector("#Puesto").value;
+            data["Identificador"] = document.querySelector("#Identificador").value;
+            data["Capacidad"] = document.querySelector("#Capacidad").value;
             data["RestauranteId"] = @ViewData["Id"];
 
-            fetch("/api/empleados", {
+            fetch("/api/mesa", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data) 
             }).then(function (response) {
                 if (response.ok) {
                     table.ajax.reload(Callback);
@@ -165,18 +154,17 @@
     $(document).ready( function () {
         var table = $('#tabla-contenido').DataTable({
             ajax: {
-                url:'/API/empleados/' + @ViewData["Id"],
+                url:'/API/mesa/' + @ViewData["Id"],
                 dataSrc : ''
 
             },
             columns: [
-                {data: 'nombre'},
-                {data: 'puesto'},
-                {data: ''},
-                {data: ''},
+                {data: 'id'},
+                {data: 'identificador'},
+                {data: 'capacidad'},
                 {
                     render: (data, type, row) => {
-                        return '<a class="btn btn-info" href="@Url.Action("Editar")/' + row.id + '">Editar</a>'
+                        return '<a class="btn btn-info" href="@Url.Action("EditarMesa")/' + row.id + '">Editar</a>'
                     }
                 }
             ],
@@ -205,7 +193,7 @@
                                  // eliminar elemento
                                   $.ajax({
                                         contentType: 'application/json',
-                                        url: '/api/empleados/',
+                                        url: '/api/mesa/',
 
                                         data: '[' + ids.toString() + ']',
                                      type: 'DELETE',
@@ -215,7 +203,7 @@
                                     });
                             }
                         });
-
+                        
 
                         console.log(ids);
                     }

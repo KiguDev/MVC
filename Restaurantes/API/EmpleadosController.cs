@@ -11,22 +11,20 @@ namespace Restaurantes.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpleadoController : Controller
+    public class EmpleadosController : Controller
     {
-
-        private readonly  IEmpleadoService _empleadoService;
+        private readonly IEmpleadoService _empleadoService;
         private readonly IMapper _mapper;
-
-        public EmpleadoController (IEmpleadoService EmpleadoService, IMapper mapper)
+        public EmpleadosController(IEmpleadoService empleadoService, IMapper mapper)
         {
-            _empleadoService = EmpleadoService;
+            _empleadoService = empleadoService;
             _mapper = mapper;
         }
 
         [HttpGet("{id}")]
         public ActionResult<List<EmpleadoDTO>> getEmpleado(int id)
         {
-            var empleados = _empleadoService.ObtenerEmpleados(id);
+            var empleados = _empleadoService.ObtenerEmpleado(id);
             var model = new List<EmpleadoDTO>();
             _mapper.Map(empleados, model);
             return model;
@@ -46,7 +44,7 @@ namespace Restaurantes.API
         }
 
         [HttpDelete("{id}")]
-        public ActionResult deleteEmpleado(int id)
+        public ActionResult deleteProducto(int id)
         {
             _empleadoService.Eliminar(id);
             return Ok();
@@ -62,21 +60,15 @@ namespace Restaurantes.API
             }
 
 
-            var empleado = new Restaurantes.Core.Entities.Empleado
+            var empleados = new Restaurantes.Core.Entities.Empleado
             {
                 Id = model.Id,
-                Nombre = model.Nombre
+                Puesto = model.Puesto
 
             };
-            empleado.Id = id;
-            var respuesta = _empleadoService.Insertar(empleado);
+            empleados.Id = id;
+            var respuesta = _empleadoService.insertar(empleados);
             return Ok();
         }
-
-
-
-
-
-
     }
 }

@@ -1,74 +1,81 @@
 ﻿@model List<Restaurante>
 
-<h1>
-    Restaurantes
+<h1 aria-orientation="horizontal" style="position:center" class="btn btn-primary col-12 ">
+    <em>Restaurantes</em>
 </h1>
+<br>
+<br>
+<div>
+    <a class="btn btn-primary" asp-action="Agregar" aria-orientation="vertical" style="position:fixed">Agregar Restaurante</a>
+</div>
+<br>
+<br>
 
-<a class="btn btn-primary" asp-action="Agregar" > Agregar restaurante</a>
-<table class="table table-bordered tabla-completa-restaurantes" border="1" style="background-color:darkcyan">
-    <thead   >
-        <tr class="table table-bordered d-inline-block alert-dark" style="color:blueviolet"  >
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>Teléfono</th>
-            <th>Logo</th>
-            <th>Pagina Web</th>
-            <th>Mesas</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody id="tabla-restaurantes">
-        @foreach (var restaurante in Model)
-        {
-        <tr class="row-@restaurante.Id">
-            <td>@restaurante.Id</td>
-            <td>
-                <input type="hidden" class="id-restaurante" value="@restaurante.Id" />
-                @restaurante.Nombre
-            </td>
-            <td>@restaurante.Domicilio</td>
-            <td>@restaurante.Telefono</td>
-            <td>@restaurante.Logo</td>
-            <td>@restaurante.PaginaWeb</td>
-            <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
-            <td>
-                <a asp-action="Editar" asp-route-id="@restaurante.Id">Editar</a>
-                <a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminar</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
-@section Scripts{
-    <script>
+
+    <table class="table  tabla-completa-restaurantes " >
+        <thead style="position:fixed,center ">
+            <tr>
+                <th>Logo</th>
+                <th>Nombre</th>
+                <th> Domicilio</th>
+                <th> Telefono</th>
+                <th> PaginaWeb</th>
+                <th> Mesas</th>
+                <th>Editar/Eliminar</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabla-restaurantes" style="position:fixed,center ">
+            @*@foreach (var restaurante in Model)
+            {
+                <tr class="row-@restaurante.Id">
+                    <td >@restaurante.Logo</td>
+                    <td >
+                        <input type="hidden" class="id-restaurante" value="@restaurante.Id" />
+                        @restaurante.Nombre
+                    </td>
+                    <td >@restaurante.Domicilio</td>
+                    <td >@restaurante.Telefono</td>
+                    <td >@restaurante.PaginaWeb</td>
+                    <td><a asp-action="Mesas" asp-route-id="@restaurante.Id">@restaurante.Mesas.Count</a></td>
+                    <td>
+                        <button a asp-action="Editar"  asp-route-id="@restaurante.Id">Editar</button>
+                        <button a href="#" class="ejecutar-eliminacion" data-id="@restaurante.Id">Eliminar </button>
+                    </td>
+                </tr>*@
+            
+        </tbody>
+    </table>
+
+        @section Scripts{
+            <script>
     $('#tabla-restaurantes').on('click','.ejecutar-eliminacion', function (event) {
         event.preventDefault();
         //var id = $(this).attr('data-id');
-        var id = $(this).data('id');
+        var id = $(this).data-id('id',);
         var IsConfirmed = confirm("Seguro que quieres eliminar este elemento?");
 
         if (IsConfirmed) {
             // eliminar elemento
             $.ajax({
-                url: 'https://localhost:44343/api/restaurantes/' + id,
+                url: 'https://localhost:44343/Restaurantes\API\Restaurante' + id,
                 type: 'DELETE',
                 success: recargarElementos
             });
-
-
         }
     });
 
     function recargarElementos() {
         // obtener elementos
-        $.getJSON('https://localhost:44343/api/restaurantes/', function (data) {
+        $.getJSON('https://localhost:44343/Home/Restaurantes', function (data) {
             var rows;
             data.forEach(function (element) {
                 var row = '<tr>'
+                + '<td>' + element.Logo + '</td>'
                 + '<td class="clase">' + element.NombreRestaurante + '</td>'
                 + '<td>' + element.direccion + '</td>'
                 + '<td>' + element.telefono + '</td>'
+                + '<td>' + element.PaginaWeb + '</td>'
                 + '<td><a href="@Url.Action("Mesas", "Index")/"' + element.id + '">' + element.cantidadMesas + '</a></td>'
                 + '<td><a href="@Url.Action("Editar")/"' + element.id + '">Editar</a> <a href="#" data-id="' + id + '" class="ejecutar-eliminacion">Eliminar</a></td>'
                 + '</tr>';
@@ -80,14 +87,15 @@
         });
     }
 
-    $(function () {
+
+        $(function () {
         var table = $('.tabla-completa-restaurantes').DataTable(
             {
                 select: true,
                 dom: 'Bfrtip',
-                 buttons: [
+                buttons: [
+                'copy', 'excel', 'pdf',
                 {
-                    text: 'Eliminar',
                     action: function ( e, dt, node, config ) {
                         var rows = table.rows({ selected: true } ).data();
 
@@ -108,5 +116,5 @@
             }
         );
     })
-    </script>
-}
+            </script>
+        }

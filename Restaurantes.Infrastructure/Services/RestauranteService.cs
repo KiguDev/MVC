@@ -17,6 +17,8 @@ namespace Restaurantes.Infrastructure.Services
             _context = context;
         }
 
+
+        //Editar Restaurante por contexto retornando el Id del restaurante
         public int Editar(Restaurantes.Core.Entities.Restaurante restaurante)
         {
             _context.Update(restaurante);
@@ -24,7 +26,14 @@ namespace Restaurantes.Infrastructure.Services
             return restaurante.Id;
         }
 
-       
+        public int Editar(int Id)
+        {
+            var restaurantes = _context.Restaurantes.Find(Id);
+            Id = restaurantes.Id;
+            _context.Restaurantes.UpdateRange();
+            _context.SaveChanges();
+            return restaurantes.Id;
+        }
 
         public void Eliminar(int id)
         {
@@ -38,12 +47,14 @@ namespace Restaurantes.Infrastructure.Services
             var restaurantes = _context.Restaurantes.Where(c => ids.Contains(c.Id));
             _context.RemoveRange(restaurantes);
             _context.SaveChanges();
-             
+
         }
 
         public void EliminarVarios(int[] ids)
         {
-            throw new NotImplementedException();
+            var restaurantes = _context.Restaurantes.Where(c => ids.Contains(c.Id));
+            _context.RemoveRange(restaurantes);
+            _context.SaveChanges();
         }
 
         public int Insertar(Core.Entities.Restaurante restaurante)
@@ -53,27 +64,19 @@ namespace Restaurantes.Infrastructure.Services
             return restaurante.Id;
         }
 
-      
+
 
         public Core.Entities.Restaurante Obtener(int id)
         {
             return _context.Restaurantes.FirstOrDefault(c => c.Id == id);
         }
 
-        
+
         public List<Core.Entities.Restaurante> ObtenerRestaurantes()
         {
             return _context.Restaurantes.Include(c => c.Mesas).Include(d => d.Empleados).ToList();
         }
 
-        void IRestauranteService.Editar(Core.Entities.Restaurante restaurante)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IRestauranteService.Eliminar(int id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

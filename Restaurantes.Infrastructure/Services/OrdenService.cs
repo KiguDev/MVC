@@ -1,12 +1,12 @@
-﻿using Restaurantes.Core.Interfaces;
+﻿using Restaurantes.Core.Entities;
+using Restaurantes.Core.Interfaces;
 using Restaurantes.Infrastructure.Data;
-using Restaurantes.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Restaurante.Infrastructure.Services
+namespace Restaurantes.Infrastructure.Services
 {
     public class OrdenService : IOrdenService
     {
@@ -29,7 +29,7 @@ namespace Restaurante.Infrastructure.Services
             _context.SaveChanges();
         }
 
-        public int Insertar(Orden orden)
+        public int insertar(Orden orden)
         {
             _context.Ordenes.Add(orden);
             _context.SaveChanges();
@@ -50,13 +50,7 @@ namespace Restaurante.Infrastructure.Services
 
         public List<Orden> ObtenerTodas()
         {
-            var ordenes = _context.Ordenes.ToList();
-            return ordenes;
-        }
-
-        public List<Orden> ObtenerTodo()
-        {
-            throw new NotImplementedException();
+            return _context.Ordenes.ToList();
         }
     }
 }

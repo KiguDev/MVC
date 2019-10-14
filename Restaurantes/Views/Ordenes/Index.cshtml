@@ -1,33 +1,217 @@
-﻿@model List<Empleado>
+﻿@model int
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<div style="height:100px;width:100px">
+        <div id="cuadrado" style="background-color:black;height:50px;width:50px;position:absolute"></div>
+    </div>*@
+<h1>Ordenes</h1>
+<div class="row">
+    <div class="col-sm-6" id="Productos">
+    </div>
+    <div class="col-sm-6" id="Totales">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6"></div>
+    <div class="col-sm-6">
+        <h3>TOTAL <b id="total-label">0</b> </h3>
+        <button id="btn-enviar" class="btn btn-success">Enviar</button>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalCantidad">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cantidad</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="cantidad-modal">Cantidad de producto</label>
+                    <input type="number" class="form-control" id="cantidad-modal" min="0" />
+                    <input type="hidden" id="precio-modal" />
+                    <input type="hidden" id="id-modal" />
+                    <input type="hidden" id="nombre-modal" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="agregarProducto">Agregar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/js-cookie/js.cookie.js"></script>
+<script>
 
 
-<h1>Empleados de @*@Model.FirstOrDefault().Restaurante.Nombre*@</h1>
-<a asp-action="Agregar" asp-route-id="@ViewData["resId"]" class="btn btn-outline-primary">Agregar Empleado +</a>
+    $("#btn-enviar").click(function () {
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th> Identificador </th>
-            <th> Capacidad </th>
-            <th></th>
-            <th></th>
+        var orden = {};
+        orden.Id = "1";
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var e in Model)
-        {
-            <tr>
-                <td> @e.Nombre </td>
-                <td> @e.Puesto</td>
+        var productos = [];
 
-                <td><a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-warning">Editar</a></td>
-                <td>
-                    <form asp-action="Eliminar">
-                        <button name="Id" value="@e.Id" type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
+        //var productos = $(".producto-row");
+
+        for (i = 0; i < 5; i++) {
+            var pNew = {};
+            pNew.Id = "1";
+            pNew.Cantidad = "1";
+            productos.push(pNew);
         }
-    </tbody>
-</table>
+        orden.productos = productos;
+        var req = JSON.stringify(orden);
+
+        $.post("/api/ordenes/RecibirProducto", {prod: req}  , function (res) {
+            console.log(res);
+        })
+
+    })
+
+    var total = 0;
+    //TEXTO
+    var tr = "<tr><td class='td-producto'>Producto</td><td class='td-cantidad'>Cantidad</td><td class='td-precio'>Precio</td> </tr>"
+    var template;
+    var templateRowProducto;
+    $(document).ready(function () {
+
+        ///Obtiene el template del div de producto en TEXTO
+
+        $.get("@Url.Action("ProductoView","Ordenes")", function (res) {
+            template = res;
+        })
+
+
+        $.get("@Url.Action("ProductoAddView","Ordenes")", function (res) {
+            templateRowProducto = res;
+        })
+
+        $.getJSON("/api/restaurante", {id:'@Model'}, function (res) {
+            $.map(res,function (r,val) {
+                   var element = $(template);  //Convierte el template en un elemento HTML/JQUERY
+                element.find('.product-name').text(r.nombre);  //REEMPLAZA EL VALOR
+                element.find('.id-producto').val(r.id);
+                element.find('.precio-producto').val("100");
+
+                $("#Productos").append(element); //LO AGREGA AL DIV
+
+                //var trNew = $(tr);
+                //trNew.find('.td-producto').text(r.nombre);
+                //trNew.find('.td-cantidad').text(r.cantidad);
+                //trNew.find('.td-precio').text(r.precio);
+                //$('tbody').append(trNew);
+
+            })
+       })
+
+
+
+ })
+
+
+    $(document).on('click', '.producto', function () {
+
+        var id = $(this).find('.id-producto').val();
+        var precio = $(this).find('.precio-producto').val();
+        var nombre = $(this).find('.product-name').text();
+        $("#id-modal").val(id);
+        $("#precio-modal").val(precio);
+        $("#nombre-modal").val(nombre);
+          Cookies.set(nombre, precio)
+        $("#modalCantidad").modal("show");
+    })
+
+    $("#agregarProducto").click(function () {
+        var nombre = $("#nombre-modal").val();
+        var id = $("#id-modal").val();
+        var precio = $("#precio-modal").val();
+        var cantidad = $("#cantidad-modal").val();
+
+        var element = $(templateRowProducto);
+        element.find('.producto-label').text(nombre);
+        element.find('.cantidad-input').val(cantidad);
+        element.find('.precio-label').text(precio);
+        element.find('.id-producto-orden').text(id);
+        $("#Totales").append(element);
+        var precioCookie = Cookies.get(nombre);
+        $("#modalCantidad").modal("hide");
+    })
+
+    function AddListeners() {
+          //JAVASCRIPT NATIVO PARA AGREGAR EVENTOS
+                   var buttons =  document.getElementsByClassName("producto");
+                    for (i = 0; i < buttons.length; i++) {
+                        buttons[i].addEventListener("click", function () {
+                             fetch(`@Url.Action("ProductoAddView","Ordenes")`, {
+                            method: "GET"
+                         }).then(function (response) {
+                            if (response.ok) {
+                                response.text().then(function (text) {
+
+                                     document.getElementById("Totales").innerHTML += text;
+                                    total += 100;
+                                    document.getElementById("total-label").innerHTML = total;
+                                    AddEliminarListener();
+                                    })
+                                }
+                             });
+                        })
+                    }
+
+
+    }
+
+
+
+    //Animaciones
+
+
+    $("#cuadrado").click(function () {
+
+        $(this).animate({
+            left: "100px",
+        }, "slow")
+         $(this).animate({
+            top: "100px"
+         }, "slow")
+         $(this).animate({
+            left: "0px"
+         }, "slow")
+         $(this).animate({
+            top: "0px"
+        }, "slow")
+    })
+
+
+    $(document).on('click', '.elim', function () {
+        $("#total-label").innerHTML = total;
+
+        var element = this ;
+
+        $(this.parentNode.parentNode).animate({
+          left: '250px',
+          opacity: '0.3',
+          height: '100px',
+          width: '0px',
+
+        });
+
+
+        setTimeout(function () {
+            element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode);
+        }, 300);
+
+    })
+
+</script>

@@ -1,25 +1,29 @@
-﻿@model List<Empleado>
+﻿@model List<Producto>
 
 
-<h1> Lista de Empleados</h1>
+<h1>Listado de Productos </h1>
 
-<table class="table" id="tabla-contenido">
-    <thead>
-        <tr>
-            <th>Nombre </th>
-            <th>Puesto</th>
-            <th></th>
-            <th></th>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var e in Model)
-        {
+    <table class="table" id="tabla-contenido">
+        <thead>
+            <tr>
+                <th> Nombre</th>
+                <th> Precio</th>
+                <th> Descripcion</th>
+                <th> Imagen</th>
+                <th></th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var e in Model)
+            {
             <tr>
                 <td> @e.Nombre </td>
-                <td> @e.Puesto</td>
-
+                <td> @e.Precio</td>
+                <td> @e.Descripcion</td>
+               <td> @e.Imagen</td>
                 <td><a asp-action="Editar" asp-route-id="@e.Id" class="btn btn-warning">Editar</a></td>
                 <td>
                     <form asp-action="Eliminar">
@@ -27,45 +31,48 @@
                     </form>
                 </td>
             </tr>
+            }
+        </tbody>
 
-        }
-    </tbody>
-</table>
+    </table>
 
-<div class="modal modal-primary fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="agregarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title" id="agregarModalLabel">Nuevo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body" id="modalcuerpo"></div>
-            <div class="modal-footer">
 
-            </div>
-        </div>
-    </div>
-</div>
+    <div class="modal modal-primary fade" id="agregarModal" tabindex="-1" role="dialog" aria-labelledby="agregarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title" id="agregarModalLabel">Nuevo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="modalcuerpo"></div>
+                <div class="modal-footer">
 
-<div class="modal modal-success fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h5 class="modal-title" id="editarModalLabel">Editar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body" id="modaleditarcuerpo">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnEditarModal">Editar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@section Scripts{
-    <script type="text/javascript">
+    <div class="modal modal-success fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title" id="editarModalLabel">Editar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="modaleditarcuerpo">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnEditarModal">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+        <script type="text/javascript">
 
         // Globals
         let table;
@@ -86,7 +93,7 @@
         function MostrarEditar(id) {
 
 
-            fetch("@Url.Action("Editar","Empleados")/" + id, {
+            fetch("@Url.Action("Editar","Producto")/" + id, {
                 method: "GET"
             }).then(function (response) {
                 if (response.ok) {
@@ -102,7 +109,7 @@
 
         // Abrir Modal
         function ModalAbrir() {
-            fetch("@Url.Action("Agregar", "Empleados")", {
+            fetch("@Url.Action("Agregar", "Producto")", {
                 method: "GET"
             }).then(function (response) {
                 if (response.ok) {
@@ -119,10 +126,11 @@
         function Editar() {
             const data = {};
             data["Nombre"] = document.querySelector("#Nombre").value;
-            data["Puesto"] = document.querySelector("#Puesto").value;
+            data["Precio"] = document.querySelector("#Precio").value;
+            data["Descripcion"] = document.querySelector("#Descripcion").value;
+            data["Imagen"] = document.querySelector("#Imagen").value;
 
-
-            fetch("/api/Empleados", {
+            fetch("/api/producto", {
                 method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -138,10 +146,12 @@
         function Guardar() {
             const data = {};
             data["Nombre"] = document.querySelector("#Nombre").value;
-            data["Puesto"] = document.querySelector("#Puesto").value;
+            data["Precio"] = document.querySelector("#Precio").value;
+            data["Descripcion"] = document.querySelector("#Descripcion").value;
+            data["Imagen"] = document.querySelector("#Imagen").value;
             data["RestauranteId"] = @ViewData["Id"];
 
-            fetch("/api/empleados", {
+            fetch("/api/producto", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -165,14 +175,15 @@
     $(document).ready( function () {
         var table = $('#tabla-contenido').DataTable({
             ajax: {
-                url:'/API/empleados/' + @ViewData["Id"],
+                url:'/API/Producto/' + @ViewData["Id"],
                 dataSrc : ''
 
             },
             columns: [
                 {data: 'nombre'},
-                {data: 'puesto'},
-                {data: ''},
+                {data: 'precio'},
+                { data: 'Descripcion' },
+                { data: 'Imagen' },
                 {data: ''},
                 {
                     render: (data, type, row) => {
@@ -205,7 +216,7 @@
                                  // eliminar elemento
                                   $.ajax({
                                         contentType: 'application/json',
-                                        url: '/api/empleados/',
+                                        url: '/api/producto/',
 
                                         data: '[' + ids.toString() + ']',
                                      type: 'DELETE',
@@ -223,5 +234,6 @@
             ]
         });
     } );
-    </script>
-}
+        </script>
+    }
+

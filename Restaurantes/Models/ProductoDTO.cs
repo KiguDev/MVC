@@ -9,10 +9,11 @@ namespace Restaurantes.Models
     {
         public int Id;
         public string Nombre;
-        public int Precio;
+        public string Precio;
         public string Descripcion;
         public string Imagen;
-        public string RestaurantId;
+        public int RestaurantId;
 
+        public RestauranteViewModel Restaurante { get; set; }
     }
 }

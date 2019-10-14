@@ -18,7 +18,6 @@ using Restaurantes.Core;
 using Restaurantes.Infrastructure.Data;
 using Restaurantes.Infrastructure.Identity;
 using Restaurantes.Infrastructure.Services;
-using Restaurante.Infrastructure.Services;
 
 
 namespace Restaurantes
@@ -71,7 +70,7 @@ namespace Restaurantes
             //        IsEssential = true
             //    };
             //});
-            services.AddScoped<IRestauranteService, RestauranteService>();
+            services.AddScoped<Infrastructure.Services.IRestauranteService, RestauranteService>();
             services.AddScoped<IMesaService, MesaService>();
             services.AddScoped<IEmpleadoService, EmpleadoService>();
             services.AddScoped<IProductoService, ProductoService>();

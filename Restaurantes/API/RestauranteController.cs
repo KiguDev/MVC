@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurantes.Core.Interfaces;
+using Restaurantes.Infrastructure.Services;
 using Restaurantes.Models;
 
 namespace Restaurantes.API
@@ -14,17 +15,17 @@ namespace Restaurantes.API
     [ApiController]
     public class RestauranteController : ControllerBase
     {
-        private readonly IRestauranteService _RestauranteService;
+        private readonly IRestauranteService RestauranteService;
         private readonly IMapper _mapper;
         public RestauranteController(IRestauranteService restauranteService, IMapper mapper)
         {
-            _RestauranteService = restauranteService;
+            RestauranteService = restauranteService;
             _mapper = mapper;
         }
         [HttpGet]
-        public ActionResult<List<RestauranteDTO>> getRestaurantes()
+        public ActionResult<List<RestauranteDTO>> ObtenerRestaurantes()
         {
-            var restaurantes = _RestauranteService.ObtenerRestaurantes();
+            var restaurantes = RestauranteService.ObtenerRestaurantes();
 
             var model = new List<RestauranteDTO>();
             _mapper.Map(restaurantes, model);
@@ -32,10 +33,10 @@ namespace Restaurantes.API
             return model;
         }
 
-        [HttpPut("{id}")]
-        public ActionResult putRestaurante(int id, [FromBody] RestauranteViewModel model)
+        [HttpPost("{id}")]
+        public ActionResult Editar ([FromForm] int id , RestauranteViewModel model)
         {
-            var restaurante = _RestauranteService.Obtener(id);
+            var restaurante = RestauranteService.Obtener(id);
             if (restaurante == null)
                 return BadRequest();
             restaurante.Nombre = model.Nombre;
@@ -46,27 +47,29 @@ namespace Restaurantes.API
             restaurante.FechaAlta = model.FechaAlta;
             restaurante.HoraCierre = model.HoraCierre;
 
-            _RestauranteService.Editar(restaurante);
+            RestauranteService.Editar(restaurante);
+            
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult deleteRestaurante(int id)
+        public ActionResult Eliminar(int id)
         {
-            _RestauranteService.Eliminar(id);
-            return Ok();
+            RestauranteService.Eliminar(id);
+
+            return RedirectToAction("Index");
         }
 
         [HttpDelete]
-        public ActionResult deleteRestaurante([FromBody]int[] ids)
+        public ActionResult EliminarVarios([FromBody]int[] ids)
         {
-            _RestauranteService.EliminarVarios(ids);
+            RestauranteService.EliminarVarios(ids);
             return Ok();
         }
 
 
         [HttpPost()]
-        public ActionResult postRestaurante([FromBody] RestauranteViewModel model)
+        public ActionResult Insertar([FromBody] RestauranteViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -76,7 +79,7 @@ namespace Restaurantes.API
             model.FechaAlta = DateTime.Now;
             _mapper.Map(model, restaurante);
           
-            var respuesta = _RestauranteService.Insertar(restaurante);
+            var respuesta = RestauranteService.Insertar(restaurante);
             return Ok();
         }
     }

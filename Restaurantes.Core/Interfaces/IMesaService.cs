@@ -1,23 +1,27 @@
-﻿using Restaurantes.Core.Entities;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Restaurantes.Core.Interfaces
-{
-    public interface IMesaService
     {
-        List<Mesa> ObtenerMesas(int id);
-       Mesa Obtener(int id);
+        public interface IMesaService
+        {
+            List<Restaurantes.Core.Entities.Mesa> ObtenerMesas(int id);
+            Restaurantes.Core.Entities.Mesa Obtener(int id);
+            IEnumerable<Restaurantes.Core.Entities.Mesa> Obtener();
 
-        int Insertar(Mesa mesa);
+            int insertar(Restaurantes.Core.Entities.Mesa mesa);
 
-        void Editar(Mesa mesa);
+            void Editar(Restaurantes.Core.Entities.Mesa mesa);
 
-        void Eliminar(int id);
-
+            void Eliminar(int id);
+            void EliminarVarios(int[] ids);
+        }
     }
-}
+
+
+
 
 //void EliminarVarios(int[] ids);
 

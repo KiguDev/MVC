@@ -36,8 +36,11 @@ namespace Restaurantes.API
                 var producto = _productoService.Obtener(id);
                 if (producto == null)
                     return BadRequest();
-                producto.Nombre = model.Nombre;
-                producto.Id = model.Id;
+            producto.Nombre = model.Nombre;
+            producto.Precio = model.Precio;
+            producto.Descripcion = model.Descripcion;
+            producto.Imagen = model.Imagen;
+           
 
                 _productoService.Editar(producto);
                 return Ok();
@@ -63,10 +66,13 @@ namespace Restaurantes.API
                 var producto = new Restaurantes.Core.Entities.Producto
                 {
                     Id = model.Id,
-                    Precio = model.Precio
+                    Precio = model.Precio,
+                    Descripcion = model.Descripcion,
+                    Imagen = model.Imagen
 
                 };
                 producto.Id = id;
+                ViewData["Id"] = producto.RestauranteId;
                 var respuesta = _productoService.Insertar(producto);
                 return Ok();
             }

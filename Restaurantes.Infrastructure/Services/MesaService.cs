@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+
 using Restaurantes.Core.Entities;
 using Restaurantes.Core.Interfaces;
 using Restaurantes.Infrastructure.Data;
@@ -17,14 +18,14 @@ namespace Restaurantes.Infrastructure.Services
             _context = context;
         }
 
-        public int Insertar(Mesa mesa)
+        public int insertar(Core.Entities.Mesa mesa)
         {
             _context.Mesas.Add(mesa);
             _context.SaveChanges();
             return mesa.Id;
         }
 
-        public void Editar(Mesa mesa)
+        public void Editar(Core.Entities.Mesa mesa)
         {
             _context.Mesas.Update(mesa);
             _context.SaveChanges();
@@ -51,12 +52,17 @@ namespace Restaurantes.Infrastructure.Services
         }
 
 
-        public Mesa Obtener(int id)
+        public Core.Entities.Mesa Obtener(int id)
         {
             return _context.Mesas.FirstOrDefault(m => m.Id == id);
         }
 
-        public List<Restaurantes.Core.Entities.Mesa> ObtenerMesas(int id)
+        public IEnumerable<Core.Entities.Mesa> Obtener()
+        {
+            return _context.Mesas;
+        }
+
+        public List<Core.Entities.Mesa> ObtenerMesas(int id)
         {
             var mesas = _context.Mesas.Include(m => m.Restaurante).Where(mes => mes.RestauranteId == id).ToList();
             return mesas;

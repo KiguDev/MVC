@@ -30,6 +30,16 @@ namespace Restaurantes.API
             return model;
         }
 
+        [HttpGet]
+        public ActionResult<List<MesaDTO>> getMesas()
+        {
+            var mesas = _mesaService.Obtener();
+            var model = new List<MesaDTO>();
+            _mapper.Map(mesas, model);
+            return model;
+        }
+
+
         [HttpPut("{id}")]
         public ActionResult putMesa(int id, MesaViewModel model)
         {
@@ -49,7 +59,15 @@ namespace Restaurantes.API
             _mesaService.Eliminar(id);
             return Ok();
         }
-         
+
+
+        [HttpDelete]
+        public ActionResult deleteMesa([FromBody]int[] ids)
+        {
+            _mesaService.EliminarVarios(ids);
+            return Ok();
+        }
+
 
         [HttpPost("{id}")]
         public ActionResult postMesa([FromBody] MesaViewModel model, int id)
@@ -67,7 +85,7 @@ namespace Restaurantes.API
 
             };
             mesa.RestauranteId = id;
-            var respuesta = _mesaService.Insertar(mesa);
+            var respuesta = _mesaService.insertar(mesa);
             return Ok();
         }
     }

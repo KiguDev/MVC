@@ -57,7 +57,7 @@ namespace Restaurantes.Infrastructure.Services
 
         public List<Restaurantes.Core.Entities.Producto> ObtenerProducto(int id)
         {
-            var producto = _context.Productos.Include(m => m.Restaurante).Where(mes => mes.Id == id).ToList();
+            var producto = _context.Productos.Where(p => p.RestauranteId == id).ToList();
            
             return producto;
         }

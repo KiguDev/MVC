@@ -12,9 +12,9 @@ namespace Restaurantes.Models
         public string Precio { get; set; }
         public string Descripcion { get; set; }
         public string Imagen { get; set; }
-        public string RestauranteId { get; set; }
+        public int RestauranteId { get; set; }
 
-
+        public RestauranteViewModel Restaurante { get; set; }
 
     }
 }

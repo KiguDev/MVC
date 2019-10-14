@@ -1,19 +1,20 @@
-﻿using Restaurantes.Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Restaurantes.Core.Interfaces
 {
-  public  interface IEmpleadoService
+    public interface IEmpleadoService
     {
-        List<Entities.Empleado> ObtenerEmpleados(int id);
-        Entities.Empleado Obtener(int id);
+        List<Restaurantes.Core.Entities.Empleado> ObtenerEmpleado(int id);
+        Restaurantes.Core.Entities.Empleado Obtener(int id);
+        IEnumerable<Restaurantes.Core.Entities.Empleado> Obtener();
 
-        int Insertar(Empleado empleado);
+        int insertar(Restaurantes.Core.Entities.Empleado empleado);
 
-        void Editar(Empleado empleado);
+        void Editar(Restaurantes.Core.Entities.Empleado empleado);
 
         void Eliminar(int id);
+        void EliminarVarios(int[] ids);
     }
 }

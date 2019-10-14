@@ -17,29 +17,31 @@ namespace Restaurantes.Controllers
                 _productoServices = productoService;
             }
 
-
             public IActionResult Index(int id)
             {
-                ViewData["resId"] = id;
+                ViewData["id"] = id;
                 var productos = _productoServices.ObtenerProducto(id);
                 return View(productos);
             }
 
+        //Agregar /Nuevo 
             public IActionResult Agregar()
             {
                 ViewData["Accion"] = "Agregar";
-                return View(new ProductoViewModel());
+                return View("Agregar", new ProductoViewModel());
             }
 
 
 
             [HttpPost]
             [ValidateAntiForgeryToken]
-            public IActionResult Agregar(ProductoViewModel model, int id)
+            public IActionResult Agregar(ProductoViewModel model)
             {
+                
                 if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("", "Te hacen falta campos");
+               
+                ModelState.AddModelError("", "Te hacen falta campos");
                     return View(model);
                 }
 
@@ -49,14 +51,13 @@ namespace Restaurantes.Controllers
                     Nombre = model.Nombre,
                     Precio = model.Precio,
                     Descripcion = model.Descripcion,
-                    Imagen = model.Imagen
-                };
+                    Imagen = model.Imagen,
+                   
 
-                model.Id = id;
-                producto.Id = id;
+
+        };
                 var respuesta = _productoServices.Insertar(producto);
-
-                return View("Agregar", model);
+                return View();
             }
 
          
@@ -69,7 +70,8 @@ namespace Restaurantes.Controllers
                     Nombre = producto.Nombre,
                     Precio = producto.Precio,
                     Descripcion = producto.Descripcion,
-                    Imagen = producto.Imagen
+                    Imagen = producto.Imagen,
+
                 };
 
                 return View("Agregar", viewModel);
@@ -91,6 +93,7 @@ namespace Restaurantes.Controllers
                     producto.Precio = model.Precio;
                     producto.Descripcion = model.Descripcion;
                     producto.Imagen = model.Imagen;
+                   
                    _productoServices.Editar(producto);
 
 
@@ -99,12 +102,12 @@ namespace Restaurantes.Controllers
 
             ///Eliminar Producto
            
-            [HttpPost]
+            [HttpDelete]
             public IActionResult Eliminar(int id)
             {
-                var resId = _productoServices.Obtener(id).Id;
+                var Id = _productoServices.Obtener(id).Id;
                 _productoServices.Eliminar(id);
-                return RedirectToAction("Index", new { Id = resId });
+                return RedirectToAction("Index", new { Id = Id });
             }
 
         

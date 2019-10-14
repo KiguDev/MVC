@@ -10,5 +10,7 @@ namespace Restaurantes.Models
         public int Id { get; set; }
         public int Capacidad { get; set; }
         public string Identificador { get; set; }
+        public int RestauranteId{ get; set; }
+
     }
 }

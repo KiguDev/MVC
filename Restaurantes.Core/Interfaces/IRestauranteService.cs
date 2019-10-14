@@ -1,40 +1,17 @@
 ﻿using System.Collections.Generic;
+using Restaurantes.Core.Entities;
 
-
-namespace Restaurantes.Core.Interfaces
+namespace Restaurantes.Infrastructure.Services
 {
-    public interface IRestauranteService 
+    public interface IRestauranteService
     {
-        List<Entities.Restaurante> ObtenerRestaurantes();
-        Entities.Restaurante Obtener(int id);
-
-        int Insertar(Entities.Restaurante restaurante);
-
-        void Editar(Entities.Restaurante restaurante);
-
+        int Editar(int Id);
+        int Editar(Core.Entities.Restaurante restaurante);
         void Eliminar(int id);
-
+        void Eliminar(int[] ids);
         void EliminarVarios(int[] ids);
-
+        int Insertar(Core.Entities.Restaurante restaurante);
+        Core.Entities.Restaurante Obtener(int id);
+        List<Core.Entities.Restaurante> ObtenerRestaurantes();
     }
-
-
-
-
-
-    ////Interfaz de Empleado
-    //List<Empleado> ObtenerEmpleado();
-    //Empleado ObtenerE(int id);
-    //int Agregar(Empleado empleado);
-    //void Editar(Empleado empleado);
-    //void Remover(Empleado empleado);
-
-
-    ////Interfaz de Mesa
-    //List<Mesa> ObtenerMesa();
-    //Mesa ObtenerM(int id);
-    //int Agregar(Mesa mesa);
-    //void Editar(Mesa mesa);
-    //void Remover(Mesa mesa);
 }
-

@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "Todas";
+    <input type="text" id="mensajeNuevo" />
+    <button id="enviar" class="btn btn-default">ENVIAR</button>
+    <div style="height:400px" id="ListadoMensajes">
+
+    </div>
+
+
+
+
+    @for (int i = 0; i < 11; i++)
+    {
+        <div class="card" style="width: 18rem;" id="@i">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary btn-eliminar" data-id="@i">ELIMINAR @i</a>
+            </div>
+        </div>
+    }
+
+
+
+}
+
+<h1>Todas</h1>
+@section Scripts{
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script>
+
+
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ordenHub").build();
+        connection.start().catch(err => console.error(err.toString()));
+
+
+
+
+        connection.on('Recibir', (message) => {
+            alert('El mensaje es ' + message);
+        });
+
+
+        connection.on('RemoverOrdenDePantalla', (message) => {
+
+            $("#" + message).remove();
+
+        });
+
+        connection.on('RecibirMensaje', (message) => {
+             $("#ListadoMensajes").append("<br/>");
+            $("#ListadoMensajes").append(message);
+
+
+        });
+
+
+        $(".btn-eliminar").click(function () {
+
+            var id = $(this).data("id");
+            connection.invoke("Eliminar", id);
+        })
+
+
+        $("#enviar").click(function () {
+
+            var message = $("#mensajeNuevo").val();
+            connection.invoke("SendMessage", message);
+            $("#mensajeNuevo").val("");
+        })
+    </script>
+
+
+}

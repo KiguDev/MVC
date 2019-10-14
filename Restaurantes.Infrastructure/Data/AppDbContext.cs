@@ -28,7 +28,7 @@ namespace Restaurantes.Infrastructure.Data
                 c.ProductoId
             });
 
-            builder.HasOne(c => c.Producto).WithMany(c => c.Ordenes).HasForeignKey(c => c.ProductoId);
+           // builder.HasOne(c => c.Producto).WithOne(c => c.Orden).HasForeignKey(c => c.ProductoId);
             builder.HasOne(c => c.Orden).WithMany(c => c.Productos).HasForeignKey(c => c.OrdenId);
         }
         private void ConfigureRetaurante(EntityTypeBuilder<Core.Entities.Restaurante> builder)
